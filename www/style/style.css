@@ -1,2 +1,17 @@
 body{
+    font-family: 'Nunito', sans-serif;
+}
+
+.start-logo{
+    position: absolute;
+    bottom: -30px;
+    left: -20px;
+}
+
+.hp-container{
+    text-align:right;
+}
+
+.hp-header{
+    font-size: 3rem;
 }

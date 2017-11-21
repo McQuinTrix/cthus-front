@@ -3,7 +3,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
-import { BrowserRouter, Route, Switch } from "react-router-dom";
+import { Router, Route, Link, hashHistory, Switch } from "react-router";
 
 import reducers from './reducers';
 import promise from "redux-promise";
@@ -11,19 +11,18 @@ import promise from "redux-promise";
 //Components
 import HomePage from './components/home-page';
 import DashBoard from './components/dashboard';
+import Logo from './components/load-logo';
 
-const createStoreWithMiddleware = applyMiddleware()(createStore);
+const createStoreWithMiddleware = applyMiddleware(promise)(createStore);
 
 ReactDOM.render(
     <Provider store={createStoreWithMiddleware(reducers)}>
-        <BrowserRouter>
+        <Router history={hashHistory}>
             <div>
-                <Switch>
-                    <Route path="/dashboard" component={DashBoard}/>
-                    <Route path="/" component={HomePage} />
-                </Switch>
+                <Route path="/dashboard" component={DashBoard}/>
+                <Route path="/" component={HomePage} />
             </div>
-        </BrowserRouter>
+        </Router>
     </Provider>
     , document.querySelector('#crypton-body')
 );

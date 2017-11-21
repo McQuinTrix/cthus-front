@@ -3,17 +3,36 @@
  */
 
 import React from 'react';
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
+import { connect } from "react-redux";
+import { fetchBTC, fetchETH } from "../actions";
+import Logo from './load-logo'
 
-let url = "https://api.gemini.com/v1/pubticker/";
+var intVal;
 
 class HomePage extends React.Component{
 
-    componentDidMount(){
+    getTicker(obj){
+        obj.props.fetchBTC("btc");
+        obj.props.fetchETH("eth");
+    }
 
+    componentDidMount(){
+        intVal = setInterval(this.getTicker,3000,this);
+    }
+
+    componentWillUnmount(){
+        clearInterval(intVal);
     }
 
     render(){
+        let BTC="", ETH="";
+        if(this.props.tick.hasOwnProperty("BTC")){
+            BTC = this.props.tick.BTC.last;
+        }
+        if(this.props.tick.hasOwnProperty("ETH")){
+            ETH = this.props.tick.ETH.last;
+        }
         return (
             <div className="hp-container">
                 <div className="hp-header">
@@ -22,21 +41,27 @@ class HomePage extends React.Component{
                 <div className="hp-quotes">
                     <div className="hp-quote-btc">
                         <label className="hp-btc-label">BTC: </label>
-                        <span> 7430.84</span>
+                        <span> {BTC}</span>
                     </div>
                     <div className="hp-quote-eth">
                         <label className="hp-eth-label">ETH: </label>
-                        <span> 430.84</span>
+                        <span> {ETH}</span>
                     </div>
                 </div>
                 <div className="hp-buttons">
                     <button>Google</button>
                     <button>Sign In Email</button>
-                    <Link to="/dashboard">Dashboard</Link>
+                </div>
+                <div className="start-logo">
+                    <Logo/>
                 </div>
             </div>
         );
     }
 }
 
-export default HomePage;
+function mapStateToProps(state) {
+    return {tick: state.ticker}
+}
+
+export default connect(mapStateToProps, {  fetchBTC, fetchETH })(HomePage);

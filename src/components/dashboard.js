@@ -3,13 +3,14 @@
  */
 
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 
 class DashBoard extends React.Component{
     render(){
         return(
             <div>
                 <Link to="/">Go Back </Link>
+                <Link to="/logo">Logo</Link>
             </div>
         )
     }
