@@ -49,8 +49,9 @@ class HomePage extends React.Component{
                     </div>
                 </div>
                 <div className="hp-buttons">
-                    <button>Google</button>
-                    <button>Sign In Email</button>
+                    <Link to="/signup" className="hp-button-black">Sign Up</Link>
+                    <br/>
+                    <button className="hp-button-black">Sign In</button>
                 </div>
                 <div className="start-logo">
                     <Logo/>

@@ -9,7 +9,7 @@ export default class Logo extends React.Component{
     constructor(props){
         super(props);
         this.state = {
-            height: "200px"
+            height: "300px"
         }
     }
 
@@ -32,7 +32,7 @@ export default class Logo extends React.Component{
                 <svg xmlns="http://www.w3.org/2000/svg"
                      xmlnsXlink="http://www.w3.org/1999/xlink"
                      height={this.state.height}
-                     viewBox="0 -30 419.82 420.66">
+                     viewBox="-100 -100 609.82 630.66">
                     <defs>
                         <style>
                             {'.cls-1{fill:url(#linear-gradient);}.cls-2{fill:url(#linear-gradient-2);}.cls-3{fill:url(#linear-gradient-3);}'}

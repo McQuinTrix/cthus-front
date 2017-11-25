@@ -87,12 +87,14 @@
 
 	var _loadLogo2 = _interopRequireDefault(_loadLogo);
 
+	var _signUp = __webpack_require__(545);
+
+	var _signUp2 = _interopRequireDefault(_signUp);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var createStoreWithMiddleware = (0, _redux.applyMiddleware)(_reduxPromise2.default)(_redux.createStore);
-
 	//Components
-
+	var createStoreWithMiddleware = (0, _redux.applyMiddleware)(_reduxPromise2.default)(_redux.createStore);
 
 	_reactDom2.default.render(_react2.default.createElement(
 	    _reactRedux.Provider,
@@ -103,6 +105,7 @@
 	        _react2.default.createElement(
 	            'div',
 	            null,
+	            _react2.default.createElement(_reactRouter.Route, { path: '/signup', component: _signUp2.default }),
 	            _react2.default.createElement(_reactRouter.Route, { path: '/dashboard', component: _dashboard2.default }),
 	            _react2.default.createElement(_reactRouter.Route, { path: '/', component: _homePage2.default })
 	        )
@@ -41971,14 +41974,15 @@
 	                    "div",
 	                    { className: "hp-buttons" },
 	                    _react2.default.createElement(
-	                        "button",
-	                        null,
-	                        "Google"
+	                        _reactRouter.Link,
+	                        { to: "/signup", className: "hp-button-black" },
+	                        "Sign Up"
 	                    ),
+	                    _react2.default.createElement("br", null),
 	                    _react2.default.createElement(
 	                        "button",
-	                        null,
-	                        "Sign In Email"
+	                        { className: "hp-button-black" },
+	                        "Sign In"
 	                    )
 	                ),
 	                _react2.default.createElement(
@@ -42036,7 +42040,7 @@
 	        var _this = _possibleConstructorReturn(this, (Logo.__proto__ || Object.getPrototypeOf(Logo)).call(this, props));
 
 	        _this.state = {
-	            height: "200px"
+	            height: "300px"
 	        };
 	        return _this;
 	    }
@@ -42067,7 +42071,7 @@
 	                    { xmlns: "http://www.w3.org/2000/svg",
 	                        xmlnsXlink: "http://www.w3.org/1999/xlink",
 	                        height: this.state.height,
-	                        viewBox: "0 -30 419.82 420.66" },
+	                        viewBox: "-100 -100 609.82 630.66" },
 	                    _react2.default.createElement(
 	                        "defs",
 	                        null,
@@ -50191,6 +50195,98 @@
 	}(_react2.default.Component);
 
 	exports.default = DashBoard;
+
+/***/ }),
+/* 545 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(2);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactRouter = __webpack_require__(199);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /**
+	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * Created by harshalcarpenter on 11/23/17.
+	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                */
+
+	var SignUp = function (_React$Component) {
+	    _inherits(SignUp, _React$Component);
+
+	    function SignUp(props) {
+	        _classCallCheck(this, SignUp);
+
+	        return _possibleConstructorReturn(this, (SignUp.__proto__ || Object.getPrototypeOf(SignUp)).call(this, props));
+	    }
+
+	    _createClass(SignUp, [{
+	        key: 'render',
+	        value: function render() {
+	            return _react2.default.createElement(
+	                'div',
+	                { className: 'su-box' },
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'su-container' },
+	                    _react2.default.createElement(
+	                        'h3',
+	                        null,
+	                        'Sign Up'
+	                    ),
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'su-body' },
+	                        _react2.default.createElement('input', { type: 'email', name: 'email' }),
+	                        _react2.default.createElement('input', { type: 'password', name: 'password' }),
+	                        _react2.default.createElement('input', { type: 'password', name: 'confirm-password' })
+	                    ),
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'su-footer' },
+	                        _react2.default.createElement(
+	                            'button',
+	                            null,
+	                            'Cancel'
+	                        ),
+	                        _react2.default.createElement(
+	                            'button',
+	                            null,
+	                            'Save'
+	                        )
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    _reactRouter.Link,
+	                    { to: '/sign-in' },
+	                    'Sign In'
+	                ),
+	                _react2.default.createElement(
+	                    _reactRouter.Link,
+	                    { to: '/' },
+	                    'Back'
+	                )
+	            );
+	        }
+	    }]);
+
+	    return SignUp;
+	}(_react2.default.Component);
+
+	exports.default = SignUp;
 
 /***/ })
 /******/ ]);
