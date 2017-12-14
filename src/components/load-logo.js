@@ -4,8 +4,14 @@
 
 import React from 'react';
 import {TweenMax, Power3,Power2, TimelineLite, TweenLite, Linear} from "gsap";
+export const homeAnim = "home-anim";
+export const smallAnim = "small-anim";
+import PropTypes from 'prop-types';
+
+
 
 export default class Logo extends React.Component{
+    rotate;
     constructor(props){
         super(props);
         this.state = {
@@ -13,17 +19,55 @@ export default class Logo extends React.Component{
         }
     }
 
-    componentWillMount(){
+    loadAnim() {
+        let tl = new TimelineLite();
 
-    }
-
-    componentDidMount(){
         TweenLite.to(this.cls1, 0, {rotation: 110,transformOrigin:"center center"});
         TweenLite.to(this.cls2, 0, {rotation: 106,transformOrigin:"center center"});
         TweenLite.to(this.cls3, 0, {rotation: 96,transformOrigin:"center center"});
         TweenLite.to(this.imageCover, 0, {scale:0.75,opacity: 0.75, y: -5,transformOrigin:"center center"});
 
-        startAnim(this);
+        tl.to(this.imageCover, 3, {rotation:360,opacity: 1, y:0,transformOrigin:"center center", ease: Power2.easeIn},0)
+            .to(this.cls1, 1.5, {rotation: 360,transformOrigin:"center center", ease: Power2.easeOut},2)
+            .to(this.cls2, 1.5, {rotation: 360,transformOrigin:"center center", ease: Power2.easeOut},2)
+            .to(this.cls3, 1.5, {rotation: 360,transformOrigin:"center center", ease: Power2.easeOut},2)
+    }
+
+    startRotate(){
+        this.rotate.play();
+        TweenLite.to(this.rotate,2,{timeScale:1});
+    }
+
+    stopRotate(){
+        TweenLite.to(this.rotate,2,{timeScale:0,onComplete:function(){ this.pause() }})
+    }
+
+    componentWillMount(){
+
+    }
+
+    componentDidMount(){
+        if(this.props.animStyle === homeAnim){
+            this.loadAnim();
+        }
+        if(this.props.animStyle === smallAnim){
+            this.rotate = new TweenMax.to(this.imageCover, .5, {rotation:"-360",transformOrigin:"center center", ease:Linear.easeNone,repeat:-1,paused:true}).timeScale(0);
+            this.startRotate();
+            setTimeout(()=>{
+                this.stopRotate()
+            },500);
+        }
+    }
+
+    componentWillReceiveProps(nextProps) {
+        if(this.props.animStyle === smallAnim){
+            if(nextProps.loading){
+                this.startRotate();
+            }
+            if(nextProps.loading === false){
+                this.stopRotate();
+            }
+        }
     }
 
     render(){
@@ -31,7 +75,7 @@ export default class Logo extends React.Component{
             <div>
                 <svg xmlns="http://www.w3.org/2000/svg"
                      xmlnsXlink="http://www.w3.org/1999/xlink"
-                     height={this.state.height}
+                     height={this.props.height}
                      viewBox="-100 -100 609.82 630.66">
                     <defs>
                         <style>
@@ -91,14 +135,15 @@ export default class Logo extends React.Component{
     }
 }
 
-function startAnim(obj) {
-    let tl = new TimelineLite();
+Logo.propTypes = {
+    animStyle: PropTypes.string,
+    height: PropTypes.number
+};
 
-    tl.to(obj.imageCover, 3, {rotation:360,opacity: 1, y:0,transformOrigin:"center center", ease: Power2.easeIn},0)
-        .to(obj.cls1, 1.5, {rotation: 360,transformOrigin:"center center", ease: Power2.easeOut},2)
-        .to(obj.cls2, 1.5, {rotation: 360,transformOrigin:"center center", ease: Power2.easeOut},2)
-        .to(obj.cls3, 1.5, {rotation: 360,transformOrigin:"center center", ease: Power2.easeOut},2)
-}
+Logo.defaultProps = {
+    animStyle: '',
+    height: 300
+};
 
 /*
  <span dangerouslySetInnerHTML={{__html: this.state.svg}}></span>

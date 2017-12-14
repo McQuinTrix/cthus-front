@@ -7,6 +7,8 @@ import { Link } from "react-router";
 import { connect } from "react-redux";
 import { fetchBTC, fetchETH } from "../actions";
 import Logo from './load-logo'
+import { homeAnim } from './load-logo';
+
 
 var intVal;
 
@@ -54,7 +56,7 @@ class HomePage extends React.Component{
                     <button className="hp-button-black">Sign In</button>
                 </div>
                 <div className="start-logo">
-                    <Logo/>
+                    <Logo animStyle={homeAnim}/>
                 </div>
             </div>
         );

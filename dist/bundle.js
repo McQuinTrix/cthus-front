@@ -71,23 +71,23 @@
 
 	var _reducers2 = _interopRequireDefault(_reducers);
 
-	var _reduxPromise = __webpack_require__(534);
+	var _reduxPromise = __webpack_require__(535);
 
 	var _reduxPromise2 = _interopRequireDefault(_reduxPromise);
 
-	var _homePage = __webpack_require__(541);
+	var _homePage = __webpack_require__(542);
 
 	var _homePage2 = _interopRequireDefault(_homePage);
 
-	var _dashboard = __webpack_require__(544);
+	var _dashboard = __webpack_require__(545);
 
 	var _dashboard2 = _interopRequireDefault(_dashboard);
 
-	var _loadLogo = __webpack_require__(542);
+	var _loadLogo = __webpack_require__(543);
 
 	var _loadLogo2 = _interopRequireDefault(_loadLogo);
 
-	var _signUp = __webpack_require__(545);
+	var _signUp = __webpack_require__(546);
 
 	var _signUp2 = _interopRequireDefault(_signUp);
 
@@ -26853,10 +26853,15 @@
 
 	var _reducerTicker2 = _interopRequireDefault(_reducerTicker);
 
+	var _reducerSign = __webpack_require__(534);
+
+	var _reducerSign2 = _interopRequireDefault(_reducerSign);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var rootReducer = (0, _redux.combineReducers)({
-	    ticker: _reducerTicker2.default
+	    ticker: _reducerTicker2.default,
+	    sign: _reducerSign2.default
 	});
 
 	exports.default = rootReducer;
@@ -39471,6 +39476,14 @@
 	                return Object.assign({}, state, { "ETH": action.payload.data });
 	            }
 	            break;
+	        case _index.SIGN_UP:
+	            if (action.payload.status === 200) {
+	                return Object.assign({}, state, { "SIGN_STATUS": action.payload.data });
+	            }
+	            break;
+	        default:
+	            return state;
+	            break;
 	    }
 	    return state;
 	};
@@ -39486,9 +39499,10 @@
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
-	exports.FETCH_ETH = exports.FETCH_BTC = undefined;
+	exports.SIGN_UP = exports.FETCH_ETH = exports.FETCH_BTC = undefined;
 	exports.fetchBTC = fetchBTC;
 	exports.fetchETH = fetchETH;
+	exports.signUp = signUp;
 
 	var _axios = __webpack_require__(508);
 
@@ -39498,8 +39512,10 @@
 
 	var FETCH_BTC = exports.FETCH_BTC = "fetch_btc";
 	var FETCH_ETH = exports.FETCH_ETH = "fetch_eth";
+	var SIGN_UP = exports.SIGN_UP = "sign_up";
 
 	var root_url = "https://api.gemini.com/v1/pubticker/";
+	var ct_url = "https://cryptonthus.herokuapp.com/api";
 
 	function fetchBTC() {
 	    var req = _axios2.default.get(root_url + "/btcusd");
@@ -39515,6 +39531,15 @@
 
 	    return {
 	        type: FETCH_ETH,
+	        payload: req
+	    };
+	}
+
+	function signUp(data) {
+	    var req = _axios2.default.post(ct_url + "/signup", data);
+
+	    return {
+	        type: SIGN_UP,
 	        payload: req
 	    };
 	}
@@ -41068,6 +41093,35 @@
 /* 534 */
 /***/ (function(module, exports, __webpack_require__) {
 
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	exports.default = function () {
+	    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+	    var action = arguments[1];
+
+	    switch (action.type) {
+	        case _index.SIGN_UP:
+	            if (action.payload.status === 200) {
+	                return Object.assign({}, state, { "SIGN_STATUS": action.payload.data });
+	            }
+	            break;
+	        default:
+	            return state;
+	            break;
+	    }
+	    return state;
+	};
+
+	var _index = __webpack_require__(507);
+
+/***/ }),
+/* 535 */
+/***/ (function(module, exports, __webpack_require__) {
+
 	'use strict';
 
 	exports.__esModule = true;
@@ -41076,7 +41130,7 @@
 
 	exports['default'] = promiseMiddleware;
 
-	var _fluxStandardAction = __webpack_require__(535);
+	var _fluxStandardAction = __webpack_require__(536);
 
 	function isPromise(val) {
 	  return val && typeof val.then === 'function';
@@ -41103,7 +41157,7 @@
 	module.exports = exports['default'];
 
 /***/ }),
-/* 535 */
+/* 536 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -41114,7 +41168,7 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	var _lodashIsplainobject = __webpack_require__(536);
+	var _lodashIsplainobject = __webpack_require__(537);
 
 	var _lodashIsplainobject2 = _interopRequireDefault(_lodashIsplainobject);
 
@@ -41133,7 +41187,7 @@
 	}
 
 /***/ }),
-/* 536 */
+/* 537 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	/**
@@ -41144,9 +41198,9 @@
 	 * Copyright 2009-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
 	 * Available under MIT license <https://lodash.com/license>
 	 */
-	var baseFor = __webpack_require__(537),
-	    isArguments = __webpack_require__(538),
-	    keysIn = __webpack_require__(539);
+	var baseFor = __webpack_require__(538),
+	    isArguments = __webpack_require__(539),
+	    keysIn = __webpack_require__(540);
 
 	/** `Object#toString` result references. */
 	var objectTag = '[object Object]';
@@ -41242,7 +41296,7 @@
 
 
 /***/ }),
-/* 537 */
+/* 538 */
 /***/ (function(module, exports) {
 
 	/**
@@ -41296,7 +41350,7 @@
 
 
 /***/ }),
-/* 538 */
+/* 539 */
 /***/ (function(module, exports) {
 
 	/**
@@ -41531,7 +41585,7 @@
 
 
 /***/ }),
-/* 539 */
+/* 540 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	/**
@@ -41542,8 +41596,8 @@
 	 * Copyright 2009-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
 	 * Available under MIT license <https://lodash.com/license>
 	 */
-	var isArguments = __webpack_require__(538),
-	    isArray = __webpack_require__(540);
+	var isArguments = __webpack_require__(539),
+	    isArray = __webpack_require__(541);
 
 	/** Used to detect unsigned integer values. */
 	var reIsUint = /^\d+$/;
@@ -41669,7 +41723,7 @@
 
 
 /***/ }),
-/* 540 */
+/* 541 */
 /***/ (function(module, exports) {
 
 	/**
@@ -41855,7 +41909,7 @@
 
 
 /***/ }),
-/* 541 */
+/* 542 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -41876,7 +41930,7 @@
 
 	var _actions = __webpack_require__(507);
 
-	var _loadLogo = __webpack_require__(542);
+	var _loadLogo = __webpack_require__(543);
 
 	var _loadLogo2 = _interopRequireDefault(_loadLogo);
 
@@ -41988,7 +42042,7 @@
 	                _react2.default.createElement(
 	                    "div",
 	                    { className: "start-logo" },
-	                    _react2.default.createElement(_loadLogo2.default, null)
+	                    _react2.default.createElement(_loadLogo2.default, { animStyle: _loadLogo.homeAnim })
 	                )
 	            );
 	        }
@@ -42004,7 +42058,7 @@
 	exports.default = (0, _reactRedux.connect)(mapStateToProps, { fetchBTC: _actions.fetchBTC, fetchETH: _actions.fetchETH })(HomePage);
 
 /***/ }),
-/* 542 */
+/* 543 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -42012,6 +42066,7 @@
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
+	exports.smallAnim = exports.homeAnim = undefined;
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -42019,7 +42074,11 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _gsap = __webpack_require__(543);
+	var _gsap = __webpack_require__(544);
+
+	var _propTypes = __webpack_require__(263);
+
+	var _propTypes2 = _interopRequireDefault(_propTypes);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -42030,6 +42089,9 @@
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /**
 	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * Created by harshalcarpenter on 11/18/17.
 	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                */
+
+	var homeAnim = exports.homeAnim = "home-anim";
+	var smallAnim = exports.smallAnim = "small-anim";
 
 	var Logo = function (_React$Component) {
 	    _inherits(Logo, _React$Component);
@@ -42046,22 +42108,65 @@
 	    }
 
 	    _createClass(Logo, [{
-	        key: "componentWillMount",
-	        value: function componentWillMount() {}
-	    }, {
-	        key: "componentDidMount",
-	        value: function componentDidMount() {
+	        key: "loadAnim",
+	        value: function loadAnim() {
+	            var tl = new _gsap.TimelineLite();
+
 	            _gsap.TweenLite.to(this.cls1, 0, { rotation: 110, transformOrigin: "center center" });
 	            _gsap.TweenLite.to(this.cls2, 0, { rotation: 106, transformOrigin: "center center" });
 	            _gsap.TweenLite.to(this.cls3, 0, { rotation: 96, transformOrigin: "center center" });
 	            _gsap.TweenLite.to(this.imageCover, 0, { scale: 0.75, opacity: 0.75, y: -5, transformOrigin: "center center" });
 
-	            startAnim(this);
+	            tl.to(this.imageCover, 3, { rotation: 360, opacity: 1, y: 0, transformOrigin: "center center", ease: _gsap.Power2.easeIn }, 0).to(this.cls1, 1.5, { rotation: 360, transformOrigin: "center center", ease: _gsap.Power2.easeOut }, 2).to(this.cls2, 1.5, { rotation: 360, transformOrigin: "center center", ease: _gsap.Power2.easeOut }, 2).to(this.cls3, 1.5, { rotation: 360, transformOrigin: "center center", ease: _gsap.Power2.easeOut }, 2);
+	        }
+	    }, {
+	        key: "startRotate",
+	        value: function startRotate() {
+	            this.rotate.play();
+	            _gsap.TweenLite.to(this.rotate, 2, { timeScale: 1 });
+	        }
+	    }, {
+	        key: "stopRotate",
+	        value: function stopRotate() {
+	            _gsap.TweenLite.to(this.rotate, 2, { timeScale: 0, onComplete: function onComplete() {
+	                    this.pause();
+	                } });
+	        }
+	    }, {
+	        key: "componentWillMount",
+	        value: function componentWillMount() {}
+	    }, {
+	        key: "componentDidMount",
+	        value: function componentDidMount() {
+	            var _this2 = this;
+
+	            if (this.props.animStyle === homeAnim) {
+	                this.loadAnim();
+	            }
+	            if (this.props.animStyle === smallAnim) {
+	                this.rotate = new _gsap.TweenMax.to(this.imageCover, .5, { rotation: "-360", transformOrigin: "center center", ease: _gsap.Linear.easeNone, repeat: -1, paused: true }).timeScale(0);
+	                this.startRotate();
+	                setTimeout(function () {
+	                    _this2.stopRotate();
+	                }, 500);
+	            }
+	        }
+	    }, {
+	        key: "componentWillReceiveProps",
+	        value: function componentWillReceiveProps(nextProps) {
+	            if (this.props.animStyle === smallAnim) {
+	                if (nextProps.loading) {
+	                    this.startRotate();
+	                }
+	                if (nextProps.loading === false) {
+	                    this.stopRotate();
+	                }
+	            }
 	        }
 	    }, {
 	        key: "render",
 	        value: function render() {
-	            var _this2 = this;
+	            var _this3 = this;
 
 	            return _react2.default.createElement(
 	                "div",
@@ -42070,7 +42175,7 @@
 	                    "svg",
 	                    { xmlns: "http://www.w3.org/2000/svg",
 	                        xmlnsXlink: "http://www.w3.org/1999/xlink",
-	                        height: this.state.height,
+	                        height: this.props.height,
 	                        viewBox: "-100 -100 609.82 630.66" },
 	                    _react2.default.createElement(
 	                        "defs",
@@ -42126,21 +42231,21 @@
 	                        _react2.default.createElement(
 	                            "g",
 	                            { id: "Layer_1-2", dataName: "Layer 1", ref: function ref(b) {
-	                                    return _this2.imageCover = b;
+	                                    return _this3.imageCover = b;
 	                                } },
 	                            _react2.default.createElement("path", { className: "cls-1",
 	                                ref: function ref(b) {
-	                                    return _this2.cls1 = b;
+	                                    return _this3.cls1 = b;
 	                                },
 	                                d: "M301.1,21.4l-3.88-2.8c-106.29-47.77-231.18-.33-279,106A210.94,210.94,0,0,0,3.5,171.1c58.17-76,162.89-105,254-64a210,210,0,0,1,87.18,72.59A211.38,211.38,0,0,0,301.1,21.4Z" }),
 	                            _react2.default.createElement("path", { className: "cls-2",
 	                                ref: function ref(b) {
-	                                    return _this2.cls2 = b;
+	                                    return _this3.cls2 = b;
 	                                },
 	                                d: "M341.37,45.73a211.74,211.74,0,0,0-41.26-26.1c58.71,75.57,60.12,184.21-2.6,261.89a210.36,210.36,0,0,1-145.46,77.6,210.59,210.59,0,0,0,99.82,57.34,210.15,210.15,0,0,0,121.11-74C446.19,251.79,432,118.94,341.37,45.73Z" }),
 	                            _react2.default.createElement("path", { className: "cls-3",
 	                                ref: function ref(b) {
-	                                    return _this2.cls3 = b;
+	                                    return _this3.cls3 = b;
 	                                },
 	                                d: "M96,209.59a210,210,0,0,1,37.77-120A211.26,211.26,0,0,0,4.22,167.46,212.6,212.6,0,0,0,0,209.66c0,116.53,94.47,211,211,211a211.28,211.28,0,0,0,31.72-2.38l1.49-.23c.9-.14,1.79-.29,2.68-.45q5.64-1,11.16-2.27C165,393.21,95.78,309.43,96,209.59Z" })
 	                        )
@@ -42156,18 +42261,22 @@
 	exports.default = Logo;
 
 
-	function startAnim(obj) {
-	    var tl = new _gsap.TimelineLite();
+	Logo.propTypes = {
+	    animStyle: _propTypes2.default.string,
+	    height: _propTypes2.default.number
+	};
 
-	    tl.to(obj.imageCover, 3, { rotation: 360, opacity: 1, y: 0, transformOrigin: "center center", ease: _gsap.Power2.easeIn }, 0).to(obj.cls1, 1.5, { rotation: 360, transformOrigin: "center center", ease: _gsap.Power2.easeOut }, 2).to(obj.cls2, 1.5, { rotation: 360, transformOrigin: "center center", ease: _gsap.Power2.easeOut }, 2).to(obj.cls3, 1.5, { rotation: 360, transformOrigin: "center center", ease: _gsap.Power2.easeOut }, 2);
-	}
+	Logo.defaultProps = {
+	    animStyle: '',
+	    height: 300
+	};
 
 	/*
 	 <span dangerouslySetInnerHTML={{__html: this.state.svg}}></span>
 	 */
 
 /***/ }),
-/* 543 */
+/* 544 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(global) {/*!
@@ -50135,7 +50244,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ }),
-/* 544 */
+/* 545 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -50197,7 +50306,7 @@
 	exports.default = DashBoard;
 
 /***/ }),
-/* 545 */
+/* 546 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -50214,7 +50323,17 @@
 
 	var _reactRouter = __webpack_require__(199);
 
+	var _loadLogo = __webpack_require__(543);
+
+	var _loadLogo2 = _interopRequireDefault(_loadLogo);
+
+	var _reactRedux = __webpack_require__(160);
+
+	var _actions = __webpack_require__(507);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -50230,10 +50349,32 @@
 	    function SignUp(props) {
 	        _classCallCheck(this, SignUp);
 
-	        return _possibleConstructorReturn(this, (SignUp.__proto__ || Object.getPrototypeOf(SignUp)).call(this, props));
+	        var _this = _possibleConstructorReturn(this, (SignUp.__proto__ || Object.getPrototypeOf(SignUp)).call(this, props));
+
+	        _this.state = {
+	            pass: "",
+	            email: ""
+	        };
+	        _this.changeInput.bind(_this);
+	        return _this;
 	    }
 
 	    _createClass(SignUp, [{
+	        key: 'save',
+	        value: function save() {
+	            (0, _actions.signUp)({
+	                'email': this.state.email,
+	                'password': this.state.pass
+	            });
+	        }
+	    }, {
+	        key: 'changeInput',
+	        value: function changeInput(event) {
+	            console.log(event.target.name);
+	            var val = this.state[event.target.name];
+	            this.setState(_defineProperty({}, event.target.name, val + event.key));
+	        }
+	    }, {
 	        key: 'render',
 	        value: function render() {
 	            return _react2.default.createElement(
@@ -50243,41 +50384,78 @@
 	                    'div',
 	                    { className: 'su-container' },
 	                    _react2.default.createElement(
-	                        'h3',
+	                        'div',
+	                        { className: 'su-logo' },
+	                        _react2.default.createElement(_loadLogo2.default, { height: 50, animStyle: _loadLogo.smallAnim, loading: '' })
+	                    ),
+	                    _react2.default.createElement(
+	                        'h2',
 	                        null,
 	                        'Sign Up'
 	                    ),
 	                    _react2.default.createElement(
 	                        'div',
 	                        { className: 'su-body' },
-	                        _react2.default.createElement('input', { type: 'email', name: 'email' }),
-	                        _react2.default.createElement('input', { type: 'password', name: 'password' }),
-	                        _react2.default.createElement('input', { type: 'password', name: 'confirm-password' })
+	                        _react2.default.createElement(
+	                            'label',
+	                            { className: 'su-inp-label' },
+	                            _react2.default.createElement(
+	                                'div',
+	                                { className: 'su-inp-div' },
+	                                'Email Address'
+	                            ),
+	                            _react2.default.createElement('input', { type: 'email',
+	                                name: 'email',
+	                                key: 'email',
+	                                value: this.state.email,
+	                                onKeyPress: this.changeInput.bind(this),
+	                                className: 'su-inp' })
+	                        ),
+	                        _react2.default.createElement(
+	                            'label',
+	                            { className: 'su-inp-label' },
+	                            _react2.default.createElement(
+	                                'div',
+	                                { className: 'su-inp-div' },
+	                                'Password'
+	                            ),
+	                            _react2.default.createElement('input', { type: 'password',
+	                                name: 'password',
+	                                key: 'pass',
+	                                value: this.state.pass,
+	                                onKeyPress: this.changeInput.bind(this),
+	                                className: 'su-inp' })
+	                        )
 	                    ),
 	                    _react2.default.createElement(
 	                        'div',
 	                        { className: 'su-footer' },
 	                        _react2.default.createElement(
 	                            'button',
-	                            null,
+	                            { className: 'su-cancel' },
 	                            'Cancel'
 	                        ),
 	                        _react2.default.createElement(
 	                            'button',
-	                            null,
+	                            { className: 'su-save',
+	                                onClick: this.save() },
 	                            'Save'
 	                        )
+	                    ),
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'su-buttons' },
+	                        _react2.default.createElement(
+	                            _reactRouter.Link,
+	                            { to: '/sign-in', className: 'su-link' },
+	                            'Sign In'
+	                        ),
+	                        _react2.default.createElement(
+	                            'a',
+	                            { className: 'su-link', onClick: _reactRouter.browserHistory.goBack },
+	                            'Back'
+	                        )
 	                    )
-	                ),
-	                _react2.default.createElement(
-	                    _reactRouter.Link,
-	                    { to: '/sign-in' },
-	                    'Sign In'
-	                ),
-	                _react2.default.createElement(
-	                    _reactRouter.Link,
-	                    { to: '/' },
-	                    'Back'
 	                )
 	            );
 	        }
@@ -50286,7 +50464,11 @@
 	    return SignUp;
 	}(_react2.default.Component);
 
-	exports.default = SignUp;
+	function mapStateToProps(state) {
+	    return { signup: state.sign };
+	}
+
+	exports.default = (0, _reactRedux.connect)(mapStateToProps, { signUp: _actions.signUp })(SignUp);
 
 /***/ })
 /******/ ]);
