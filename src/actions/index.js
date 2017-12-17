@@ -3,6 +3,7 @@ import axios from "axios";
 export const FETCH_BTC = "fetch_btc";
 export const FETCH_ETH = "fetch_eth";
 export const SIGN_UP = "sign_up";
+export const SIGN_IN = "sign_in";
 
 const root_url = "https://api.gemini.com/v1/pubticker/";
 const ct_url = "https://cryptonthus.herokuapp.com/api";
@@ -30,6 +31,15 @@ export function signUp(data){
 
     return {
         type: SIGN_UP,
+        payload: req
+    }
+}
+
+export function signIn(data){
+    const req = axios.post(`${ct_url}/userInfo`,data);
+
+    return {
+        type: SIGN_IN,
         payload: req
     }
 }

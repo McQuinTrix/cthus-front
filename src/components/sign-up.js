@@ -6,41 +6,90 @@ import React from 'react';
 import { Link,browserHistory } from 'react-router';
 import Logo, {smallAnim} from './load-logo';
 import { connect } from "react-redux";
-import { signUp } from "../actions";
+import { signUp, signIn } from "../actions";
+import PropTypes from 'prop-types';
 
 class SignUp extends React.Component{
+    signUpBool= true;
+    pageState = "Sign In";
+    otherState = "Sign Up";
+
     constructor(props){
         super(props);
         this.state = {
-            pass: "",
+            password: "",
             email: ""
         };
         this.changeInput.bind(this);
+        this.toggleState.bind(this);
     }
 
     save(){
-        signUp({
-            'email':this.state.email,
-            'password': this.state.pass
-        })
+        if(this.state.email.length === 0 || this.state.password === 0){
+            return;
+        }
+        if(this.signUpBool){
+            signUp({
+                'email':this.state.email,
+                'password': this.state.password
+            })
+        }else{
+            signIn({
+                'email':this.state.email,
+                'password': this.state.password
+            })
+        }
+    }
+
+    toggleState(){
+        debugger;
+        //Toggle Signup boolean
+        this.signUpBool = !this.signUpBool;
+        //Change the wordings
+        this.changeState();
+    }
+
+    changeState(){
+        debugger;
+        if(this.signUpBool){
+            this.pageState = "Sign Up";
+            this.otherState = "Sign In";
+        }else{
+            this.pageState = "Sign In";
+            this.otherState = "Sign Up";
+        }
+        this.setState(this.state);
     }
 
     changeInput(event){
         console.log(event.target.name);
-        let val = this.state[event.target.name];
+        let val = event.target.value;
+
         this.setState({
-            [event.target.name]: val+event.key
+            [event.target.name]: val
         })
     }
 
+    componentWillMount(){
+        //Change Sign Up Bool variable to prop value
+        this.signUpBool = this.props.params.id === "true"
+    }
+
+    componentDidMount(){
+        //Change State --
+        this.changeState();
+    }
+
     render(){
+        let pageState = this.pageState,
+            otherState = this.otherState;
         return (
             <div className="su-box">
                 <div className="su-container">
                     <div className="su-logo">
                         <Logo height={50} animStyle={smallAnim} loading=""/>
                     </div>
-                    <h2>Sign Up</h2>
+                    <h2>{pageState}</h2>
                     <div className="su-body">
                         <label className="su-inp-label">
                             <div className="su-inp-div">
@@ -50,7 +99,7 @@ class SignUp extends React.Component{
                                    name="email"
                                    key="email"
                                    value={this.state.email}
-                                   onKeyPress={this.changeInput.bind(this)}
+                                   onChange={this.changeInput.bind(this)}
                                    className="su-inp"/>
                         </label>
                         <label className="su-inp-label">
@@ -60,18 +109,18 @@ class SignUp extends React.Component{
                             <input type="password"
                                    name="password"
                                    key="pass"
-                                   value={this.state.pass}
-                                   onKeyPress={this.changeInput.bind(this)}
+                                   value={this.state.password}
+                                   onChange={this.changeInput.bind(this)}
                                    className="su-inp"/>
                         </label>
                     </div>
                     <div className="su-footer">
                         <button className="su-cancel">Cancel</button>
                         <button className="su-save"
-                                onClick={this.save()}>Save</button>
+                                onClick={this.save.bind(this)}>Save</button>
                     </div>
                     <div className="su-buttons">
-                        <Link to="/sign-in" className="su-link">Sign In</Link>
+                        <a className="su-link" onClick={this.toggleState.bind(this)}>{otherState}</a>
                         <a className="su-link" onClick={browserHistory.goBack}>Back</a>
                     </div>
                 </div>
@@ -80,9 +129,16 @@ class SignUp extends React.Component{
     }
 }
 
+SignUp.propTypes = {
+    signUpBool: PropTypes.bool
+};
+
+SignUp.defaultProps = {
+    signUpBool: true
+};
 
 function mapStateToProps(state) {
-    return {signup: state.sign}
+    return {sign: state.sign}
 }
 
-export default connect(mapStateToProps, {  signUp })(SignUp);
+export default connect(mapStateToProps, {  signUp, signIn })(SignUp);

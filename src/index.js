@@ -20,7 +20,7 @@ ReactDOM.render(
     <Provider store={createStoreWithMiddleware(reducers)}>
         <Router history={hashHistory}>
             <div>
-                <Route path="/signup" component={SignUp}/>
+                <Route path="/signup/:id" component={SignUp}/>
                 <Route path="/dashboard" component={DashBoard}/>
                 <Route path="/" component={HomePage} />
             </div>

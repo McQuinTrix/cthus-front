@@ -47,6 +47,7 @@ export default class Logo extends React.Component{
     }
 
     componentDidMount(){
+
         if(this.props.animStyle === homeAnim){
             this.loadAnim();
         }

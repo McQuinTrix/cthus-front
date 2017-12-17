@@ -105,7 +105,7 @@
 	        _react2.default.createElement(
 	            'div',
 	            null,
-	            _react2.default.createElement(_reactRouter.Route, { path: '/signup', component: _signUp2.default }),
+	            _react2.default.createElement(_reactRouter.Route, { path: '/signup/:id', component: _signUp2.default }),
 	            _react2.default.createElement(_reactRouter.Route, { path: '/dashboard', component: _dashboard2.default }),
 	            _react2.default.createElement(_reactRouter.Route, { path: '/', component: _homePage2.default })
 	        )
@@ -39499,10 +39499,11 @@
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
-	exports.SIGN_UP = exports.FETCH_ETH = exports.FETCH_BTC = undefined;
+	exports.SIGN_IN = exports.SIGN_UP = exports.FETCH_ETH = exports.FETCH_BTC = undefined;
 	exports.fetchBTC = fetchBTC;
 	exports.fetchETH = fetchETH;
 	exports.signUp = signUp;
+	exports.signIn = signIn;
 
 	var _axios = __webpack_require__(508);
 
@@ -39513,6 +39514,7 @@
 	var FETCH_BTC = exports.FETCH_BTC = "fetch_btc";
 	var FETCH_ETH = exports.FETCH_ETH = "fetch_eth";
 	var SIGN_UP = exports.SIGN_UP = "sign_up";
+	var SIGN_IN = exports.SIGN_IN = "sign_in";
 
 	var root_url = "https://api.gemini.com/v1/pubticker/";
 	var ct_url = "https://cryptonthus.herokuapp.com/api";
@@ -39540,6 +39542,15 @@
 
 	    return {
 	        type: SIGN_UP,
+	        payload: req
+	    };
+	}
+
+	function signIn(data) {
+	    var req = _axios2.default.post(ct_url + "/userInfo", data);
+
+	    return {
+	        type: SIGN_IN,
 	        payload: req
 	    };
 	}
@@ -41109,6 +41120,11 @@
 	                return Object.assign({}, state, { "SIGN_STATUS": action.payload.data });
 	            }
 	            break;
+	        case _index.SIGN_IN:
+	            if (action.payload.status === 200) {
+	                return Object.assign({}, state, { "SIGN_IN": action.payload.data });
+	            }
+	            break;
 	        default:
 	            return state;
 	            break;
@@ -42029,20 +42045,24 @@
 	                    { className: "hp-buttons" },
 	                    _react2.default.createElement(
 	                        _reactRouter.Link,
-	                        { to: "/signup", className: "hp-button-black" },
+	                        { to: "/signup/true",
+	                            params: { signUpBool: true },
+	                            className: "hp-button-black" },
 	                        "Sign Up"
 	                    ),
 	                    _react2.default.createElement("br", null),
 	                    _react2.default.createElement(
-	                        "button",
-	                        { className: "hp-button-black" },
+	                        _reactRouter.Link,
+	                        { to: "/signup/false",
+	                            params: { signUpBool: false },
+	                            className: "hp-button-black" },
 	                        "Sign In"
 	                    )
 	                ),
 	                _react2.default.createElement(
 	                    "div",
 	                    { className: "start-logo" },
-	                    _react2.default.createElement(_loadLogo2.default, { animStyle: _loadLogo.homeAnim })
+	                    _react2.default.createElement(_loadLogo2.default, { animStyle: _loadLogo.homeAnim, height: 300 })
 	                )
 	            );
 	        }
@@ -50331,6 +50351,10 @@
 
 	var _actions = __webpack_require__(507);
 
+	var _propTypes = __webpack_require__(263);
+
+	var _propTypes2 = _interopRequireDefault(_propTypes);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
@@ -50351,32 +50375,84 @@
 
 	        var _this = _possibleConstructorReturn(this, (SignUp.__proto__ || Object.getPrototypeOf(SignUp)).call(this, props));
 
+	        _this.signUpBool = true;
+	        _this.pageState = "Sign In";
+	        _this.otherState = "Sign Up";
+
 	        _this.state = {
-	            pass: "",
+	            password: "",
 	            email: ""
 	        };
 	        _this.changeInput.bind(_this);
+	        _this.toggleState.bind(_this);
 	        return _this;
 	    }
 
 	    _createClass(SignUp, [{
 	        key: 'save',
 	        value: function save() {
-	            (0, _actions.signUp)({
-	                'email': this.state.email,
-	                'password': this.state.pass
-	            });
+	            if (this.state.email.length === 0 || this.state.password === 0) {
+	                return;
+	            }
+	            if (this.signUpBool) {
+	                (0, _actions.signUp)({
+	                    'email': this.state.email,
+	                    'password': this.state.password
+	                });
+	            } else {
+	                (0, _actions.signIn)({
+	                    'email': this.state.email,
+	                    'password': this.state.password
+	                });
+	            }
+	        }
+	    }, {
+	        key: 'toggleState',
+	        value: function toggleState() {
+	            debugger;
+	            //Toggle Signup boolean
+	            this.signUpBool = !this.signUpBool;
+	            //Change the wordings
+	            this.changeState();
+	        }
+	    }, {
+	        key: 'changeState',
+	        value: function changeState() {
+	            debugger;
+	            if (this.signUpBool) {
+	                this.pageState = "Sign Up";
+	                this.otherState = "Sign In";
+	            } else {
+	                this.pageState = "Sign In";
+	                this.otherState = "Sign Up";
+	            }
+	            this.setState(this.state);
 	        }
 	    }, {
 	        key: 'changeInput',
 	        value: function changeInput(event) {
 	            console.log(event.target.name);
-	            var val = this.state[event.target.name];
-	            this.setState(_defineProperty({}, event.target.name, val + event.key));
+	            var val = event.target.value;
+
+	            this.setState(_defineProperty({}, event.target.name, val));
+	        }
+	    }, {
+	        key: 'componentWillMount',
+	        value: function componentWillMount() {
+	            //Change Sign Up Bool variable to prop value
+	            this.signUpBool = this.props.params.id === "true";
+	        }
+	    }, {
+	        key: 'componentDidMount',
+	        value: function componentDidMount() {
+	            //Change State --
+	            this.changeState();
 	        }
 	    }, {
 	        key: 'render',
 	        value: function render() {
+	            var pageState = this.pageState,
+	                otherState = this.otherState;
 	            return _react2.default.createElement(
 	                'div',
 	                { className: 'su-box' },
@@ -50391,7 +50467,7 @@
 	                    _react2.default.createElement(
 	                        'h2',
 	                        null,
-	                        'Sign Up'
+	                        pageState
 	                    ),
 	                    _react2.default.createElement(
 	                        'div',
@@ -50408,7 +50484,7 @@
 	                                name: 'email',
 	                                key: 'email',
 	                                value: this.state.email,
-	                                onKeyPress: this.changeInput.bind(this),
+	                                onChange: this.changeInput.bind(this),
 	                                className: 'su-inp' })
 	                        ),
 	                        _react2.default.createElement(
@@ -50422,8 +50498,8 @@
 	                            _react2.default.createElement('input', { type: 'password',
 	                                name: 'password',
 	                                key: 'pass',
-	                                value: this.state.pass,
-	                                onKeyPress: this.changeInput.bind(this),
+	                                value: this.state.password,
+	                                onChange: this.changeInput.bind(this),
 	                                className: 'su-inp' })
 	                        )
 	                    ),
@@ -50438,7 +50514,7 @@
 	                        _react2.default.createElement(
 	                            'button',
 	                            { className: 'su-save',
-	                                onClick: this.save() },
+	                                onClick: this.save.bind(this) },
 	                            'Save'
 	                        )
 	                    ),
@@ -50446,9 +50522,9 @@
 	                        'div',
 	                        { className: 'su-buttons' },
 	                        _react2.default.createElement(
-	                            _reactRouter.Link,
-	                            { to: '/sign-in', className: 'su-link' },
-	                            'Sign In'
+	                            'a',
+	                            { className: 'su-link', onClick: this.toggleState.bind(this) },
+	                            otherState
 	                        ),
 	                        _react2.default.createElement(
 	                            'a',
@@ -50464,11 +50540,19 @@
 	    return SignUp;
 	}(_react2.default.Component);
 
+	SignUp.propTypes = {
+	    signUpBool: _propTypes2.default.bool
+	};
+
+	SignUp.defaultProps = {
+	    signUpBool: true
+	};
+
 	function mapStateToProps(state) {
-	    return { signup: state.sign };
+	    return { sign: state.sign };
 	}
 
-	exports.default = (0, _reactRedux.connect)(mapStateToProps, { signUp: _actions.signUp })(SignUp);
+	exports.default = (0, _reactRedux.connect)(mapStateToProps, { signUp: _actions.signUp, signIn: _actions.signIn })(SignUp);
 
 /***/ })
 /******/ ]);

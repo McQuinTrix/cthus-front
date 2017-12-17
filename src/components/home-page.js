@@ -51,12 +51,16 @@ class HomePage extends React.Component{
                     </div>
                 </div>
                 <div className="hp-buttons">
-                    <Link to="/signup" className="hp-button-black">Sign Up</Link>
+                    <Link to="/signup/true"
+                          params={{ signUpBool: true }}
+                          className="hp-button-black">Sign Up</Link>
                     <br/>
-                    <button className="hp-button-black">Sign In</button>
+                    <Link to="/signup/false"
+                          params={{ signUpBool: false }}
+                          className="hp-button-black">Sign In</Link>
                 </div>
                 <div className="start-logo">
-                    <Logo animStyle={homeAnim}/>
+                    <Logo animStyle={homeAnim} height={300}/>
                 </div>
             </div>
         );
