@@ -127,3 +127,24 @@ body{
     text-decoration: none;
     border-bottom: 1px solid black;
 }
+
+/*
+ Canvas CSS
+ */
+
+.canvas-body{
+    background-color: #333;
+    height: 100vh;
+    color: white;
+}
+
+.canvas-body .canvas-menu-button{
+    position: fixed;
+    background-color: #333;
+    font-size: 28px;
+    bottom: 10px;
+    right: 10px;
+    padding: 20px 27px;
+    box-shadow: 0px 0px 10px 5px #000;
+    border-radius: 50%;
+}

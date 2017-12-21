@@ -14,6 +14,14 @@ gulp.task('copy', function(){
    gulp.src(['style/**/*.css'])
        .pipe(gulp.dest('www/style'))
 
+    //Font awesome css
+    gulp.src(['node_modules/font-awesome/css/**'])
+        .pipe(gulp.dest('www/style/fa/css'));
+
+    //Font awesome font files
+    gulp.src(['node_modules/font-awesome/fonts/**'])
+        .pipe(gulp.dest('www/style/fa/fonts'))
+
     gulp.src(['dist/**'])
        .pipe(gulp.dest('www/dist'))
 

@@ -9,8 +9,11 @@ export default function (state={},action) {
             }
             break;
         case SIGN_IN:
+            debugger;
             if(action.payload.status === 200){
-                return Object.assign({}, state, {"SIGN_IN": action.payload.data});
+                let obj = {};
+                obj[SIGN_IN] = action.payload.data;
+                return Object.assign({}, state, obj );
             }
             break;
         default:

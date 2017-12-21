@@ -91,10 +91,16 @@
 
 	var _signUp2 = _interopRequireDefault(_signUp);
 
+	var _canvas = __webpack_require__(547);
+
+	var _canvas2 = _interopRequireDefault(_canvas);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	//Components
 	var createStoreWithMiddleware = (0, _redux.applyMiddleware)(_reduxPromise2.default)(_redux.createStore);
+
+	//Components
+
 
 	_reactDom2.default.render(_react2.default.createElement(
 	    _reactRedux.Provider,
@@ -105,6 +111,7 @@
 	        _react2.default.createElement(
 	            'div',
 	            null,
+	            _react2.default.createElement(_reactRouter.Route, { path: '/canvas/:userid', components: _canvas2.default }),
 	            _react2.default.createElement(_reactRouter.Route, { path: '/signup/:id', component: _signUp2.default }),
 	            _react2.default.createElement(_reactRouter.Route, { path: '/dashboard', component: _dashboard2.default }),
 	            _react2.default.createElement(_reactRouter.Route, { path: '/', component: _homePage2.default })
@@ -41121,8 +41128,11 @@
 	            }
 	            break;
 	        case _index.SIGN_IN:
+	            debugger;
 	            if (action.payload.status === 200) {
-	                return Object.assign({}, state, { "SIGN_IN": action.payload.data });
+	                var obj = {};
+	                obj[_index.SIGN_IN] = action.payload.data;
+	                return Object.assign({}, state, obj);
 	            }
 	            break;
 	        default:
@@ -50395,12 +50405,12 @@
 	                return;
 	            }
 	            if (this.signUpBool) {
-	                (0, _actions.signUp)({
+	                this.props.signUp({
 	                    'email': this.state.email,
 	                    'password': this.state.password
 	                });
 	            } else {
-	                (0, _actions.signIn)({
+	                this.props.signIn({
 	                    'email': this.state.email,
 	                    'password': this.state.password
 	                });
@@ -50418,7 +50428,6 @@
 	    }, {
 	        key: 'changeState',
 	        value: function changeState() {
-	            debugger;
 	            if (this.signUpBool) {
 	                this.pageState = "Sign Up";
 	                this.otherState = "Sign In";
@@ -50441,6 +50450,10 @@
 	        value: function componentWillMount() {
 	            //Change Sign Up Bool variable to prop value
 	            this.signUpBool = this.props.params.id === "true";
+
+	            if (this.props.sign) {
+	                debugger;
+	            }
 	        }
 	    }, {
 	        key: 'componentDidMount',
@@ -50453,6 +50466,12 @@
 	        value: function render() {
 	            var pageState = this.pageState,
 	                otherState = this.otherState;
+
+	            //Error can be shown
+	            if (this.props.sign[_actions.SIGN_IN]) {
+	                this.props.history.push('/canvas/' + this.props.sign[_actions.SIGN_IN].data.userId);
+	            }
+
 	            return _react2.default.createElement(
 	                'div',
 	                { className: 'su-box' },
@@ -50549,10 +50568,100 @@
 	};
 
 	function mapStateToProps(state) {
+	    debugger;
 	    return { sign: state.sign };
 	}
 
 	exports.default = (0, _reactRedux.connect)(mapStateToProps, { signUp: _actions.signUp, signIn: _actions.signIn })(SignUp);
+
+/***/ }),
+/* 547 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(2);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _loadLogo = __webpack_require__(543);
+
+	var _loadLogo2 = _interopRequireDefault(_loadLogo);
+
+	var _reactRedux = __webpack_require__(160);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /**
+	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * Created by harshalcarpenter on 12/19/17.
+	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                */
+
+	var Canvas = function (_React$Component) {
+	    _inherits(Canvas, _React$Component);
+
+	    function Canvas(props) {
+	        _classCallCheck(this, Canvas);
+
+	        return _possibleConstructorReturn(this, (Canvas.__proto__ || Object.getPrototypeOf(Canvas)).call(this, props));
+	    }
+
+	    //Render
+
+
+	    _createClass(Canvas, [{
+	        key: 'render',
+	        value: function render() {
+	            return _react2.default.createElement(
+	                'div',
+	                { className: 'canvas-container' },
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'canvas-body' },
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'canvas-menu-button' },
+	                        _react2.default.createElement('i', { className: 'fa fa-bars' })
+	                    ),
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'canvas-top-icon' },
+	                        _react2.default.createElement(_loadLogo2.default, { height: 50 })
+	                    ),
+	                    _react2.default.createElement('div', { className: 'dashboard' }),
+	                    _react2.default.createElement('div', { className: 'other-pages' })
+	                ),
+	                _react2.default.createElement('div', { className: 'canvas-menu' })
+	            );
+	        }
+	    }]);
+
+	    return Canvas;
+	}(_react2.default.Component);
+
+	Canvas.propTypes = {
+	    //signUpBool: PropTypes.bool
+	};
+
+	Canvas.defaultProps = {
+	    //signUpBool: true
+	};
+
+	function mapStateToProps(state) {
+	    //return {sign: state.sign}
+	    return {};
+	}
+
+	exports.default = (0, _reactRedux.connect)(mapStateToProps, {})(Canvas);
 
 /***/ })
 /******/ ]);

@@ -6,7 +6,7 @@ import React from 'react';
 import { Link,browserHistory } from 'react-router';
 import Logo, {smallAnim} from './load-logo';
 import { connect } from "react-redux";
-import { signUp, signIn } from "../actions";
+import { signUp, signIn,SIGN_IN } from "../actions";
 import PropTypes from 'prop-types';
 
 class SignUp extends React.Component{
@@ -29,12 +29,12 @@ class SignUp extends React.Component{
             return;
         }
         if(this.signUpBool){
-            signUp({
+            this.props.signUp({
                 'email':this.state.email,
                 'password': this.state.password
             })
         }else{
-            signIn({
+            this.props.signIn({
                 'email':this.state.email,
                 'password': this.state.password
             })
@@ -50,7 +50,6 @@ class SignUp extends React.Component{
     }
 
     changeState(){
-        debugger;
         if(this.signUpBool){
             this.pageState = "Sign Up";
             this.otherState = "Sign In";
@@ -72,7 +71,12 @@ class SignUp extends React.Component{
 
     componentWillMount(){
         //Change Sign Up Bool variable to prop value
-        this.signUpBool = this.props.params.id === "true"
+        this.signUpBool = this.props.params.id === "true";
+
+        if(this.props.sign){
+            debugger;
+
+        }
     }
 
     componentDidMount(){
@@ -83,6 +87,12 @@ class SignUp extends React.Component{
     render(){
         let pageState = this.pageState,
             otherState = this.otherState;
+
+        //Error can be shown
+        if(this.props.sign[SIGN_IN]){
+            this.props.history.push('/canvas/'+this.props.sign[SIGN_IN].data.userId);
+        }
+
         return (
             <div className="su-box">
                 <div className="su-container">
@@ -138,6 +148,7 @@ SignUp.defaultProps = {
 };
 
 function mapStateToProps(state) {
+    debugger;
     return {sign: state.sign}
 }
 
