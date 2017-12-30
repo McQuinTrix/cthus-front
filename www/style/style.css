@@ -138,13 +138,157 @@ body{
     color: white;
 }
 
+.canvas-top-icon{
+    position: fixed;
+    top: 0px;
+    width: 100vw;
+    padding: 5px 8px;
+    height: 48px;
+}
+
 .canvas-body .canvas-menu-button{
     position: fixed;
     background-color: #333;
     font-size: 28px;
-    bottom: 10px;
-    right: 10px;
-    padding: 20px 27px;
-    box-shadow: 0px 0px 10px 5px #000;
+    bottom: 20px;
+    right: 20px;
+    padding: 12px 19px;
+    box-shadow: 0px 0px 10px 3px #111;
     border-radius: 50%;
+
+    z-index: 100;
+}
+
+.canvas-top-icon .logo-div{
+    display: inline-block;
+}
+
+.canvas-top-icon .canvas-title{
+    display: inline-block;
+    margin: 5px 6px;
+    position: relative;
+    top: -19px;
+}
+
+.canvas-cover{
+    padding: 60px 15px 0px;
+}
+
+.menu-wheel{
+    position: absolute;
+    bottom: 30px;
+    right: 30px;
+    font-size: 21px;
+    height: 40px;
+    width: 40px;
+
+    z-index: 99;
+}
+
+.menu-wheel .mw-option{
+    position: absolute;
+    border-radius: 50%;
+    background-color: #333;
+    height: 28px;
+    padding: 10px 14px;
+    width: 22px;
+    box-shadow: 0px 0px 10px 3px #111;
+    transition: 0.2s all;
+}
+
+.mw-option:nth-child(1){
+    top: -210px;
+    left: -6px;
+}
+.mw-option:nth-child(2){
+    top: -181px;
+    left: -80px;
+}
+.mw-option:nth-child(3){
+    top: -133px;
+    left: -145px;
+}
+.mw-option:nth-child(4){
+    top: -71px;
+    left: -193px;
+}
+.mw-option:nth-child(5){
+    top: -3px;
+    left: -219px;
+}
+
+.menu-wheel.close-options .mw-option{
+    top: -4px;
+    left: -6px;
+}
+
+.canvas-cover > div.hide{
+    display: none;
+}
+
+.dash-head > .dash-h2,
+.dash-head > .dash-worth{
+    display: inline-block;
+}
+
+.dash-head > .dash-h2{
+    margin: 10px 0px 5px;
+}
+
+.dash-head > .dash-worth{
+    margin: 0 10px;
+}
+
+.coin-cover{
+    padding: 0px;
+    margin-bottom: 17px;
+    display: flex;
+    justify-content: space-between;
+    border-radius: 15px;
+    background-color: #4a4a4a;
+    overflow: hidden;
+}
+
+.coin-intro{
+    display: flex;
+    align-items: center;
+    padding: 20px 15px;
+}
+
+.coin-image-cover{
+    display: flex;
+}
+
+.coin-name{
+    padding: 0 10px;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.coin-image{
+    height: 50px;
+}
+
+.coin-amount{
+    font-weight: bolder;
+    font-size: 17px;
+    display: flex;
+    align-items: center;
+    padding: 10px 15px;
+}
+
+.coin-amount.up-tick{
+    background-color: #268426;
+}
+.coin-amount.down-tick{
+    background-color: #b32222;
+}
+
+.ca-cover{
+    height: 23px;
+    overflow: hidden;
+    text-align: right;
+}
+.coin-total{
+    font-size: 22px;
 }

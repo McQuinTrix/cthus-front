@@ -73,7 +73,7 @@ export default class Logo extends React.Component{
 
     render(){
         return (
-            <div>
+            <div className="logo-div">
                 <svg xmlns="http://www.w3.org/2000/svg"
                      xmlnsXlink="http://www.w3.org/1999/xlink"
                      height={this.props.height}

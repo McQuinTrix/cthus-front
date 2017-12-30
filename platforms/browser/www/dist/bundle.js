@@ -42200,7 +42200,7 @@
 
 	            return _react2.default.createElement(
 	                "div",
-	                null,
+	                { className: "logo-div" },
 	                _react2.default.createElement(
 	                    "svg",
 	                    { xmlns: "http://www.w3.org/2000/svg",
@@ -50596,6 +50596,12 @@
 
 	var _reactRedux = __webpack_require__(160);
 
+	var _dashboard = __webpack_require__(545);
+
+	var _dashboard2 = _interopRequireDefault(_dashboard);
+
+	var _actions = __webpack_require__(507);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -50606,21 +50612,80 @@
 	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * Created by harshalcarpenter on 12/19/17.
 	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                */
 
+	var canvasState = {
+	    dashboard: "dashboard",
+	    news: "news",
+	    profile: "profile",
+	    chat: "chat",
+	    info: "info"
+	};
+
+	var intVal;
+
 	var Canvas = function (_React$Component) {
 	    _inherits(Canvas, _React$Component);
 
 	    function Canvas(props) {
 	        _classCallCheck(this, Canvas);
 
-	        return _possibleConstructorReturn(this, (Canvas.__proto__ || Object.getPrototypeOf(Canvas)).call(this, props));
+	        var _this = _possibleConstructorReturn(this, (Canvas.__proto__ || Object.getPrototypeOf(Canvas)).call(this, props));
+
+	        _this.state = {
+	            menuOpen: false,
+	            canvasState: canvasState.dashboard
+	        };
+	        return _this;
 	    }
 
-	    //Render
-
-
 	    _createClass(Canvas, [{
+	        key: 'getTicker',
+	        value: function getTicker(obj) {
+	            obj.props.fetchBTC("btc");
+	            obj.props.fetchETH("eth");
+	        }
+	    }, {
+	        key: 'toggleMenu',
+	        value: function toggleMenu() {
+	            this.setState({ menuOpen: !this.state.menuOpen });
+	        }
+	    }, {
+	        key: 'changeCanvasState',
+	        value: function changeCanvasState(cState) {
+	            this.setState({ canvasState: canvasState[cState] });
+	            this.toggleMenu();
+	        }
+	    }, {
+	        key: 'componentWillMount',
+	        value: function componentWillMount() {
+	            intVal = setInterval(this.getTicker, 3000, this);
+	        }
+	    }, {
+	        key: 'componentWillUnmount',
+	        value: function componentWillUnmount() {
+	            clearInterval(intVal);
+	        }
+
+	        //Render
+
+	    }, {
 	        key: 'render',
 	        value: function render() {
+	            var _this2 = this;
+
+	            var mwClass = this.state.menuOpen ? "" : "close-options";
+	            mwClass += " menu-wheel ";
+
+	            var currentState = this.state.canvasState;
+
+	            var BTC = "",
+	                ETH = "";
+	            if (this.props.tick.hasOwnProperty("BTC")) {
+	                BTC = this.props.tick.BTC.last;
+	            }
+	            if (this.props.tick.hasOwnProperty("ETH")) {
+	                ETH = this.props.tick.ETH.last;
+	            }
+
 	            return _react2.default.createElement(
 	                'div',
 	                { className: 'canvas-container' },
@@ -50629,16 +50694,93 @@
 	                    { className: 'canvas-body' },
 	                    _react2.default.createElement(
 	                        'div',
-	                        { className: 'canvas-menu-button' },
+	                        { className: 'canvas-top-icon' },
+	                        _react2.default.createElement(_loadLogo2.default, { height: 50 }),
+	                        _react2.default.createElement(
+	                            'h3',
+	                            { className: 'canvas-title' },
+	                            'Cryptonthus'
+	                        )
+	                    ),
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'canvas-menu-button',
+	                            onClick: this.toggleMenu.bind(this) },
 	                        _react2.default.createElement('i', { className: 'fa fa-bars' })
 	                    ),
 	                    _react2.default.createElement(
 	                        'div',
-	                        { className: 'canvas-top-icon' },
-	                        _react2.default.createElement(_loadLogo2.default, { height: 50 })
+	                        { className: mwClass },
+	                        _react2.default.createElement(
+	                            'div',
+	                            { className: 'mw-option',
+	                                onClick: function onClick() {
+	                                    return _this2.changeCanvasState(canvasState.dashboard);
+	                                } },
+	                            _react2.default.createElement('i', { className: 'fa fa-briefcase' })
+	                        ),
+	                        _react2.default.createElement(
+	                            'div',
+	                            { className: 'mw-option',
+	                                onClick: function onClick() {
+	                                    return _this2.changeCanvasState(canvasState.news);
+	                                } },
+	                            _react2.default.createElement('i', { className: 'fa fa-newspaper-o' })
+	                        ),
+	                        _react2.default.createElement(
+	                            'div',
+	                            { className: 'mw-option',
+	                                onClick: function onClick() {
+	                                    return _this2.changeCanvasState(canvasState.profile);
+	                                } },
+	                            _react2.default.createElement('i', { className: 'fa fa-user-circle' })
+	                        ),
+	                        _react2.default.createElement(
+	                            'div',
+	                            { className: 'mw-option',
+	                                onClick: function onClick() {
+	                                    return _this2.changeCanvasState(canvasState.chat);
+	                                } },
+	                            _react2.default.createElement('i', { className: 'fa fa-comments' })
+	                        ),
+	                        _react2.default.createElement(
+	                            'div',
+	                            { className: 'mw-option',
+	                                onClick: function onClick() {
+	                                    return _this2.changeCanvasState(canvasState.info);
+	                                } },
+	                            _react2.default.createElement('i', { className: 'fa fa-info-circle' })
+	                        )
 	                    ),
-	                    _react2.default.createElement('div', { className: 'dashboard' }),
-	                    _react2.default.createElement('div', { className: 'other-pages' })
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'canvas-cover' },
+	                        _react2.default.createElement(
+	                            'div',
+	                            { className: 'dashboard ' + (currentState === canvasState.dashboard ? '' : 'hide') },
+	                            _react2.default.createElement(Dashboard, { btc: BTC, eth: ETH, proppy: 'apples' })
+	                        ),
+	                        _react2.default.createElement(
+	                            'div',
+	                            { className: 'news-block ' + (currentState === canvasState.news ? '' : 'hide') },
+	                            _react2.default.createElement(News, null)
+	                        ),
+	                        _react2.default.createElement(
+	                            'div',
+	                            { className: 'user-prof ' + (currentState === canvasState.profile ? '' : 'hide') },
+	                            _react2.default.createElement(UserProfile, null)
+	                        ),
+	                        _react2.default.createElement(
+	                            'div',
+	                            { className: 'chat-room ' + (currentState === canvasState.chat ? '' : 'hide') },
+	                            _react2.default.createElement(Chat, null)
+	                        ),
+	                        _react2.default.createElement(
+	                            'div',
+	                            { className: 'about-us ' + (currentState === canvasState.info ? '' : 'hide') },
+	                            _react2.default.createElement(AboutUs, null)
+	                        )
+	                    )
 	                ),
 	                _react2.default.createElement('div', { className: 'canvas-menu' })
 	            );
@@ -50656,12 +50798,252 @@
 	    //signUpBool: true
 	};
 
+	//DashBoard
+
+	var Dashboard = function (_React$Component2) {
+	    _inherits(Dashboard, _React$Component2);
+
+	    function Dashboard(props) {
+	        _classCallCheck(this, Dashboard);
+
+	        return _possibleConstructorReturn(this, (Dashboard.__proto__ || Object.getPrototypeOf(Dashboard)).call(this, props));
+	    }
+
+	    _createClass(Dashboard, [{
+	        key: 'render',
+	        value: function render() {
+	            var coinHTML = [],
+	                coinObj = [{
+	                name: "BTC",
+	                full_name: "Bitcoin",
+	                imgUrl: "imgs/icon/bitcoin.svg",
+	                amount: 5
+	            }, {
+	                name: "ETH",
+	                full_name: "Ethereum",
+	                imgUrl: "imgs/icon/ethereum.svg",
+	                amount: 25
+	            }],
+	                amount = 0,
+	                BTC = this.props.btc,
+	                ETH = this.props.eth;
+
+	            coinObj.forEach(function (elem, ind) {
+	                debugger;
+	                if (elem.name === "BTC") {
+	                    amount = amount + +BTC * elem.amount;
+	                    elem.currVal = +BTC;
+	                } else if (elem.name === "ETH") {
+	                    amount = amount + +ETH * elem.amount;
+	                    elem.currVal = +ETH;
+	                }
+
+	                coinHTML.push(_react2.default.createElement(
+	                    'div',
+	                    { className: 'coin-cover' },
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'coin-intro' },
+	                        _react2.default.createElement(
+	                            'div',
+	                            { className: 'coin-image-cover' },
+	                            _react2.default.createElement('img', { src: elem.imgUrl, className: 'coin-image' })
+	                        ),
+	                        _react2.default.createElement(
+	                            'div',
+	                            { className: 'coin-name' },
+	                            elem.full_name
+	                        )
+	                    ),
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'coin-amount' },
+	                        _react2.default.createElement(
+	                            'div',
+	                            { className: 'ca-cover' },
+	                            _react2.default.createElement(
+	                                'div',
+	                                { className: 'coin-total' },
+	                                elem.amount
+	                            ),
+	                            _react2.default.createElement(
+	                                'div',
+	                                { className: 'coin-curr' },
+	                                (+elem.currVal).toLocaleString()
+	                            ),
+	                            _react2.default.createElement(
+	                                'div',
+	                                { className: 'coin-fiat' },
+	                                (+elem.currVal * elem.amount).toFixed(2).toLocaleString()
+	                            )
+	                        )
+	                    )
+	                ));
+	            });
+
+	            return _react2.default.createElement(
+	                'div',
+	                null,
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'dash-head' },
+	                    _react2.default.createElement(
+	                        'h2',
+	                        { className: 'dash-h2' },
+	                        'Portfolio'
+	                    ),
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'dash-worth' },
+	                        '$',
+	                        amount.toFixed(2)
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'curr-cover' },
+	                    coinHTML
+	                ),
+	                _react2.default.createElement('div', { className: 'curr-chart' })
+	            );
+	        }
+	    }]);
+
+	    return Dashboard;
+	}(_react2.default.Component);
+
+	//News
+
+
+	var News = function (_React$Component3) {
+	    _inherits(News, _React$Component3);
+
+	    function News(props) {
+	        _classCallCheck(this, News);
+
+	        return _possibleConstructorReturn(this, (News.__proto__ || Object.getPrototypeOf(News)).call(this, props));
+	    }
+
+	    _createClass(News, [{
+	        key: 'render',
+	        value: function render() {
+	            return _react2.default.createElement(
+	                'div',
+	                null,
+	                _react2.default.createElement(
+	                    'h2',
+	                    null,
+	                    'News'
+	                ),
+	                _react2.default.createElement('div', { className: 'latest-news' })
+	            );
+	        }
+	    }]);
+
+	    return News;
+	}(_react2.default.Component);
+
+	//User Profile
+
+
+	var UserProfile = function (_React$Component4) {
+	    _inherits(UserProfile, _React$Component4);
+
+	    function UserProfile(props) {
+	        _classCallCheck(this, UserProfile);
+
+	        return _possibleConstructorReturn(this, (UserProfile.__proto__ || Object.getPrototypeOf(UserProfile)).call(this, props));
+	    }
+
+	    _createClass(UserProfile, [{
+	        key: 'render',
+	        value: function render() {
+	            return _react2.default.createElement(
+	                'div',
+	                null,
+	                _react2.default.createElement(
+	                    'h2',
+	                    null,
+	                    'User Profile'
+	                ),
+	                _react2.default.createElement('div', { className: 'user-profile' })
+	            );
+	        }
+	    }]);
+
+	    return UserProfile;
+	}(_react2.default.Component);
+
+	//Chat
+
+
+	var Chat = function (_React$Component5) {
+	    _inherits(Chat, _React$Component5);
+
+	    function Chat(props) {
+	        _classCallCheck(this, Chat);
+
+	        return _possibleConstructorReturn(this, (Chat.__proto__ || Object.getPrototypeOf(Chat)).call(this, props));
+	    }
+
+	    _createClass(Chat, [{
+	        key: 'render',
+	        value: function render() {
+	            return _react2.default.createElement(
+	                'div',
+	                null,
+	                _react2.default.createElement(
+	                    'h2',
+	                    null,
+	                    'Chat'
+	                ),
+	                _react2.default.createElement('div', { className: 'chat-room' })
+	            );
+	        }
+	    }]);
+
+	    return Chat;
+	}(_react2.default.Component);
+
+	//About Us
+
+
+	var AboutUs = function (_React$Component6) {
+	    _inherits(AboutUs, _React$Component6);
+
+	    function AboutUs(props) {
+	        _classCallCheck(this, AboutUs);
+
+	        return _possibleConstructorReturn(this, (AboutUs.__proto__ || Object.getPrototypeOf(AboutUs)).call(this, props));
+	    }
+
+	    _createClass(AboutUs, [{
+	        key: 'render',
+	        value: function render() {
+	            return _react2.default.createElement(
+	                'div',
+	                null,
+	                _react2.default.createElement(
+	                    'h2',
+	                    null,
+	                    'About Us'
+	                ),
+	                _react2.default.createElement('div', { className: 'about-us' })
+	            );
+	        }
+	    }]);
+
+	    return AboutUs;
+	}(_react2.default.Component);
+
+	//Redux
+
 	function mapStateToProps(state) {
 	    //return {sign: state.sign}
-	    return {};
+	    return { tick: state.ticker };
 	}
 
-	exports.default = (0, _reactRedux.connect)(mapStateToProps, {})(Canvas);
+	exports.default = (0, _reactRedux.connect)(mapStateToProps, { fetchBTC: _actions.fetchBTC, fetchETH: _actions.fetchETH })(Canvas);
 
 /***/ })
 /******/ ]);
