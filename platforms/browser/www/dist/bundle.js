@@ -39506,11 +39506,13 @@
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
-	exports.SIGN_IN = exports.SIGN_UP = exports.FETCH_ETH = exports.FETCH_BTC = undefined;
+	exports.PORT_UPDATE = exports.PORT_GET = exports.SIGN_IN = exports.SIGN_UP = exports.FETCH_ETH = exports.FETCH_BTC = undefined;
 	exports.fetchBTC = fetchBTC;
 	exports.fetchETH = fetchETH;
 	exports.signUp = signUp;
 	exports.signIn = signIn;
+	exports.getPortfolio = getPortfolio;
+	exports.updateCoinAPI = updateCoinAPI;
 
 	var _axios = __webpack_require__(508);
 
@@ -39522,9 +39524,12 @@
 	var FETCH_ETH = exports.FETCH_ETH = "fetch_eth";
 	var SIGN_UP = exports.SIGN_UP = "sign_up";
 	var SIGN_IN = exports.SIGN_IN = "sign_in";
+	var PORT_GET = exports.PORT_GET = "port_get";
+	var PORT_UPDATE = exports.PORT_UPDATE = "port_update";
 
 	var root_url = "https://api.gemini.com/v1/pubticker/";
 	var ct_url = "https://cryptonthus.herokuapp.com/api";
+	//const ct_url = "http://localhost:8001/api";
 
 	function fetchBTC() {
 	    var req = _axios2.default.get(root_url + "/btcusd");
@@ -39558,6 +39563,24 @@
 
 	    return {
 	        type: SIGN_IN,
+	        payload: req
+	    };
+	}
+
+	function getPortfolio(id) {
+	    var req = _axios2.default.get(ct_url + "/portfolio/" + id);
+
+	    return {
+	        type: PORT_GET,
+	        payload: req
+	    };
+	}
+
+	function updateCoinAPI(data) {
+	    var req = _axios2.default.post(ct_url + "/portfolio", data);
+
+	    return {
+	        type: PORT_UPDATE,
 	        payload: req
 	    };
 	}
@@ -41128,11 +41151,24 @@
 	            }
 	            break;
 	        case _index.SIGN_IN:
-	            debugger;
 	            if (action.payload.status === 200) {
 	                var obj = {};
 	                obj[_index.SIGN_IN] = action.payload.data;
 	                return Object.assign({}, state, obj);
+	            }
+	            break;
+	        case _index.PORT_GET:
+	            if (action.payload.status === 200) {
+	                var _obj = {};
+	                _obj[_index.PORT_GET] = action.payload.data;
+	                return Object.assign({}, state, _obj);
+	            }
+	            break;
+	        case _index.PORT_UPDATE:
+	            if (action.payload.status === 200) {
+	                var _obj2 = {};
+	                _obj2[_index.PORT_UPDATE] = action.payload.data;
+	                return Object.assign({}, state, _obj2);
 	            }
 	            break;
 	        default:
@@ -50291,6 +50327,16 @@
 
 	var _reactRouter = __webpack_require__(199);
 
+	var _actions = __webpack_require__(507);
+
+	var _index = __webpack_require__(507);
+
+	var _loadLogo = __webpack_require__(543);
+
+	var _loadLogo2 = _interopRequireDefault(_loadLogo);
+
+	var _reactRedux = __webpack_require__(160);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -50301,39 +50347,275 @@
 	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * Created by harshalcarpenter on 11/16/17.
 	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                */
 
-	var DashBoard = function (_React$Component) {
-	    _inherits(DashBoard, _React$Component);
+	//DashBoard
+	var Dashboard = function (_React$Component) {
+	    _inherits(Dashboard, _React$Component);
 
-	    function DashBoard() {
-	        _classCallCheck(this, DashBoard);
+	    function Dashboard(props) {
+	        _classCallCheck(this, Dashboard);
 
-	        return _possibleConstructorReturn(this, (DashBoard.__proto__ || Object.getPrototypeOf(DashBoard)).apply(this, arguments));
+	        var _this = _possibleConstructorReturn(this, (Dashboard.__proto__ || Object.getPrototypeOf(Dashboard)).call(this, props));
+
+	        _this.coinObj = {
+	            "BTC": {
+	                name: "BTC",
+	                full_name: "Bitcoin",
+	                imgUrl: "imgs/icon/bitcoin.svg",
+	                amount: 0
+	            },
+	            "ETH": {
+	                name: "ETH",
+	                full_name: "Ethereum",
+	                imgUrl: "imgs/icon/ethereum.svg",
+	                amount: 0
+	            }
+	        };
+	        _this.startX = 0;
+
+	        _this.state = {
+	            eth: 0,
+	            btc: 0,
+	            updateCoin: "",
+	            changePortVal: true
+	        };
+	        _this.touchEnd.bind(_this);
+	        _this.touchStart.bind(_this);
+	        _this.updateCoinVal.bind(_this);
+	        return _this;
 	    }
 
-	    _createClass(DashBoard, [{
+	    _createClass(Dashboard, [{
+	        key: 'getPortData',
+	        value: function getPortData() {
+	            this.props.getPortfolio(this.props.userId);
+	        }
+
+	        //Swipe Detection
+
+	    }, {
+	        key: 'touchStart',
+	        value: function touchStart(event, origEvent) {
+	            //console.log(arguments);
+	            //console.log(origEvent.changedTouches[0].pageX);
+	            this.startX = origEvent.changedTouches[0].pageX;
+	        }
+	    }, {
+	        key: 'touchEnd',
+	        value: function touchEnd(event, origEvent) {
+	            //console.log(arguments);
+	            //console.log(origEvent.changedTouches[0].pageX);
+	            var endX = origEvent.changedTouches[0].pageX;
+
+	            if (this.startX > endX + 100) {
+	                alert("Swiped Right -> Left");
+	            } else if (this.startX + 100 < endX) {
+	                alert("Swiped Left -> Right");
+	            }
+	        }
+	    }, {
+	        key: 'updateCoinVal',
+	        value: function updateCoinVal(coin, event) {
+	            this.coinObj[coin].amount = event.target.value;
+	            this.forceUpdate();
+	        }
+	    }, {
+	        key: 'updatePortfolio',
+	        value: function updatePortfolio(coin) {
+	            this.props.updateCoinAPI({
+	                userId: this.props.userId,
+	                type: coin,
+	                value: this.coinObj[coin].amount
+	            });
+	        }
+
+	        //Change Coin Value
+
+	    }, {
+	        key: 'openUpdater',
+	        value: function openUpdater(type) {
+	            if (type === this.state.updateCoin) {
+	                type = "";
+	            }
+	            this.setState({
+	                updateCoin: type
+	            });
+	        }
+	    }, {
+	        key: 'componentDidMount',
+	        value: function componentDidMount() {
+	            this.getPortData();
+	        }
+	    }, {
+	        key: 'togglePortalVal',
+	        value: function togglePortalVal() {
+	            //Set State
+	            this.setState({
+	                changePortVal: !this.state.changePortVal
+	            });
+	        }
+	    }, {
 	        key: 'render',
 	        value: function render() {
+	            var _this2 = this;
+
+	            var coinHTML = [],
+	                coinObj = this.coinObj,
+	                amount = 0,
+	                BTC = this.props.btc,
+	                ETH = this.props.eth;
+
+	            if (this.props.sign.hasOwnProperty(_index.PORT_GET) && this.state.changePortVal) {
+	                this.props.sign[_index.PORT_GET].result[0].coins.forEach(function (elem, ind) {
+	                    coinObj[elem.type].amount = elem.value;
+	                });
+	                this.togglePortalVal();
+	            }
+
+	            Object.keys(coinObj).forEach(function (elem, ind) {
+	                if (elem === "BTC") {
+	                    amount = amount + +BTC * coinObj[elem].amount;
+	                    coinObj[elem].currVal = +BTC;
+	                } else if (elem === "ETH") {
+	                    amount = amount + +ETH * coinObj[elem].amount;
+	                    coinObj[elem].currVal = +ETH;
+	                }
+
+	                var coin = coinObj[elem],
+	                    coverClass = "coin-cover";
+
+	                if (elem === _this2.state.updateCoin) {
+	                    coverClass += " update-active";
+	                }
+
+	                coinHTML.push(_react2.default.createElement(
+	                    'div',
+	                    { className: coverClass,
+	                        key: ind,
+	                        onTouchEnd: function onTouchEnd(e) {
+	                            _this2.touchEnd(e, e.nativeEvent);
+	                        },
+	                        onTouchStart: function onTouchStart(e) {
+	                            _this2.touchStart(e, e.nativeEvent);
+	                        } },
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'coin-short',
+	                            onClick: function onClick() {
+	                                _this2.openUpdater(elem);
+	                            } },
+	                        _react2.default.createElement(
+	                            'div',
+	                            { className: 'coin-intro' },
+	                            _react2.default.createElement(
+	                                'div',
+	                                { className: 'coin-image-cover' },
+	                                _react2.default.createElement('img', { src: coin.imgUrl, className: 'coin-image' })
+	                            ),
+	                            _react2.default.createElement(
+	                                'div',
+	                                { className: 'coin-name' },
+	                                coin.full_name
+	                            )
+	                        ),
+	                        _react2.default.createElement(
+	                            'div',
+	                            { className: 'coin-amount' },
+	                            _react2.default.createElement(
+	                                'div',
+	                                { className: 'ca-cover' },
+	                                _react2.default.createElement(
+	                                    'div',
+	                                    { className: 'coin-total' },
+	                                    coin.amount
+	                                ),
+	                                _react2.default.createElement(
+	                                    'div',
+	                                    { className: 'coin-curr' },
+	                                    (+coin.currVal).toLocaleString()
+	                                ),
+	                                _react2.default.createElement(
+	                                    'div',
+	                                    { className: 'coin-fiat' },
+	                                    (+coin.currVal * coin.amount).toFixed(2).toLocaleString()
+	                                )
+	                            )
+	                        )
+	                    ),
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'coin-more' },
+	                        _react2.default.createElement(
+	                            'div',
+	                            { className: 'coin-update' },
+	                            _react2.default.createElement('input', { type: 'number',
+	                                className: 'coin-input',
+	                                value: coin.amount,
+	                                onChange: function onChange(e) {
+	                                    _this2.updateCoinVal(elem, e);
+	                                } }),
+	                            _react2.default.createElement(
+	                                'button',
+	                                { className: 'update-button',
+	                                    onClick: function onClick() {
+	                                        _this2.updatePortfolio(elem);
+	                                    } },
+	                                _react2.default.createElement('i', { className: 'fa fa-refresh' }),
+	                                'Update'
+	                            )
+	                        )
+	                    )
+	                ));
+	            });
+
 	            return _react2.default.createElement(
 	                'div',
 	                null,
 	                _react2.default.createElement(
-	                    _reactRouter.Link,
-	                    { to: '/' },
-	                    'Go Back '
+	                    'div',
+	                    { className: 'dash-head' },
+	                    _react2.default.createElement(
+	                        'h2',
+	                        { className: 'dash-h2' },
+	                        'Portfolio'
+	                    ),
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'dash-worth' },
+	                        '$',
+	                        amount.toFixed(2)
+	                    )
 	                ),
 	                _react2.default.createElement(
-	                    _reactRouter.Link,
-	                    { to: '/logo' },
-	                    'Logo'
+	                    'div',
+	                    { className: 'dash-body' },
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'curr-main' },
+	                        _react2.default.createElement(
+	                            'div',
+	                            { className: 'curr-cover' },
+	                            coinHTML
+	                        ),
+	                        _react2.default.createElement('div', { className: 'curr-chart' })
+	                    ),
+	                    _react2.default.createElement('div', { className: 'curr-detail' })
 	                )
 	            );
 	        }
 	    }]);
 
-	    return DashBoard;
+	    return Dashboard;
 	}(_react2.default.Component);
 
-	exports.default = DashBoard;
+	function mapStateToProps(state) {
+	    //return {sign: state.sign}
+	    return {
+	        tick: state.ticker,
+	        sign: state.sign
+	    };
+	}
+
+	exports.default = (0, _reactRedux.connect)(mapStateToProps, { getPortfolio: _actions.getPortfolio, updateCoinAPI: _actions.updateCoinAPI })(Dashboard);
 
 /***/ }),
 /* 546 */
@@ -50419,7 +50701,6 @@
 	    }, {
 	        key: 'toggleState',
 	        value: function toggleState() {
-	            debugger;
 	            //Toggle Signup boolean
 	            this.signUpBool = !this.signUpBool;
 	            //Change the wordings
@@ -50451,9 +50732,7 @@
 	            //Change Sign Up Bool variable to prop value
 	            this.signUpBool = this.props.params.id === "true";
 
-	            if (this.props.sign) {
-	                debugger;
-	            }
+	            if (this.props.sign) {}
 	        }
 	    }, {
 	        key: 'componentDidMount',
@@ -50568,7 +50847,6 @@
 	};
 
 	function mapStateToProps(state) {
-	    debugger;
 	    return { sign: state.sign };
 	}
 
@@ -50594,13 +50872,19 @@
 
 	var _loadLogo2 = _interopRequireDefault(_loadLogo);
 
-	var _reactRedux = __webpack_require__(160);
+	var _alertMessage = __webpack_require__(548);
+
+	var _alertMessage2 = _interopRequireDefault(_alertMessage);
 
 	var _dashboard = __webpack_require__(545);
 
 	var _dashboard2 = _interopRequireDefault(_dashboard);
 
+	var _reactRedux = __webpack_require__(160);
+
 	var _actions = __webpack_require__(507);
+
+	var _index = __webpack_require__(507);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -50611,6 +50895,12 @@
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /**
 	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * Created by harshalcarpenter on 12/19/17.
 	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                */
+
+	//Components
+
+
+	//Redux stuff
+
 
 	var canvasState = {
 	    dashboard: "dashboard",
@@ -50686,6 +50976,8 @@
 	                ETH = this.props.tick.ETH.last;
 	            }
 
+	            var userId = this.props.params.userid;
+
 	            return _react2.default.createElement(
 	                'div',
 	                { className: 'canvas-container' },
@@ -50758,7 +51050,7 @@
 	                        _react2.default.createElement(
 	                            'div',
 	                            { className: 'dashboard ' + (currentState === canvasState.dashboard ? '' : 'hide') },
-	                            _react2.default.createElement(Dashboard, { btc: BTC, eth: ETH, proppy: 'apples' })
+	                            _react2.default.createElement(_dashboard2.default, { btc: BTC, eth: ETH, userId: userId })
 	                        ),
 	                        _react2.default.createElement(
 	                            'div',
@@ -50798,125 +51090,10 @@
 	    //signUpBool: true
 	};
 
-	//DashBoard
-
-	var Dashboard = function (_React$Component2) {
-	    _inherits(Dashboard, _React$Component2);
-
-	    function Dashboard(props) {
-	        _classCallCheck(this, Dashboard);
-
-	        return _possibleConstructorReturn(this, (Dashboard.__proto__ || Object.getPrototypeOf(Dashboard)).call(this, props));
-	    }
-
-	    _createClass(Dashboard, [{
-	        key: 'render',
-	        value: function render() {
-	            var coinHTML = [],
-	                coinObj = [{
-	                name: "BTC",
-	                full_name: "Bitcoin",
-	                imgUrl: "imgs/icon/bitcoin.svg",
-	                amount: 5
-	            }, {
-	                name: "ETH",
-	                full_name: "Ethereum",
-	                imgUrl: "imgs/icon/ethereum.svg",
-	                amount: 25
-	            }],
-	                amount = 0,
-	                BTC = this.props.btc,
-	                ETH = this.props.eth;
-
-	            coinObj.forEach(function (elem, ind) {
-	                debugger;
-	                if (elem.name === "BTC") {
-	                    amount = amount + +BTC * elem.amount;
-	                    elem.currVal = +BTC;
-	                } else if (elem.name === "ETH") {
-	                    amount = amount + +ETH * elem.amount;
-	                    elem.currVal = +ETH;
-	                }
-
-	                coinHTML.push(_react2.default.createElement(
-	                    'div',
-	                    { className: 'coin-cover' },
-	                    _react2.default.createElement(
-	                        'div',
-	                        { className: 'coin-intro' },
-	                        _react2.default.createElement(
-	                            'div',
-	                            { className: 'coin-image-cover' },
-	                            _react2.default.createElement('img', { src: elem.imgUrl, className: 'coin-image' })
-	                        ),
-	                        _react2.default.createElement(
-	                            'div',
-	                            { className: 'coin-name' },
-	                            elem.full_name
-	                        )
-	                    ),
-	                    _react2.default.createElement(
-	                        'div',
-	                        { className: 'coin-amount' },
-	                        _react2.default.createElement(
-	                            'div',
-	                            { className: 'ca-cover' },
-	                            _react2.default.createElement(
-	                                'div',
-	                                { className: 'coin-total' },
-	                                elem.amount
-	                            ),
-	                            _react2.default.createElement(
-	                                'div',
-	                                { className: 'coin-curr' },
-	                                (+elem.currVal).toLocaleString()
-	                            ),
-	                            _react2.default.createElement(
-	                                'div',
-	                                { className: 'coin-fiat' },
-	                                (+elem.currVal * elem.amount).toFixed(2).toLocaleString()
-	                            )
-	                        )
-	                    )
-	                ));
-	            });
-
-	            return _react2.default.createElement(
-	                'div',
-	                null,
-	                _react2.default.createElement(
-	                    'div',
-	                    { className: 'dash-head' },
-	                    _react2.default.createElement(
-	                        'h2',
-	                        { className: 'dash-h2' },
-	                        'Portfolio'
-	                    ),
-	                    _react2.default.createElement(
-	                        'div',
-	                        { className: 'dash-worth' },
-	                        '$',
-	                        amount.toFixed(2)
-	                    )
-	                ),
-	                _react2.default.createElement(
-	                    'div',
-	                    { className: 'curr-cover' },
-	                    coinHTML
-	                ),
-	                _react2.default.createElement('div', { className: 'curr-chart' })
-	            );
-	        }
-	    }]);
-
-	    return Dashboard;
-	}(_react2.default.Component);
-
 	//News
 
-
-	var News = function (_React$Component3) {
-	    _inherits(News, _React$Component3);
+	var News = function (_React$Component2) {
+	    _inherits(News, _React$Component2);
 
 	    function News(props) {
 	        _classCallCheck(this, News);
@@ -50946,8 +51123,8 @@
 	//User Profile
 
 
-	var UserProfile = function (_React$Component4) {
-	    _inherits(UserProfile, _React$Component4);
+	var UserProfile = function (_React$Component3) {
+	    _inherits(UserProfile, _React$Component3);
 
 	    function UserProfile(props) {
 	        _classCallCheck(this, UserProfile);
@@ -50977,8 +51154,8 @@
 	//Chat
 
 
-	var Chat = function (_React$Component5) {
-	    _inherits(Chat, _React$Component5);
+	var Chat = function (_React$Component4) {
+	    _inherits(Chat, _React$Component4);
 
 	    function Chat(props) {
 	        _classCallCheck(this, Chat);
@@ -51008,8 +51185,8 @@
 	//About Us
 
 
-	var AboutUs = function (_React$Component6) {
-	    _inherits(AboutUs, _React$Component6);
+	var AboutUs = function (_React$Component5) {
+	    _inherits(AboutUs, _React$Component5);
 
 	    function AboutUs(props) {
 	        _classCallCheck(this, AboutUs);
@@ -51040,10 +51217,69 @@
 
 	function mapStateToProps(state) {
 	    //return {sign: state.sign}
-	    return { tick: state.ticker };
+	    return {
+	        tick: state.ticker,
+	        sign: state.sign
+	    };
 	}
 
-	exports.default = (0, _reactRedux.connect)(mapStateToProps, { fetchBTC: _actions.fetchBTC, fetchETH: _actions.fetchETH })(Canvas);
+	exports.default = (0, _reactRedux.connect)(mapStateToProps, { fetchBTC: _actions.fetchBTC, fetchETH: _actions.fetchETH, getPortfolio: _actions.getPortfolio })(Canvas);
+
+/***/ }),
+/* 548 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(2);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /**
+	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * Created by harshalcarpenter on 1/7/18.
+	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                */
+
+	var Alert = function (_React$Component) {
+	    _inherits(Alert, _React$Component);
+
+	    function Alert(props) {
+	        _classCallCheck(this, Alert);
+
+	        return _possibleConstructorReturn(this, (Alert.__proto__ || Object.getPrototypeOf(Alert)).call(this, props));
+	    }
+
+	    _createClass(Alert, [{
+	        key: "render",
+	        value: function render() {
+	            var summ = this.props.summ,
+	                mess = this.props.mess;
+	            return _react2.default.createElement(
+	                "div",
+	                { className: "alert-mess" },
+	                _react2.default.createElement(
+	                    "div",
+	                    { className: "a-summ" },
+	                    summ
+	                ),
+	                _react2.default.createElement(
+	                    "div",
+	                    { className: "a-mess" },
+	                    mess
+	                )
+	            );
+	        }
+	    }]);
+
+	    return Alert;
+	}(_react2.default.Component);
 
 /***/ })
 /******/ ]);

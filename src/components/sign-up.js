@@ -42,7 +42,6 @@ class SignUp extends React.Component{
     }
 
     toggleState(){
-        debugger;
         //Toggle Signup boolean
         this.signUpBool = !this.signUpBool;
         //Change the wordings
@@ -74,7 +73,6 @@ class SignUp extends React.Component{
         this.signUpBool = this.props.params.id === "true";
 
         if(this.props.sign){
-            debugger;
 
         }
     }
@@ -148,7 +146,6 @@ SignUp.defaultProps = {
 };
 
 function mapStateToProps(state) {
-    debugger;
     return {sign: state.sign}
 }
 

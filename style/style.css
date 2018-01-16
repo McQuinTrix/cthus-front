@@ -242,17 +242,32 @@ body{
 .coin-cover{
     padding: 0px;
     margin-bottom: 17px;
-    display: flex;
-    justify-content: space-between;
     border-radius: 15px;
     background-color: #4a4a4a;
     overflow: hidden;
+}
+
+.coin-cover .coin-more{
+    display: none;
+    margin: 0 10px 8px;
+    padding: 8px 10px;
+    background-color: #585858;
+    border-radius: 10px;
+}
+
+.coin-cover.update-active .coin-more{
+    display: block;
 }
 
 .coin-intro{
     display: flex;
     align-items: center;
     padding: 20px 15px;
+}
+
+.coin-short{
+    display: flex;
+    justify-content: space-between;
 }
 
 .coin-image-cover{
@@ -291,4 +306,26 @@ body{
 }
 .coin-total{
     font-size: 22px;
+}
+
+.update-button{
+    float: right;
+    font-size: 1rem;
+    background-color: transparent;
+    color: white;
+    border-width: 0px;
+}
+
+.update-button .fa-refresh{
+    display: inline-block;
+    padding: 0 10px;
+}
+
+.coin-input{
+    background-color: transparent;
+    border-width: 0px;
+    border-bottom: 1px solid white;
+    color: white;
+    font-size: 1rem;
+    padding: 2px 5px;
 }

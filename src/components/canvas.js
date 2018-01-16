@@ -3,10 +3,16 @@
  */
 
 import React from 'react';
+
+//Components
 import Logo, {smallAnim} from './load-logo';
+import Alert from './alert-message';
+import Dashboard from "./dashboard";
+
+//Redux stuff
 import { connect } from "react-redux";
-import DashBoard from "./dashboard";
-import { fetchBTC, fetchETH } from "../actions";
+import { fetchBTC, fetchETH, getPortfolio } from "../actions";
+import { PORT_GET } from "../actions/index";
 
 const canvasState = {
     dashboard:"dashboard",
@@ -66,6 +72,8 @@ class Canvas extends React.Component{
             ETH = this.props.tick.ETH.last;
         }
 
+        let userId = this.props.params.userid;
+
         return (
             <div className="canvas-container">
                 <div className="canvas-body">
@@ -112,7 +120,7 @@ class Canvas extends React.Component{
                         {/*** Dashboard ***/}
 
                         <div className={`dashboard ${currentState === canvasState.dashboard ? '' : 'hide'}`}>
-                            <Dashboard btc={BTC} eth={ETH} proppy="apples"/>
+                            <Dashboard btc={BTC} eth={ETH} userId={userId}/>
                         </div>
 
                         {/** Reddit News/Comments **/}
@@ -153,90 +161,6 @@ Canvas.defaultProps = {
     //signUpBool: true
 };
 
-//DashBoard
-class Dashboard extends React.Component{
-    constructor(props){
-        super(props);
-    }
-
-    render(){
-        let coinHTML =[],
-            coinObj = [
-                {
-                    name: "BTC",
-                    full_name: "Bitcoin",
-                    imgUrl: "imgs/icon/bitcoin.svg",
-                    amount: 5
-                },{
-                    name: "ETH",
-                    full_name: "Ethereum",
-                    imgUrl: "imgs/icon/ethereum.svg",
-                    amount: 25
-                }
-            ],
-            amount = 0,
-            BTC=this.props.btc,
-            ETH=this.props.eth;
-
-
-        coinObj.forEach((elem,ind)=>{
-            debugger;
-            if(elem.name === "BTC"){
-                amount = amount + ((+BTC)* elem.amount);
-                elem.currVal = +BTC;
-            }else if(elem.name === "ETH"){
-                amount = amount + ((+ETH)* elem.amount);
-                elem.currVal = +ETH;
-            }
-
-            coinHTML.push(
-               <div className="coin-cover">
-                   <div className="coin-intro">
-                       <div className="coin-image-cover">
-                           <img src={elem.imgUrl} className="coin-image"/>
-                       </div>
-                       <div className="coin-name">
-                           {elem.full_name}
-                       </div>
-                   </div>
-                   <div className="coin-amount">
-                       <div className="ca-cover">
-                           <div className="coin-total">
-                               {elem.amount}
-                           </div>
-                           <div className="coin-curr">
-                               {(+elem.currVal).toLocaleString()}
-                           </div>
-                           <div className="coin-fiat">
-                               {((+elem.currVal)*elem.amount).toFixed(2).toLocaleString()}
-                           </div>
-                       </div>
-                   </div>
-               </div>
-            )
-        });
-
-        return (
-            <div>
-                <div className="dash-head">
-                    <h2 className="dash-h2">Portfolio</h2>
-                    <div className="dash-worth">
-                        ${amount.toFixed(2)}
-                    </div>
-                </div>
-
-                <div className="curr-cover">
-                    {coinHTML}
-                </div>
-                <div className="curr-chart">
-                    {/* BTC Chart */}
-                    {/* ETH Chart */}
-                    {/* Total Chart */}
-                </div>
-            </div>
-        );
-    }
-}
 
 //News
 class News extends React.Component{
@@ -314,7 +238,10 @@ class AboutUs extends React.Component{
 
 function mapStateToProps(state) {
     //return {sign: state.sign}
-    return {tick: state.ticker}
+    return {
+        tick: state.ticker,
+        sign: state.sign
+    }
 }
 
-export default connect(mapStateToProps, { fetchBTC, fetchETH})(Canvas);
+export default connect(mapStateToProps, { fetchBTC, fetchETH,getPortfolio})(Canvas);
