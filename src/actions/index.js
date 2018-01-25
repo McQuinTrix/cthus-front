@@ -6,6 +6,7 @@ export const SIGN_UP = "sign_up";
 export const SIGN_IN = "sign_in";
 export const PORT_GET = "port_get";
 export const PORT_UPDATE = "port_update";
+export const PROF_UPDATE = "prof_update";
 
 const root_url = "https://api.gemini.com/v1/pubticker/";
 const ct_url = "https://cryptonthus.herokuapp.com/api";
@@ -39,10 +40,19 @@ export function signUp(data){
 }
 
 export function signIn(data){
-    const req = axios.post(`${ct_url}/userInfo`,data);
+    const req = axios.post(`${ct_url}/userInfo/signin`,data);
 
     return {
         type: SIGN_IN,
+        payload: req
+    }
+}
+
+export function updateUser(userId,data){
+    const req = axios.post(`${ct_url}/userInfo/${userId}`,data);
+
+    return {
+        type: UPDATE_PORT,
         payload: req
     }
 }
@@ -60,7 +70,7 @@ export function updateCoinAPI(data){
     const req = axios.post(`${ct_url}/portfolio`,data);
 
     return {
-        type: PORT_UPDATE,
+        type: PROF_UPDATE,
         payload: req
     }
 }

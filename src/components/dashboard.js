@@ -105,13 +105,16 @@ class Dashboard extends React.Component{
             ETH = this.props.eth;
 
         if(this.props.sign.hasOwnProperty(PORT_GET) && this.state.changePortVal){
-            this.props
-                .sign[PORT_GET]
-                .result[0]
-                .coins
-                .forEach((elem,ind)=>{
-                    coinObj[elem.type].amount = elem.value;
-                });
+            if(this.props.sign[PORT_GET].result.length){
+                this.props
+                    .sign[PORT_GET]
+                    .result[0]
+                    .coins
+                    .forEach((elem,ind)=>{
+                        coinObj[elem.type].amount = elem.value;
+                    });
+            }
+
             this.togglePortalVal()
         }
 

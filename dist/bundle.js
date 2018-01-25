@@ -39506,11 +39506,12 @@
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
-	exports.PORT_UPDATE = exports.PORT_GET = exports.SIGN_IN = exports.SIGN_UP = exports.FETCH_ETH = exports.FETCH_BTC = undefined;
+	exports.PROF_UPDATE = exports.PORT_UPDATE = exports.PORT_GET = exports.SIGN_IN = exports.SIGN_UP = exports.FETCH_ETH = exports.FETCH_BTC = undefined;
 	exports.fetchBTC = fetchBTC;
 	exports.fetchETH = fetchETH;
 	exports.signUp = signUp;
 	exports.signIn = signIn;
+	exports.updateUser = updateUser;
 	exports.getPortfolio = getPortfolio;
 	exports.updateCoinAPI = updateCoinAPI;
 
@@ -39526,6 +39527,7 @@
 	var SIGN_IN = exports.SIGN_IN = "sign_in";
 	var PORT_GET = exports.PORT_GET = "port_get";
 	var PORT_UPDATE = exports.PORT_UPDATE = "port_update";
+	var PROF_UPDATE = exports.PROF_UPDATE = "prof_update";
 
 	var root_url = "https://api.gemini.com/v1/pubticker/";
 	var ct_url = "https://cryptonthus.herokuapp.com/api";
@@ -39559,10 +39561,19 @@
 	}
 
 	function signIn(data) {
-	    var req = _axios2.default.post(ct_url + "/userInfo", data);
+	    var req = _axios2.default.post(ct_url + "/userInfo/signin", data);
 
 	    return {
 	        type: SIGN_IN,
+	        payload: req
+	    };
+	}
+
+	function updateUser(userId, data) {
+	    var req = _axios2.default.post(ct_url + "/userInfo/" + userId, data);
+
+	    return {
+	        type: UPDATE_PORT,
 	        payload: req
 	    };
 	}
@@ -39580,7 +39591,7 @@
 	    var req = _axios2.default.post(ct_url + "/portfolio", data);
 
 	    return {
-	        type: PORT_UPDATE,
+	        type: PROF_UPDATE,
 	        payload: req
 	    };
 	}
@@ -41169,6 +41180,13 @@
 	                var _obj2 = {};
 	                _obj2[_index.PORT_UPDATE] = action.payload.data;
 	                return Object.assign({}, state, _obj2);
+	            }
+	            break;
+	        case _index.PROF_UPDATE:
+	            if (action.payload.status === 200) {
+	                var _obj3 = {};
+	                _obj3[_index.PROF_UPDATE] = action.payload.data;
+	                return Object.assign({}, state, _obj3);
 	            }
 	            break;
 	        default:
@@ -50465,9 +50483,12 @@
 	                ETH = this.props.eth;
 
 	            if (this.props.sign.hasOwnProperty(_index.PORT_GET) && this.state.changePortVal) {
-	                this.props.sign[_index.PORT_GET].result[0].coins.forEach(function (elem, ind) {
-	                    coinObj[elem.type].amount = elem.value;
-	                });
+	                if (this.props.sign[_index.PORT_GET].result.length) {
+	                    this.props.sign[_index.PORT_GET].result[0].coins.forEach(function (elem, ind) {
+	                        coinObj[elem.type].amount = elem.value;
+	                    });
+	                }
+
 	                this.togglePortalVal();
 	            }
 
@@ -50880,6 +50901,10 @@
 
 	var _dashboard2 = _interopRequireDefault(_dashboard);
 
+	var _userProfile = __webpack_require__(549);
+
+	var _userProfile2 = _interopRequireDefault(_userProfile);
+
 	var _reactRedux = __webpack_require__(160);
 
 	var _actions = __webpack_require__(507);
@@ -51060,7 +51085,7 @@
 	                        _react2.default.createElement(
 	                            'div',
 	                            { className: 'user-prof ' + (currentState === canvasState.profile ? '' : 'hide') },
-	                            _react2.default.createElement(UserProfile, null)
+	                            _react2.default.createElement(_userProfile2.default, null)
 	                        ),
 	                        _react2.default.createElement(
 	                            'div',
@@ -51120,42 +51145,11 @@
 	    return News;
 	}(_react2.default.Component);
 
-	//User Profile
-
-
-	var UserProfile = function (_React$Component3) {
-	    _inherits(UserProfile, _React$Component3);
-
-	    function UserProfile(props) {
-	        _classCallCheck(this, UserProfile);
-
-	        return _possibleConstructorReturn(this, (UserProfile.__proto__ || Object.getPrototypeOf(UserProfile)).call(this, props));
-	    }
-
-	    _createClass(UserProfile, [{
-	        key: 'render',
-	        value: function render() {
-	            return _react2.default.createElement(
-	                'div',
-	                null,
-	                _react2.default.createElement(
-	                    'h2',
-	                    null,
-	                    'User Profile'
-	                ),
-	                _react2.default.createElement('div', { className: 'user-profile' })
-	            );
-	        }
-	    }]);
-
-	    return UserProfile;
-	}(_react2.default.Component);
-
 	//Chat
 
 
-	var Chat = function (_React$Component4) {
-	    _inherits(Chat, _React$Component4);
+	var Chat = function (_React$Component3) {
+	    _inherits(Chat, _React$Component3);
 
 	    function Chat(props) {
 	        _classCallCheck(this, Chat);
@@ -51185,8 +51179,8 @@
 	//About Us
 
 
-	var AboutUs = function (_React$Component5) {
-	    _inherits(AboutUs, _React$Component5);
+	var AboutUs = function (_React$Component4) {
+	    _inherits(AboutUs, _React$Component4);
 
 	    function AboutUs(props) {
 	        _classCallCheck(this, AboutUs);
@@ -51280,6 +51274,125 @@
 
 	    return Alert;
 	}(_react2.default.Component);
+
+/***/ }),
+/* 549 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(2);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactRedux = __webpack_require__(160);
+
+	var _actions = __webpack_require__(507);
+
+	var _index = __webpack_require__(507);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /**
+	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * Created by harshalcarpenter on 1/21/18.
+	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                */
+
+	//User Profile
+	var UserProfile = function (_React$Component) {
+	    _inherits(UserProfile, _React$Component);
+
+	    function UserProfile(props) {
+	        _classCallCheck(this, UserProfile);
+
+	        var _this = _possibleConstructorReturn(this, (UserProfile.__proto__ || Object.getPrototypeOf(UserProfile)).call(this, props));
+
+	        _this.state = {
+	            fname: "",
+	            lname: ""
+	        };
+	        return _this;
+	    }
+
+	    _createClass(UserProfile, [{
+	        key: "updateChange",
+	        value: function updateChange(event, name) {
+	            var obj = {};
+	            obj[name] = event.target.value;
+	            this.setState(obj);
+	        }
+	    }, {
+	        key: "componentWillMount",
+	        value: function componentWillMount() {}
+	    }, {
+	        key: "render",
+	        value: function render() {
+	            var _this2 = this;
+
+	            var hideShow = '',
+	                fName = this.state.fname,
+	                lName = this.state.lname;
+
+	            return _react2.default.createElement(
+	                "div",
+	                { className: hideShow },
+	                _react2.default.createElement(
+	                    "h2",
+	                    null,
+	                    "User Profile"
+	                ),
+	                _react2.default.createElement(
+	                    "div",
+	                    { className: "user-profile" },
+	                    _react2.default.createElement(
+	                        "div",
+	                        { className: "input-cover" },
+	                        _react2.default.createElement("input", { className: "input-large",
+	                            value: fName,
+	                            onChange: function onChange(e) {
+	                                _this2.updateChange(e, 'fName');
+	                            },
+	                            placeholder: "Enter First Name ..." })
+	                    ),
+	                    _react2.default.createElement(
+	                        "div",
+	                        { className: "input-cover" },
+	                        _react2.default.createElement("input", { className: "input-large",
+	                            value: lName,
+	                            onChange: function onChange(e) {
+	                                _this2.updateChange(e, 'lName');
+	                            },
+	                            placeholder: "Enter Last Name ..." })
+	                    ),
+	                    _react2.default.createElement(
+	                        "button",
+	                        { className: "button-active-large" },
+	                        _react2.default.createElement("i", { className: "fa fa-floppy-o" }),
+	                        " Save"
+	                    )
+	                )
+	            );
+	        }
+	    }]);
+
+	    return UserProfile;
+	}(_react2.default.Component);
+
+	function mapStateToProps(state) {
+	    //return {sign: state.sign}
+	    return {};
+	}
+
+	exports.default = (0, _reactRedux.connect)(mapStateToProps, { updateUser: _actions.updateUser })(UserProfile);
 
 /***/ })
 /******/ ]);

@@ -8,6 +8,7 @@ import React from 'react';
 import Logo, {smallAnim} from './load-logo';
 import Alert from './alert-message';
 import Dashboard from "./dashboard";
+import UserProfile from "./user-profile";
 
 //Redux stuff
 import { connect } from "react-redux";
@@ -173,24 +174,6 @@ class News extends React.Component{
             <div>
                 <h2>News</h2>
                 <div className="latest-news">
-
-                </div>
-            </div>
-        );
-    }
-}
-
-//User Profile
-class UserProfile extends React.Component{
-    constructor(props){
-        super(props);
-    }
-
-    render(){
-        return (
-            <div>
-                <h2>User Profile</h2>
-                <div className="user-profile">
 
                 </div>
             </div>
