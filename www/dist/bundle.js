@@ -39506,14 +39506,15 @@
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
-	exports.PROF_UPDATE = exports.PORT_UPDATE = exports.PORT_GET = exports.SIGN_IN = exports.SIGN_UP = exports.FETCH_ETH = exports.FETCH_BTC = undefined;
+	exports.UPDATE_USERINFO = exports.USER_INFO = exports.PROF_UPDATE = exports.PORT_UPDATE = exports.PORT_GET = exports.SIGN_IN = exports.SIGN_UP = exports.FETCH_ETH = exports.FETCH_BTC = undefined;
 	exports.fetchBTC = fetchBTC;
 	exports.fetchETH = fetchETH;
 	exports.signUp = signUp;
-	exports.signIn = signIn;
-	exports.updateUser = updateUser;
-	exports.getPortfolio = getPortfolio;
 	exports.updateCoinAPI = updateCoinAPI;
+	exports.getPortfolio = getPortfolio;
+	exports.getUser = getUser;
+	exports.updateUser = updateUser;
+	exports.signIn = signIn;
 
 	var _axios = __webpack_require__(508);
 
@@ -39528,6 +39529,8 @@
 	var PORT_GET = exports.PORT_GET = "port_get";
 	var PORT_UPDATE = exports.PORT_UPDATE = "port_update";
 	var PROF_UPDATE = exports.PROF_UPDATE = "prof_update";
+	var USER_INFO = exports.USER_INFO = "get_userInfo";
+	var UPDATE_USERINFO = exports.UPDATE_USERINFO = "update_userInfo";
 
 	var root_url = "https://api.gemini.com/v1/pubticker/";
 	var ct_url = "https://cryptonthus.herokuapp.com/api";
@@ -39560,20 +39563,11 @@
 	    };
 	}
 
-	function signIn(data) {
-	    var req = _axios2.default.post(ct_url + "/userInfo/signin", data);
+	function updateCoinAPI(data) {
+	    var req = _axios2.default.post(ct_url + "/portfolio", data);
 
 	    return {
-	        type: SIGN_IN,
-	        payload: req
-	    };
-	}
-
-	function updateUser(userId, data) {
-	    var req = _axios2.default.post(ct_url + "/userInfo/" + userId, data);
-
-	    return {
-	        type: UPDATE_PORT,
+	        type: PROF_UPDATE,
 	        payload: req
 	    };
 	}
@@ -39587,11 +39581,29 @@
 	    };
 	}
 
-	function updateCoinAPI(data) {
-	    var req = _axios2.default.post(ct_url + "/portfolio", data);
+	function getUser(id) {
+	    var req = _axios2.default.get(ct_url + "/userInfo/" + id);
 
 	    return {
-	        type: PROF_UPDATE,
+	        type: USER_INFO,
+	        payload: req
+	    };
+	}
+
+	function updateUser(userId, data) {
+	    var req = _axios2.default.put(ct_url + "/userInfo/" + userId, data);
+
+	    return {
+	        type: UPDATE_USERINFO,
+	        payload: req
+	    };
+	}
+
+	function signIn(data) {
+	    var req = _axios2.default.post(ct_url + "/userInfo/signin", data);
+
+	    return {
+	        type: SIGN_IN,
 	        payload: req
 	    };
 	}
@@ -41187,6 +41199,20 @@
 	                var _obj3 = {};
 	                _obj3[_index.PROF_UPDATE] = action.payload.data;
 	                return Object.assign({}, state, _obj3);
+	            }
+	            break;
+	        case _index.USER_INFO:
+	            if (action.payload.status === 200) {
+	                var _obj4 = {};
+	                _obj4[_index.USER_INFO] = action.payload.data;
+	                return Object.assign({}, state, _obj4);
+	            }
+	            break;
+	        case _index.UPDATE_USERINFO:
+	            if (action.payload.status === 200) {
+	                var _obj5 = {};
+	                _obj5[_index.UPDATE_USERINFO] = action.payload.data;
+	                return Object.assign({}, state, _obj5);
 	            }
 	            break;
 	        default:
@@ -50413,15 +50439,11 @@
 	    }, {
 	        key: 'touchStart',
 	        value: function touchStart(event, origEvent) {
-	            //console.log(arguments);
-	            //console.log(origEvent.changedTouches[0].pageX);
 	            this.startX = origEvent.changedTouches[0].pageX;
 	        }
 	    }, {
 	        key: 'touchEnd',
 	        value: function touchEnd(event, origEvent) {
-	            //console.log(arguments);
-	            //console.log(origEvent.changedTouches[0].pageX);
 	            var endX = origEvent.changedTouches[0].pageX;
 
 	            if (this.startX > endX + 100) {
@@ -50464,6 +50486,21 @@
 	            this.getPortData();
 	        }
 	    }, {
+	        key: 'componentWillReceiveProps',
+	        value: function componentWillReceiveProps() {
+	            var _this2 = this;
+
+	            if (this.props.sign.hasOwnProperty(_index.PORT_GET) && this.state.changePortVal) {
+	                if (this.props.sign[_index.PORT_GET].result.length) {
+	                    this.props.sign[_index.PORT_GET].result[0].coins.forEach(function (elem, ind) {
+	                        _this2.coinObj[elem.type].amount = elem.value;
+	                    });
+	                }
+
+	                this.togglePortalVal();
+	            }
+	        }
+	    }, {
 	        key: 'togglePortalVal',
 	        value: function togglePortalVal() {
 	            //Set State
@@ -50474,23 +50511,13 @@
 	    }, {
 	        key: 'render',
 	        value: function render() {
-	            var _this2 = this;
+	            var _this3 = this;
 
 	            var coinHTML = [],
 	                coinObj = this.coinObj,
 	                amount = 0,
 	                BTC = this.props.btc,
 	                ETH = this.props.eth;
-
-	            if (this.props.sign.hasOwnProperty(_index.PORT_GET) && this.state.changePortVal) {
-	                if (this.props.sign[_index.PORT_GET].result.length) {
-	                    this.props.sign[_index.PORT_GET].result[0].coins.forEach(function (elem, ind) {
-	                        coinObj[elem.type].amount = elem.value;
-	                    });
-	                }
-
-	                this.togglePortalVal();
-	            }
 
 	            Object.keys(coinObj).forEach(function (elem, ind) {
 	                if (elem === "BTC") {
@@ -50504,7 +50531,7 @@
 	                var coin = coinObj[elem],
 	                    coverClass = "coin-cover";
 
-	                if (elem === _this2.state.updateCoin) {
+	                if (elem === _this3.state.updateCoin) {
 	                    coverClass += " update-active";
 	                }
 
@@ -50513,16 +50540,16 @@
 	                    { className: coverClass,
 	                        key: ind,
 	                        onTouchEnd: function onTouchEnd(e) {
-	                            _this2.touchEnd(e, e.nativeEvent);
+	                            _this3.touchEnd(e, e.nativeEvent);
 	                        },
 	                        onTouchStart: function onTouchStart(e) {
-	                            _this2.touchStart(e, e.nativeEvent);
+	                            _this3.touchStart(e, e.nativeEvent);
 	                        } },
 	                    _react2.default.createElement(
 	                        'div',
 	                        { className: 'coin-short',
 	                            onClick: function onClick() {
-	                                _this2.openUpdater(elem);
+	                                _this3.openUpdater(elem);
 	                            } },
 	                        _react2.default.createElement(
 	                            'div',
@@ -50572,13 +50599,13 @@
 	                                className: 'coin-input',
 	                                value: coin.amount,
 	                                onChange: function onChange(e) {
-	                                    _this2.updateCoinVal(elem, e);
+	                                    _this3.updateCoinVal(elem, e);
 	                                } }),
 	                            _react2.default.createElement(
 	                                'button',
 	                                { className: 'update-button',
 	                                    onClick: function onClick() {
-	                                        _this2.updatePortfolio(elem);
+	                                        _this3.updatePortfolio(elem);
 	                                    } },
 	                                _react2.default.createElement('i', { className: 'fa fa-refresh' }),
 	                                'Update'
@@ -51085,7 +51112,7 @@
 	                        _react2.default.createElement(
 	                            'div',
 	                            { className: 'user-prof ' + (currentState === canvasState.profile ? '' : 'hide') },
-	                            _react2.default.createElement(_userProfile2.default, null)
+	                            _react2.default.createElement(_userProfile2.default, { userId: userId })
 	                        ),
 	                        _react2.default.createElement(
 	                            'div',
@@ -51316,23 +51343,57 @@
 
 	        var _this = _possibleConstructorReturn(this, (UserProfile.__proto__ || Object.getPrototypeOf(UserProfile)).call(this, props));
 
+	        _this.toUpdateFromAPI = false;
+
 	        _this.state = {
 	            fname: "",
 	            lname: ""
 	        };
+	        _this.getUserInfo.bind(_this);
 	        return _this;
 	    }
 
 	    _createClass(UserProfile, [{
-	        key: "updateChange",
-	        value: function updateChange(event, name) {
+	        key: "updateUser",
+	        value: function updateUser() {
+	            this.props.updateUser(this.props.userId, {
+	                fname: this.state.fname,
+	                lname: this.state.lname
+	            });
+	            this.toUpdateFromAPI = true;
+	        }
+	    }, {
+	        key: "getUserInfo",
+	        value: function getUserInfo() {
+	            this.props.getUser(this.props.userId);
+	        }
+	    }, {
+	        key: "handleChange",
+	        value: function handleChange(event, type) {
 	            var obj = {};
-	            obj[name] = event.target.value;
+	            obj[type] = event.target.value;
 	            this.setState(obj);
 	        }
 	    }, {
 	        key: "componentWillMount",
-	        value: function componentWillMount() {}
+	        value: function componentWillMount() {
+	            this.getUserInfo();
+	        }
+	    }, {
+	        key: "componentWillReceiveProps",
+	        value: function componentWillReceiveProps(nextProps) {
+	            if (nextProps.sign.hasOwnProperty(_index.USER_INFO) && !this.toUpdateFromAPI) {
+	                var result = nextProps.sign[_index.USER_INFO].result;
+	                this.setState({
+	                    fname: result.fname,
+	                    lname: result.lname
+	                });
+	            }
+	            if (nextProps.sign.hasOwnProperty(_index.UPDATE_USERINFO) && this.toUpdateFromAPI) {
+	                this.getUserInfo();
+	                this.toUpdateFromAPI = false;
+	            }
+	        }
 	    }, {
 	        key: "render",
 	        value: function render() {
@@ -51356,26 +51417,27 @@
 	                    _react2.default.createElement(
 	                        "div",
 	                        { className: "input-cover" },
-	                        _react2.default.createElement("input", { className: "input-large",
+	                        _react2.default.createElement("input", { className: "input-large input-white-back",
 	                            value: fName,
 	                            onChange: function onChange(e) {
-	                                _this2.updateChange(e, 'fName');
+	                                _this2.handleChange(e, 'fname');
 	                            },
 	                            placeholder: "Enter First Name ..." })
 	                    ),
 	                    _react2.default.createElement(
 	                        "div",
 	                        { className: "input-cover" },
-	                        _react2.default.createElement("input", { className: "input-large",
+	                        _react2.default.createElement("input", { className: "input-large input-white-back",
 	                            value: lName,
 	                            onChange: function onChange(e) {
-	                                _this2.updateChange(e, 'lName');
+	                                _this2.handleChange(e, 'lname');
 	                            },
 	                            placeholder: "Enter Last Name ..." })
 	                    ),
 	                    _react2.default.createElement(
 	                        "button",
-	                        { className: "button-active-large" },
+	                        { className: "button-active-large",
+	                            onClick: this.updateUser.bind(this) },
 	                        _react2.default.createElement("i", { className: "fa fa-floppy-o" }),
 	                        " Save"
 	                    )
@@ -51389,10 +51451,12 @@
 
 	function mapStateToProps(state) {
 	    //return {sign: state.sign}
-	    return {};
+	    return {
+	        sign: state.sign
+	    };
 	}
 
-	exports.default = (0, _reactRedux.connect)(mapStateToProps, { updateUser: _actions.updateUser })(UserProfile);
+	exports.default = (0, _reactRedux.connect)(mapStateToProps, { updateUser: _actions.updateUser, getUser: _actions.getUser })(UserProfile);
 
 /***/ })
 /******/ ]);

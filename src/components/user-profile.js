@@ -4,35 +4,56 @@
 
 import React from 'react';
 import { connect } from "react-redux";
-import { updateUser } from "../actions";
-import { PORT_GET,PORT_UPDATE } from "../actions/index";
+import { updateUser, getUser } from "../actions";
+import { PORT_GET, UPDATE_USERINFO, USER_INFO } from "../actions/index";
 
 //User Profile
 class UserProfile extends React.Component{
     constructor(props){
         super(props);
-        this.state ={
+        this.state = {
             fname: "",
             lname: ""
-        }
+        };
+        this.getUserInfo.bind(this);
     }
 
-    updateChange(event,name){
+    toUpdateFromAPI = false;
+
+    updateUser(){
+        this.props.updateUser(this.props.userId,{
+            fname: this.state.fname,
+            lname: this.state.lname
+        });
+        this.toUpdateFromAPI = true;
+    }
+
+    getUserInfo(){
+        this.props.getUser(this.props.userId);
+    }
+
+    handleChange(event,type){
         let obj = {};
-        obj[name] = event.target.value;
+        obj[type] = event.target.value;
         this.setState(obj);
     }
 
-    updateUser(){
-
-    }
-
-    getUser(){
-
-    }
-
     componentWillMount(){
+        this.getUserInfo();
+    }
 
+    componentWillReceiveProps(nextProps){
+        if(nextProps.sign.hasOwnProperty(USER_INFO) && !this.toUpdateFromAPI){
+            let result = nextProps.sign[USER_INFO].result;
+            this.setState({
+                fname: result.fname,
+                lname: result.lname
+            })
+        }
+        if(nextProps.sign.hasOwnProperty(UPDATE_USERINFO) && this.toUpdateFromAPI){
+            this.getUserInfo();
+            this.toUpdateFromAPI = false;
+        }
     }
 
     render(){
@@ -45,18 +66,19 @@ class UserProfile extends React.Component{
                 <h2>User Profile</h2>
                 <div className="user-profile">
                     <div className="input-cover">
-                        <input className="input-large"
+                        <input className="input-large input-white-back"
                                value={fName}
-                               onChange={(e)=>{this.updateChange(e,'fName')}}
+                               onChange={(e)=>{this.handleChange(e,'fname')}}
                                placeholder="Enter First Name ..."/>
                     </div>
                     <div className="input-cover">
-                        <input className="input-large"
+                        <input className="input-large input-white-back"
                                value={lName}
-                               onChange={(e)=>{this.updateChange(e,'lName')}}
+                               onChange={(e)=>{this.handleChange(e,'lname')}}
                                placeholder="Enter Last Name ..."/>
                     </div>
-                    <button className="button-active-large">
+                    <button className="button-active-large"
+                            onClick={this.updateUser.bind(this)}>
                         <i className="fa fa-floppy-o"></i> Save
                     </button>
                 </div>
@@ -68,8 +90,8 @@ class UserProfile extends React.Component{
 function mapStateToProps(state) {
     //return {sign: state.sign}
     return {
-
+        sign: state.sign
     }
 }
 
-export default connect(mapStateToProps, { updateUser })(UserProfile);
+export default connect(mapStateToProps, { updateUser, getUser })(UserProfile);

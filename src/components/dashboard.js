@@ -46,13 +46,9 @@ class Dashboard extends React.Component{
     //Swipe Detection
     startX = 0;
     touchStart(event, origEvent){
-        //console.log(arguments);
-        //console.log(origEvent.changedTouches[0].pageX);
         this.startX = origEvent.changedTouches[0].pageX;
     }
     touchEnd(event, origEvent){
-        //console.log(arguments);
-        //console.log(origEvent.changedTouches[0].pageX);
         let endX = origEvent.changedTouches[0].pageX;
 
         if(this.startX > endX+100){
@@ -89,6 +85,22 @@ class Dashboard extends React.Component{
         this.getPortData();
     }
 
+    componentWillReceiveProps(){
+        if(this.props.sign.hasOwnProperty(PORT_GET) && this.state.changePortVal){
+            if(this.props.sign[PORT_GET].result.length){
+                this.props
+                    .sign[PORT_GET]
+                    .result[0]
+                    .coins
+                    .forEach((elem,ind)=>{
+                        this.coinObj[elem.type].amount = elem.value;
+                    });
+            }
+
+            this.togglePortalVal()
+        }
+    }
+
     togglePortalVal(){
         //Set State
         this.setState({
@@ -103,20 +115,6 @@ class Dashboard extends React.Component{
             amount = 0,
             BTC = this.props.btc,
             ETH = this.props.eth;
-
-        if(this.props.sign.hasOwnProperty(PORT_GET) && this.state.changePortVal){
-            if(this.props.sign[PORT_GET].result.length){
-                this.props
-                    .sign[PORT_GET]
-                    .result[0]
-                    .coins
-                    .forEach((elem,ind)=>{
-                        coinObj[elem.type].amount = elem.value;
-                    });
-            }
-
-            this.togglePortalVal()
-        }
 
         Object.keys(coinObj).forEach((elem,ind)=>{
             if(elem === "BTC"){

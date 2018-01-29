@@ -1,4 +1,4 @@
-import { SIGN_UP, SIGN_IN, PORT_GET, PORT_UPDATE, PROF_UPDATE } from '../actions/index';
+import { SIGN_UP, SIGN_IN, PORT_GET, PORT_UPDATE, PROF_UPDATE, USER_INFO,UPDATE_USERINFO } from '../actions/index';
 
 
 export default function (state={},action) {
@@ -36,6 +36,20 @@ export default function (state={},action) {
                 return Object.assign({},state, obj);
             }
         break;
+        case USER_INFO:
+            if(action.payload.status === 200){
+                let obj = {};
+                obj[USER_INFO] = action.payload.data;
+                return Object.assign({},state, obj);
+            }
+            break;
+        case UPDATE_USERINFO:
+            if(action.payload.status === 200){
+                let obj = {};
+                obj[UPDATE_USERINFO] = action.payload.data;
+                return Object.assign({},state, obj);
+            }
+            break;
         default:
             return state;
             break;

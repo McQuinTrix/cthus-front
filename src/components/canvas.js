@@ -131,7 +131,7 @@ class Canvas extends React.Component{
 
                         {/** Profile **/}
                         <div className={`user-prof ${currentState === canvasState.profile ? '' : 'hide'}`}>
-                            <UserProfile/>
+                            <UserProfile userId={userId}/>
                         </div>
 
                         {/** Chats **/}
