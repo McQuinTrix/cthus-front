@@ -9,7 +9,6 @@ import { fetchBTC, fetchETH } from "../actions";
 import Logo from './load-logo'
 import { homeAnim } from './load-logo';
 
-
 var intVal;
 
 class HomePage extends React.Component{
@@ -28,7 +27,9 @@ class HomePage extends React.Component{
     }
 
     render(){
-        let BTC="", ETH="";
+        let BTC = "",
+            ETH = "";
+
         if(this.props.tick.hasOwnProperty("BTC")){
             BTC = this.props.tick.BTC.last;
         }

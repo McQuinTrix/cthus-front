@@ -63,9 +63,12 @@ class Canvas extends React.Component{
         let mwClass = this.state.menuOpen ? "" : "close-options";
         mwClass += " menu-wheel ";
 
+        let alert = { summ: "Hello", mess: "This is message", type: "success"};
+
         let currentState = this.state.canvasState;
 
-        let BTC="", ETH="";
+        let BTC = "",
+            ETH = "";
         if(this.props.tick.hasOwnProperty("BTC")){
             BTC = this.props.tick.BTC.last;
         }
@@ -148,6 +151,10 @@ class Canvas extends React.Component{
                 <div className="canvas-menu">
 
                 </div>
+                <Alert summ={alert.summ}
+                       mess={alert.mess}
+                       type={alert.type}
+                        />
             </div>
         );
     }

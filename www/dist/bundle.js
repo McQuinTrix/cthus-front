@@ -42082,6 +42082,7 @@
 	        value: function render() {
 	            var BTC = "",
 	                ETH = "";
+
 	            if (this.props.tick.hasOwnProperty("BTC")) {
 	                BTC = this.props.tick.BTC.last;
 	            }
@@ -51016,6 +51017,7 @@
 
 	            var mwClass = this.state.menuOpen ? "" : "close-options";
 	            mwClass += " menu-wheel ";
+	            alert = { summ: "Hello", mess: "Fuck this bullshit time", type: "success" };
 
 	            var currentState = this.state.canvasState;
 
@@ -51126,7 +51128,11 @@
 	                        )
 	                    )
 	                ),
-	                _react2.default.createElement('div', { className: 'canvas-menu' })
+	                _react2.default.createElement('div', { className: 'canvas-menu' }),
+	                _react2.default.createElement(_alertMessage2.default, { summ: alert.summ,
+	                    mess: alert.mess,
+	                    type: alert.type
+	                })
 	            );
 	        }
 	    }]);
@@ -51252,6 +51258,10 @@
 
 	"use strict";
 
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 	var _react = __webpack_require__(2);
@@ -51274,17 +51284,43 @@
 	    function Alert(props) {
 	        _classCallCheck(this, Alert);
 
-	        return _possibleConstructorReturn(this, (Alert.__proto__ || Object.getPrototypeOf(Alert)).call(this, props));
+	        var _this = _possibleConstructorReturn(this, (Alert.__proto__ || Object.getPrototypeOf(Alert)).call(this, props));
+
+	        debugger;
+	        return _this;
 	    }
 
 	    _createClass(Alert, [{
 	        key: "render",
 	        value: function render() {
 	            var summ = this.props.summ,
-	                mess = this.props.mess;
+	                mess = this.props.mess,
+	                type = this.props.type.toLowerCase(),
+	                typeClass = "";
+
+	            switch (type) {
+	                case "error":
+	                    typeClass = "error-class";
+	                    break;
+	                case "warn":
+	                    typeClass = "warn-class";
+	                    break;
+	                case "update":
+	                    typeClass = "update-class";
+	                    break;
+	                case "success":
+	                    typeClass = "success-class";
+	                    break;
+	                default:
+	                    typeClass = "update-class";
+	                    break;
+	            }
+
+	            typeClass += " alert-mess";
+
 	            return _react2.default.createElement(
 	                "div",
-	                { className: "alert-mess" },
+	                { className: typeClass },
 	                _react2.default.createElement(
 	                    "div",
 	                    { className: "a-summ" },
@@ -51301,6 +51337,8 @@
 
 	    return Alert;
 	}(_react2.default.Component);
+
+	exports.default = Alert;
 
 /***/ }),
 /* 549 */
