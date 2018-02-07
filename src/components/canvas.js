@@ -34,6 +34,8 @@ class Canvas extends React.Component{
             canvasState: canvasState.dashboard
         }
     }
+    //Alert Obj
+    alert = {mess: "", type: ""};
 
     getTicker(obj){
         obj.props.fetchBTC("btc");
@@ -55,6 +57,9 @@ class Canvas extends React.Component{
 
     componentWillUnmount(){
         clearInterval(intVal);
+        setTimeout(()=>{
+            this.alert = { mess: "This is message", type: "success"};
+        },2000)
     }
 
     //Render
@@ -62,8 +67,6 @@ class Canvas extends React.Component{
 
         let mwClass = this.state.menuOpen ? "" : "close-options";
         mwClass += " menu-wheel ";
-
-        let alert = { summ: "Hello", mess: "This is message", type: "success"};
 
         let currentState = this.state.canvasState;
 

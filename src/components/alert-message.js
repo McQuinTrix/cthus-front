@@ -3,18 +3,38 @@
  */
 
 import React from 'react';
+import {TweenMax} from "gsap";
 
 export default class Alert extends React.Component{
+
+    //Alert Element
+    alertElem;
+    //top initial for alert elem
+    initialTop = "-60px";
+
     constructor(props){
         super(props);
-        debugger;
+    }
+
+    componentDidMount(){
+
+    }
+
+    componentWillReceiveProps(nextProps){
+        TweenMax.to(this.alertElem, 0.5, {top:0});
+        setTimeout(()=>{
+            TweenMax.to(this.alertElem, 0.5, {top: this.initialTop});
+        },nextProps.time || 5000);
     }
 
     render(){
         let summ = this.props.summ,
             mess = this.props.mess,
             type = this.props.type.toLowerCase(),
-            typeClass = "";
+            typeClass = "",
+            summClass = "a-summ";
+
+        if(mess){}
 
         switch(type){
             case "error":
@@ -36,9 +56,13 @@ export default class Alert extends React.Component{
 
         typeClass += " alert-mess";
 
+        if(summ){
+            summClass += ' display-none';
+        }
+
         return (
-            <div className={typeClass}>
-                <div className="a-summ">
+            <div className={typeClass} ref={(elem) => (this.alertElem = elem)}>
+                <div className={summClass}>
                     {summ}
                 </div>
                 <div className="a-mess">

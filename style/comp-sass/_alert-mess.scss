@@ -1,8 +1,28 @@
 .alert-mess{
   position: absolute;
-  top: 5px;
-  width: 90%;
-  left: 5%;
-  right: 5%;
+  top: -60px;
+  width: 100%;
   text-align: center;
+  .a-mess{
+    font-size: 18px;
+    font-weight: bold;
+    padding: 15px 5px;
+    color: white;
+  }
+}
+
+.success-class{
+  background-color: rgba(86, 212, 86, 0.93);
+}
+
+.error-class{
+  background-color: rgba(255, 30, 30, 0.93);
+}
+
+.update-class{
+  background-color: rgba(30, 139, 255, 0.93);
+}
+
+.warn-class{
+  background-color: rgba(255, 136, 30, 0.93);
 }

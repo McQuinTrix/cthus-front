@@ -42341,22 +42341,22 @@
 	                        { id: "Layer_2", dataName: "Layer 2" },
 	                        _react2.default.createElement(
 	                            "g",
-	                            { id: "Layer_1-2", dataName: "Layer 1", ref: function ref(b) {
-	                                    return _this3.imageCover = b;
+	                            { id: "Layer_1-2", dataName: "Layer 1", ref: function ref(elem) {
+	                                    return _this3.imageCover = elem;
 	                                } },
 	                            _react2.default.createElement("path", { className: "cls-1",
-	                                ref: function ref(b) {
-	                                    return _this3.cls1 = b;
+	                                ref: function ref(elem) {
+	                                    return _this3.cls1 = elem;
 	                                },
 	                                d: "M301.1,21.4l-3.88-2.8c-106.29-47.77-231.18-.33-279,106A210.94,210.94,0,0,0,3.5,171.1c58.17-76,162.89-105,254-64a210,210,0,0,1,87.18,72.59A211.38,211.38,0,0,0,301.1,21.4Z" }),
 	                            _react2.default.createElement("path", { className: "cls-2",
-	                                ref: function ref(b) {
-	                                    return _this3.cls2 = b;
+	                                ref: function ref(elem) {
+	                                    return _this3.cls2 = elem;
 	                                },
 	                                d: "M341.37,45.73a211.74,211.74,0,0,0-41.26-26.1c58.71,75.57,60.12,184.21-2.6,261.89a210.36,210.36,0,0,1-145.46,77.6,210.59,210.59,0,0,0,99.82,57.34,210.15,210.15,0,0,0,121.11-74C446.19,251.79,432,118.94,341.37,45.73Z" }),
 	                            _react2.default.createElement("path", { className: "cls-3",
-	                                ref: function ref(b) {
-	                                    return _this3.cls3 = b;
+	                                ref: function ref(elem) {
+	                                    return _this3.cls3 = elem;
 	                                },
 	                                d: "M96,209.59a210,210,0,0,1,37.77-120A211.26,211.26,0,0,0,4.22,167.46,212.6,212.6,0,0,0,0,209.66c0,116.53,94.47,211,211,211a211.28,211.28,0,0,0,31.72-2.38l1.49-.23c.9-.14,1.79-.29,2.68-.45q5.64-1,11.16-2.27C165,393.21,95.78,309.43,96,209.59Z" })
 	                        )
@@ -50973,12 +50973,17 @@
 
 	        var _this = _possibleConstructorReturn(this, (Canvas.__proto__ || Object.getPrototypeOf(Canvas)).call(this, props));
 
+	        _this.alert = { mess: "", type: "" };
+
+
 	        _this.state = {
 	            menuOpen: false,
 	            canvasState: canvasState.dashboard
 	        };
 	        return _this;
 	    }
+	    //Alert Obj
+
 
 	    _createClass(Canvas, [{
 	        key: 'getTicker',
@@ -51005,7 +51010,12 @@
 	    }, {
 	        key: 'componentWillUnmount',
 	        value: function componentWillUnmount() {
+	            var _this2 = this;
+
 	            clearInterval(intVal);
+	            setTimeout(function () {
+	                _this2.alert = { mess: "This is message", type: "success" };
+	            }, 2000);
 	        }
 
 	        //Render
@@ -51013,11 +51023,10 @@
 	    }, {
 	        key: 'render',
 	        value: function render() {
-	            var _this2 = this;
+	            var _this3 = this;
 
 	            var mwClass = this.state.menuOpen ? "" : "close-options";
 	            mwClass += " menu-wheel ";
-	            alert = { summ: "Hello", mess: "Fuck this bullshit time", type: "success" };
 
 	            var currentState = this.state.canvasState;
 
@@ -51061,7 +51070,7 @@
 	                            'div',
 	                            { className: 'mw-option',
 	                                onClick: function onClick() {
-	                                    return _this2.changeCanvasState(canvasState.dashboard);
+	                                    return _this3.changeCanvasState(canvasState.dashboard);
 	                                } },
 	                            _react2.default.createElement('i', { className: 'fa fa-briefcase' })
 	                        ),
@@ -51069,7 +51078,7 @@
 	                            'div',
 	                            { className: 'mw-option',
 	                                onClick: function onClick() {
-	                                    return _this2.changeCanvasState(canvasState.news);
+	                                    return _this3.changeCanvasState(canvasState.news);
 	                                } },
 	                            _react2.default.createElement('i', { className: 'fa fa-newspaper-o' })
 	                        ),
@@ -51077,7 +51086,7 @@
 	                            'div',
 	                            { className: 'mw-option',
 	                                onClick: function onClick() {
-	                                    return _this2.changeCanvasState(canvasState.profile);
+	                                    return _this3.changeCanvasState(canvasState.profile);
 	                                } },
 	                            _react2.default.createElement('i', { className: 'fa fa-user-circle' })
 	                        ),
@@ -51085,7 +51094,7 @@
 	                            'div',
 	                            { className: 'mw-option',
 	                                onClick: function onClick() {
-	                                    return _this2.changeCanvasState(canvasState.chat);
+	                                    return _this3.changeCanvasState(canvasState.chat);
 	                                } },
 	                            _react2.default.createElement('i', { className: 'fa fa-comments' })
 	                        ),
@@ -51093,7 +51102,7 @@
 	                            'div',
 	                            { className: 'mw-option',
 	                                onClick: function onClick() {
-	                                    return _this2.changeCanvasState(canvasState.info);
+	                                    return _this3.changeCanvasState(canvasState.info);
 	                                } },
 	                            _react2.default.createElement('i', { className: 'fa fa-info-circle' })
 	                        )
@@ -51268,6 +51277,8 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
+	var _gsap = __webpack_require__(544);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -51281,22 +51292,41 @@
 	var Alert = function (_React$Component) {
 	    _inherits(Alert, _React$Component);
 
+	    //Alert Element
 	    function Alert(props) {
 	        _classCallCheck(this, Alert);
 
 	        var _this = _possibleConstructorReturn(this, (Alert.__proto__ || Object.getPrototypeOf(Alert)).call(this, props));
 
-	        debugger;
+	        _this.initialTop = "-60px";
 	        return _this;
 	    }
+	    //top initial for alert elem
+
 
 	    _createClass(Alert, [{
+	        key: "componentDidMount",
+	        value: function componentDidMount() {}
+	    }, {
+	        key: "componentWillReceiveProps",
+	        value: function componentWillReceiveProps(nextProps) {
+	            var _this2 = this;
+
+	            _gsap.TweenMax.to(this.alertElem, 0.5, { top: 0 });
+	            setTimeout(function () {
+	                _gsap.TweenMax.to(_this2.alertElem, 0.5, { top: _this2.initialTop });
+	            }, nextProps.time || 5000);
+	        }
+	    }, {
 	        key: "render",
 	        value: function render() {
+	            var _this3 = this;
+
 	            var summ = this.props.summ,
 	                mess = this.props.mess,
 	                type = this.props.type.toLowerCase(),
-	                typeClass = "";
+	                typeClass = "",
+	                summClass = "a-summ";
 
 	            switch (type) {
 	                case "error":
@@ -51318,12 +51348,18 @@
 
 	            typeClass += " alert-mess";
 
+	            if (summ) {
+	                summClass += ' display-none';
+	            }
+
 	            return _react2.default.createElement(
 	                "div",
-	                { className: typeClass },
+	                { className: typeClass, ref: function ref(elem) {
+	                        return _this3.alertElem = elem;
+	                    } },
 	                _react2.default.createElement(
 	                    "div",
-	                    { className: "a-summ" },
+	                    { className: summClass },
 	                    summ
 	                ),
 	                _react2.default.createElement(
