@@ -51005,17 +51005,18 @@
 	    }, {
 	        key: 'componentWillMount',
 	        value: function componentWillMount() {
+	            var _this2 = this;
+
 	            intVal = setInterval(this.getTicker, 3000, this);
+	            setTimeout(function () {
+	                debugger;
+	                _this2.alert = { mess: "This is message", type: "success" };
+	            }, 2000);
 	        }
 	    }, {
 	        key: 'componentWillUnmount',
 	        value: function componentWillUnmount() {
-	            var _this2 = this;
-
 	            clearInterval(intVal);
-	            setTimeout(function () {
-	                _this2.alert = { mess: "This is message", type: "success" };
-	            }, 2000);
 	        }
 
 	        //Render
@@ -51322,11 +51323,13 @@
 	        value: function render() {
 	            var _this3 = this;
 
-	            var summ = this.props.summ,
-	                mess = this.props.mess,
-	                type = this.props.type.toLowerCase(),
+	            var summ = this.props.summ || "",
+	                mess = this.props.mess || "",
+	                type = this.props.type || "",
 	                typeClass = "",
 	                summClass = "a-summ";
+
+	            type = type.toLowerCase();
 
 	            switch (type) {
 	                case "error":
@@ -51347,6 +51350,10 @@
 	            }
 
 	            typeClass += " alert-mess";
+
+	            if (mess.length < 1) {
+	                typeClass = "display-none";
+	            }
 
 	            if (summ) {
 	                summClass += ' display-none';

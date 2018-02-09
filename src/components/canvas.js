@@ -53,13 +53,14 @@ class Canvas extends React.Component{
 
     componentWillMount(){
         intVal = setInterval(this.getTicker,3000,this);
+        setTimeout(()=>{
+            debugger;
+            this.alert = { mess: "This is message", type: "success"};
+        },2000)
     }
 
     componentWillUnmount(){
         clearInterval(intVal);
-        setTimeout(()=>{
-            this.alert = { mess: "This is message", type: "success"};
-        },2000)
     }
 
     //Render

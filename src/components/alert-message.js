@@ -28,13 +28,16 @@ export default class Alert extends React.Component{
     }
 
     render(){
-        let summ = this.props.summ,
-            mess = this.props.mess,
-            type = this.props.type.toLowerCase(),
+        let summ = this.props.summ || "",
+            mess = this.props.mess || "",
+            type = this.props.type || "",
             typeClass = "",
             summClass = "a-summ";
 
-        if(mess){}
+
+
+
+        type = type.toLowerCase();
 
         switch(type){
             case "error":
@@ -55,6 +58,10 @@ export default class Alert extends React.Component{
         }
 
         typeClass += " alert-mess";
+
+        if(mess.length < 1){
+            typeClass = "display-none";
+        }
 
         if(summ){
             summClass += ' display-none';
