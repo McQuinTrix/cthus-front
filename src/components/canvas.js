@@ -35,7 +35,7 @@ class Canvas extends React.Component{
         }
     }
     //Alert Obj
-    alert = {mess: "", type: ""};
+    alert = {message: "", type: ""};
 
     getTicker(obj){
         obj.props.fetchBTC("btc");
@@ -54,8 +54,8 @@ class Canvas extends React.Component{
     componentWillMount(){
         intVal = setInterval(this.getTicker,3000,this);
         setTimeout(()=>{
-            debugger;
-            this.alert = { mess: "This is message", type: "success"};
+            this.alert = { message: "This is message", type: "success"};
+            this.refs.alertRef.showAlert(this.alert);
         },2000)
     }
 
@@ -155,10 +155,7 @@ class Canvas extends React.Component{
                 <div className="canvas-menu">
 
                 </div>
-                <Alert summ={alert.summ}
-                       mess={alert.mess}
-                       type={alert.type}
-                        />
+                <Alert ref="alertRef"/>
             </div>
         );
     }

@@ -50973,7 +50973,7 @@
 
 	        var _this = _possibleConstructorReturn(this, (Canvas.__proto__ || Object.getPrototypeOf(Canvas)).call(this, props));
 
-	        _this.alert = { mess: "", type: "" };
+	        _this.alert = { message: "", type: "" };
 
 
 	        _this.state = {
@@ -51009,8 +51009,8 @@
 
 	            intVal = setInterval(this.getTicker, 3000, this);
 	            setTimeout(function () {
-	                debugger;
-	                _this2.alert = { mess: "This is message", type: "success" };
+	                _this2.alert = { message: "This is message", type: "success" };
+	                _this2.refs.alertRef.showAlert(_this2.alert);
 	            }, 2000);
 	        }
 	    }, {
@@ -51139,10 +51139,7 @@
 	                    )
 	                ),
 	                _react2.default.createElement('div', { className: 'canvas-menu' }),
-	                _react2.default.createElement(_alertMessage2.default, { summ: alert.summ,
-	                    mess: alert.mess,
-	                    type: alert.type
-	                })
+	                _react2.default.createElement(_alertMessage2.default, { ref: 'alertRef' })
 	            );
 	        }
 	    }]);
@@ -51300,32 +51297,47 @@
 	        var _this = _possibleConstructorReturn(this, (Alert.__proto__ || Object.getPrototypeOf(Alert)).call(this, props));
 
 	        _this.initialTop = "-60px";
+
+	        _this.state = {
+	            summary: "",
+	            message: "",
+	            type: ""
+	        };
 	        return _this;
 	    }
 	    //top initial for alert elem
 
 
 	    _createClass(Alert, [{
-	        key: "componentDidMount",
-	        value: function componentDidMount() {}
-	    }, {
-	        key: "componentWillReceiveProps",
-	        value: function componentWillReceiveProps(nextProps) {
+	        key: "showAlert",
+	        value: function showAlert(obj) {
 	            var _this2 = this;
+
+	            this.setState({
+	                summary: obj["summary"] || "",
+	                message: obj["message"] || "",
+	                type: obj["type"]
+	            });
 
 	            _gsap.TweenMax.to(this.alertElem, 0.5, { top: 0 });
 	            setTimeout(function () {
 	                _gsap.TweenMax.to(_this2.alertElem, 0.5, { top: _this2.initialTop });
-	            }, nextProps.time || 5000);
+	            }, obj.time || 5000);
 	        }
+	    }, {
+	        key: "componentDidMount",
+	        value: function componentDidMount() {}
+	    }, {
+	        key: "componentWillReceiveProps",
+	        value: function componentWillReceiveProps(nextProps) {}
 	    }, {
 	        key: "render",
 	        value: function render() {
 	            var _this3 = this;
 
-	            var summ = this.props.summ || "",
-	                mess = this.props.mess || "",
-	                type = this.props.type || "",
+	            var summary = this.state.summary || "",
+	                message = this.state.message || "",
+	                type = this.state.type || "",
 	                typeClass = "",
 	                summClass = "a-summ";
 
@@ -51351,11 +51363,11 @@
 
 	            typeClass += " alert-mess";
 
-	            if (mess.length < 1) {
+	            if (message.length < 1) {
 	                typeClass = "display-none";
 	            }
 
-	            if (summ) {
+	            if (!summary) {
 	                summClass += ' display-none';
 	            }
 
@@ -51367,12 +51379,12 @@
 	                _react2.default.createElement(
 	                    "div",
 	                    { className: summClass },
-	                    summ
+	                    summary
 	                ),
 	                _react2.default.createElement(
 	                    "div",
 	                    { className: "a-mess" },
-	                    mess
+	                    message
 	                )
 	            );
 	        }

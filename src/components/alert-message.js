@@ -14,6 +14,25 @@ export default class Alert extends React.Component{
 
     constructor(props){
         super(props);
+        this.state = {
+            summary: "",
+            message: "",
+            type: ""
+        }
+    }
+
+    showAlert(obj){
+
+        this.setState({
+            summary: obj["summary"] || "",
+            message: obj["message"] || "",
+            type: obj["type"]
+        });
+
+        TweenMax.to(this.alertElem, 0.5, {top:0});
+        setTimeout(()=>{
+            TweenMax.to(this.alertElem, 0.5, {top: this.initialTop});
+        },obj.time || 5000);
     }
 
     componentDidMount(){
@@ -21,20 +40,15 @@ export default class Alert extends React.Component{
     }
 
     componentWillReceiveProps(nextProps){
-        TweenMax.to(this.alertElem, 0.5, {top:0});
-        setTimeout(()=>{
-            TweenMax.to(this.alertElem, 0.5, {top: this.initialTop});
-        },nextProps.time || 5000);
+
     }
 
     render(){
-        let summ = this.props.summ || "",
-            mess = this.props.mess || "",
-            type = this.props.type || "",
+        let summary = this.state.summary || "",
+            message = this.state.message || "",
+            type = this.state.type || "",
             typeClass = "",
             summClass = "a-summ";
-
-
 
 
         type = type.toLowerCase();
@@ -59,21 +73,21 @@ export default class Alert extends React.Component{
 
         typeClass += " alert-mess";
 
-        if(mess.length < 1){
+        if(message.length < 1){
             typeClass = "display-none";
         }
 
-        if(summ){
+        if(!summary){
             summClass += ' display-none';
         }
 
         return (
             <div className={typeClass} ref={(elem) => (this.alertElem = elem)}>
                 <div className={summClass}>
-                    {summ}
+                    {summary}
                 </div>
                 <div className="a-mess">
-                    {mess}
+                    {message}
                 </div>
             </div>
         );
