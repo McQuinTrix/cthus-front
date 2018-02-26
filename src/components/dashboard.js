@@ -13,6 +13,7 @@ import axios from 'axios';
 
 import Alert from './alert-message';
 import ReLineChart from './feature-comp/line-chart';
+import ReAreaChart from './feature-comp/area-chart';
 
 //--- CT API Url
 const ct_url = "https://cryptonthus.herokuapp.com/api";
@@ -99,7 +100,6 @@ class Dashboard extends React.Component{
 
     componentDidMount(){
         this.getPortData();
-
     }
 
     componentWillReceiveProps(nextProps){
@@ -208,9 +208,10 @@ class Dashboard extends React.Component{
                             </button>
                         </div>
                         <div className="coin-chart">
-                            <ReLineChart width={340}
+                            <ReAreaChart width={340}
                                          height={300}
                                          chartData={coin.data}
+                                         chartName={coin.full_name}
                                          dataKey="value"
                                          marginStyle={{top: 5, right: 30, left: 10, bottom: 5}}
                                          strokeColor="#20e5f1"/>

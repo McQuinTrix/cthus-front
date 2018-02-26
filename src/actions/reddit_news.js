@@ -6,10 +6,10 @@ import axios from "axios";
 
 const reddit_url = "https://www.reddit.com/r/";
 export const NEWS_UPDATE = "fetch_news";
-export const CRYPTO = "crypto";
-export const BTC_NEWS = "btc_news";
-export const ETH_NEWS = "eth_news";
-export const CRY_MAR = "cry_mar";
+export const CRYPTO = "CryptoCurrency";
+export const BTC_NEWS = "Bitcoin";
+export const ETH_NEWS = "Ethereum";
+export const CRY_MAR = "CryptoMarkets";
 
 export function getNews(type,limit) {
     let url = reddit_url;
@@ -33,11 +33,9 @@ export function getNews(type,limit) {
             };
             break;
     }
-
-    const req = axios.get(`${url}`);
-
+    const req = axios.get(url);
     return {
-        type: NEWS_UPDATE,
+        type: type,
         payload: req
     }
 }

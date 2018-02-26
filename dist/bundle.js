@@ -87,11 +87,11 @@
 
 	var _loadLogo2 = _interopRequireDefault(_loadLogo);
 
-	var _signUp = __webpack_require__(1122);
+	var _signUp = __webpack_require__(1123);
 
 	var _signUp2 = _interopRequireDefault(_signUp);
 
-	var _canvas = __webpack_require__(1123);
+	var _canvas = __webpack_require__(1124);
 
 	var _canvas2 = _interopRequireDefault(_canvas);
 
@@ -41274,17 +41274,44 @@
 	    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 	    var action = arguments[1];
 
+	    console.log(action.type);
 	    switch (action.type) {
-	        case _reddit_news.NEWS_UPDATE:
+	        case _reddit_news.CRYPTO:
+
 	            if (action.payload.status === 200) {
 	                var obj = {};
-	                obj[_reddit_news.NEWS_UPDATE] = action.payload.data;
+	                obj[_reddit_news.NEWS_UPDATE] = { type: action.type, data: action.payload.data };
 	                return Object.assign({}, state, obj);
+	            }
+	            break;
+	        case _reddit_news.BTC_NEWS:
+
+	            if (action.payload.status === 200) {
+	                var _obj = {};
+	                _obj[_reddit_news.NEWS_UPDATE] = { type: action.type, data: action.payload.data };
+	                return Object.assign({}, state, _obj);
+	            }
+	            break;
+	        case _reddit_news.ETH_NEWS:
+
+	            if (action.payload.status === 200) {
+	                var _obj2 = {};
+	                _obj2[_reddit_news.NEWS_UPDATE] = { type: action.type, data: action.payload.data };
+	                return Object.assign({}, state, _obj2);
+	            }
+	            break;
+	        case _reddit_news.CRY_MAR:
+
+	            if (action.payload.status === 200) {
+	                var _obj3 = {};
+	                _obj3[_reddit_news.NEWS_UPDATE] = { type: action.type, data: action.payload.data };
+	                return Object.assign({}, state, _obj3);
 	            }
 	            break;
 	        default:
 	            return state;
 	    }
+	    return state;
 	};
 
 	var _reddit_news = __webpack_require__(536);
@@ -41312,10 +41339,10 @@
 	                                               */
 
 	var NEWS_UPDATE = exports.NEWS_UPDATE = "fetch_news";
-	var CRYPTO = exports.CRYPTO = "crypto";
-	var BTC_NEWS = exports.BTC_NEWS = "btc_news";
-	var ETH_NEWS = exports.ETH_NEWS = "eth_news";
-	var CRY_MAR = exports.CRY_MAR = "cry_mar";
+	var CRYPTO = exports.CRYPTO = "CryptoCurrency";
+	var BTC_NEWS = exports.BTC_NEWS = "Bitcoin";
+	var ETH_NEWS = exports.ETH_NEWS = "Ethereum";
+	var CRY_MAR = exports.CRY_MAR = "CryptoMarkets";
 
 	function getNews(type, limit) {
 	    var url = reddit_url;
@@ -41339,11 +41366,9 @@
 	            };
 	            break;
 	    }
-
-	    var req = _axios2.default.get("" + url);
-
+	    var req = _axios2.default.get(url);
 	    return {
-	        type: NEWS_UPDATE,
+	        type: type,
 	        payload: req
 	    };
 	}
@@ -50534,6 +50559,10 @@
 
 	var _lineChart2 = _interopRequireDefault(_lineChart);
 
+	var _areaChart = __webpack_require__(1122);
+
+	var _areaChart2 = _interopRequireDefault(_areaChart);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -50793,9 +50822,10 @@
 	                        _react2.default.createElement(
 	                            'div',
 	                            { className: 'coin-chart' },
-	                            _react2.default.createElement(_lineChart2.default, { width: 340,
+	                            _react2.default.createElement(_areaChart2.default, { width: 340,
 	                                height: 300,
 	                                chartData: coin.data,
+	                                chartName: coin.full_name,
 	                                dataKey: 'value',
 	                                marginStyle: { top: 5, right: 30, left: 10, bottom: 5 },
 	                                strokeColor: '#20e5f1' })
@@ -106551,6 +106581,98 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
+	var _recharts = __webpack_require__(671);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /**
+	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * Created by harshalcarpenter on 2/24/18.
+	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                */
+
+	//-- Recharts
+
+
+	var ReAreaChart = function (_React$Component) {
+	    _inherits(ReAreaChart, _React$Component);
+
+	    function ReAreaChart(props) {
+	        _classCallCheck(this, ReAreaChart);
+
+	        return _possibleConstructorReturn(this, (ReAreaChart.__proto__ || Object.getPrototypeOf(ReAreaChart)).call(this, props));
+	    }
+
+	    _createClass(ReAreaChart, [{
+	        key: 'render',
+	        value: function render() {
+	            var chartWidth = this.props.width,
+	                chartHeight = this.props.height,
+	                chartData = this.props.chartData,
+	                marginStyle = this.props.marginStyle,
+	                strokeColor = this.props.strokeColor,
+	                dataKey = this.props.dataKey,
+	                chartName = this.props.chartName;
+
+	            return _react2.default.createElement(
+	                'div',
+	                null,
+	                _react2.default.createElement(
+	                    _recharts.AreaChart,
+	                    { width: chartWidth,
+	                        height: chartHeight,
+	                        data: chartData,
+	                        margin: marginStyle },
+	                    _react2.default.createElement(
+	                        'defs',
+	                        null,
+	                        _react2.default.createElement(
+	                            'linearGradient',
+	                            { id: 'colorUv-' + chartName, x1: '0', y1: '0', x2: '0', y2: '1' },
+	                            _react2.default.createElement('stop', { offset: '5%', stopColor: strokeColor, stopOpacity: 0.8 }),
+	                            _react2.default.createElement('stop', { offset: '95%', stopColor: strokeColor, stopOpacity: 0.3 })
+	                        )
+	                    ),
+	                    _react2.default.createElement(_recharts.XAxis, { dataKey: 'name', stroke: '#fff' }),
+	                    _react2.default.createElement(_recharts.YAxis, { domain: ['dataMin', 'dataMax'], stroke: '#fff' }),
+	                    _react2.default.createElement(_recharts.Tooltip, null),
+	                    _react2.default.createElement(_recharts.Area, { type: 'monotone',
+	                        dataKey: dataKey,
+	                        stroke: strokeColor,
+	                        fillOpacity: 1,
+	                        fill: 'url(#colorUv-' + chartName + ')' })
+	                )
+	            );
+	        }
+	    }]);
+
+	    return ReAreaChart;
+	}(_react2.default.Component);
+
+	//<CartesianGrid strokeDasharray="3 3"/>
+	//<Legend stroke="#fff"/>
+
+
+	exports.default = ReAreaChart;
+
+/***/ }),
+/* 1123 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(2);
+
+	var _react2 = _interopRequireDefault(_react);
+
 	var _reactRouter = __webpack_require__(199);
 
 	var _loadLogo = __webpack_require__(545);
@@ -106784,7 +106906,7 @@
 	exports.default = (0, _reactRedux.connect)(mapStateToProps, { signUp: _actions.signUp, signIn: _actions.signIn })(SignUp);
 
 /***/ }),
-/* 1123 */
+/* 1124 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -106811,11 +106933,11 @@
 
 	var _dashboard2 = _interopRequireDefault(_dashboard);
 
-	var _userProfile = __webpack_require__(1124);
+	var _userProfile = __webpack_require__(1125);
 
 	var _userProfile2 = _interopRequireDefault(_userProfile);
 
-	var _news = __webpack_require__(1125);
+	var _news = __webpack_require__(1126);
 
 	var _news2 = _interopRequireDefault(_news);
 
@@ -107128,7 +107250,7 @@
 	exports.default = (0, _reactRedux.connect)(mapStateToProps, { fetchBTC: _actions.fetchBTC, fetchETH: _actions.fetchETH, getPortfolio: _actions.getPortfolio })(Canvas);
 
 /***/ }),
-/* 1124 */
+/* 1125 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -107284,10 +107406,10 @@
 	exports.default = (0, _reactRedux.connect)(mapStateToProps, { updateUser: _actions.updateUser, getUser: _actions.getUser })(UserProfile);
 
 /***/ }),
-/* 1125 */
+/* 1126 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
@@ -107298,6 +107420,14 @@
 	var _react = __webpack_require__(2);
 
 	var _react2 = _interopRequireDefault(_react);
+
+	var _reddit_news = __webpack_require__(536);
+
+	var _moment = __webpack_require__(548);
+
+	var _moment2 = _interopRequireDefault(_moment);
+
+	var _reactRedux = __webpack_require__(160);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -107316,21 +107446,100 @@
 	    function News(props) {
 	        _classCallCheck(this, News);
 
-	        return _possibleConstructorReturn(this, (News.__proto__ || Object.getPrototypeOf(News)).call(this, props));
+	        var _this = _possibleConstructorReturn(this, (News.__proto__ || Object.getPrototypeOf(News)).call(this, props));
+
+	        _this.newsObj = {};
+	        return _this;
 	    }
 
+	    //news object
+
+
 	    _createClass(News, [{
-	        key: "render",
+	        key: 'formNewsComp',
+	        value: function formNewsComp(type) {
+	            var newsHTML = [];
+	            debugger;
+	            newsHTML.push(_react2.default.createElement(
+	                'h1',
+	                null,
+	                type
+	            ));
+	            this.newsObj[type].data.children.forEach(function (elem) {
+	                newsHTML.push(_react2.default.createElement(
+	                    'div',
+	                    { className: 'news-container' },
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'news-image' },
+	                        _react2.default.createElement('img', { src: elem.data.thumbnail })
+	                    ),
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'news-desc' },
+	                        _react2.default.createElement(
+	                            'h3',
+	                            null,
+	                            elem.data.title
+	                        ),
+	                        _react2.default.createElement(
+	                            'div',
+	                            { className: 'news-time' },
+	                            (0, _moment2.default)().utc(elem.data.created_utc).format("MMM DD,YYYY")
+	                        )
+	                    )
+	                ));
+	            });
+
+	            return newsHTML;
+	        }
+	    }, {
+	        key: 'componentWillMount',
+	        value: function componentWillMount() {
+	            this.props.getNews(_reddit_news.CRYPTO, 3);
+	            this.props.getNews(_reddit_news.BTC_NEWS, 3);
+	            this.props.getNews(_reddit_news.ETH_NEWS, 3);
+	            this.props.getNews(_reddit_news.CRY_MAR, 3);
+	        }
+	    }, {
+	        key: 'componentWillReceiveProps',
+	        value: function componentWillReceiveProps(nextProps) {
+	            var self = this,
+	                news_update = nextProps.news[_reddit_news.NEWS_UPDATE];
+	            debugger;
+	            if (news_update) {
+	                this.newsObj[news_update.type] = news_update.data;
+	            }
+	        }
+	    }, {
+	        key: 'render',
 	        value: function render() {
+	            var _this2 = this;
+
+	            var sectionComp = [];
+
+	            Object.keys(this.newsObj).forEach(function (elem) {
+	                var sectionHTML = _react2.default.createElement(
+	                    'div',
+	                    { className: 'news-cover' },
+	                    _this2.formNewsComp(elem)
+	                );
+	                sectionComp.push(sectionHTML);
+	            });
+
 	            return _react2.default.createElement(
-	                "div",
+	                'div',
 	                null,
 	                _react2.default.createElement(
-	                    "h2",
+	                    'h2',
 	                    null,
-	                    "News"
+	                    'News'
 	                ),
-	                _react2.default.createElement("div", { className: "latest-news" })
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'latest-news' },
+	                    sectionComp
+	                )
 	            );
 	        }
 	    }]);
@@ -107338,7 +107547,14 @@
 	    return News;
 	}(_react2.default.Component);
 
-	exports.default = News;
+	function mapStateToProps(state) {
+	    return {
+	        tick: state.ticker,
+	        news: state.news
+	    };
+	}
+
+	exports.default = (0, _reactRedux.connect)(mapStateToProps, { getNews: _reddit_news.getNews })(News);
 
 /***/ })
 /******/ ]);
