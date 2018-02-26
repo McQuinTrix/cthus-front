@@ -3,11 +3,13 @@
  */
 
 import React from 'react';
-import { Link } from "react-router";
+import { Link,browserHistory } from "react-router";
 import { connect } from "react-redux";
 import { fetchBTC, fetchETH } from "../actions";
 import Logo from './load-logo'
 import { homeAnim } from './load-logo';
+
+export const userId = "user_id";
 
 var intVal;
 
@@ -18,8 +20,16 @@ class HomePage extends React.Component{
         obj.props.fetchETH("eth");
     }
 
+    checkForCookie(){
+        let userIdVal = window.localStorage.getItem(userId);
+        if(userIdVal && userIdVal.length > 0){
+            this.props.history.push('/signup/false');
+        }
+    }
+
     componentDidMount(){
         intVal = setInterval(this.getTicker,3000,this);
+        this.checkForCookie();
     }
 
     componentWillUnmount(){

@@ -8,6 +8,7 @@ import Logo, {smallAnim} from './load-logo';
 import { connect } from "react-redux";
 import { signUp, signIn,SIGN_IN } from "../actions";
 import PropTypes from 'prop-types';
+import {userId} from './home-page.js';
 
 class SignUp extends React.Component{
     signUpBool= true;
@@ -22,6 +23,13 @@ class SignUp extends React.Component{
         };
         this.changeInput.bind(this);
         this.toggleState.bind(this);
+    }
+
+    checkForCookie(){
+        let userIdVal = window.localStorage.getItem(userId);
+        if(userIdVal && userIdVal.length > 0){
+            this.props.history.push('/canvas/'+userIdVal);
+        }
     }
 
     save(){
@@ -80,6 +88,8 @@ class SignUp extends React.Component{
     componentDidMount(){
         //Change State --
         this.changeState();
+        //Check for Cookie --
+        this.checkForCookie();
     }
 
     render(){
@@ -88,6 +98,7 @@ class SignUp extends React.Component{
 
         //Error can be shown
         if(this.props.sign[SIGN_IN]){
+            window.localStorage.setItem(userId,this.props.sign[SIGN_IN].data.userId);
             this.props.history.push('/canvas/'+this.props.sign[SIGN_IN].data.userId);
         }
 

@@ -9,6 +9,8 @@ import Logo, {smallAnim} from './load-logo';
 import Alert from './alert-message';
 import Dashboard from "./dashboard";
 import UserProfile from "./user-profile";
+import News from "./news.js";
+import {userId} from './home-page.js';
 
 //Redux stuff
 import { connect } from "react-redux";
@@ -54,13 +56,23 @@ class Canvas extends React.Component{
     componentWillMount(){
         intVal = setInterval(this.getTicker,3000,this);
         setTimeout(()=>{
-            this.alert = { message: "This is message", type: "success"};
+            this.alert = { message: "You are logged in.", type: "success"};
             this.refs.alertRef.showAlert(this.alert);
         },2000)
     }
 
     componentWillUnmount(){
         clearInterval(intVal);
+    }
+
+    exit(){
+        window.localStorage.removeItem(userId);
+        if(true){
+            this.props.history.go(-2);
+        }else{
+            this.props.history.go(-1);
+        }
+
     }
 
     //Render
@@ -81,6 +93,7 @@ class Canvas extends React.Component{
         }
 
         let userId = this.props.params.userid;
+        let self = this;
 
         return (
             <div className="canvas-container">
@@ -114,12 +127,12 @@ class Canvas extends React.Component{
                             <i className="fa fa-user-circle"></i>
                         </div>
                         <div className="mw-option"
-                             onClick={()=> this.changeCanvasState(canvasState.chat)}>
-                            <i className="fa fa-comments"></i>
-                        </div>
-                        <div className="mw-option"
                              onClick={()=> this.changeCanvasState(canvasState.info)}>
                             <i className="fa fa-info-circle"></i>
+                        </div>
+                        <div className="mw-option mw-option-red"
+                             onClick={()=>{this.exit()}}>
+                            <i className="fa fa-sign-out"></i>
                         </div>
                     </div>
 
@@ -169,25 +182,6 @@ Canvas.propTypes = {
 Canvas.defaultProps = {
     //signUpBool: true
 };
-
-
-//News
-class News extends React.Component{
-    constructor(props){
-        super(props);
-    }
-
-    render(){
-        return (
-            <div>
-                <h2>News</h2>
-                <div className="latest-news">
-
-                </div>
-            </div>
-        );
-    }
-}
 
 //Chat
 class Chat extends React.Component{

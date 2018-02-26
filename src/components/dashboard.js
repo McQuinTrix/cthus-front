@@ -3,11 +3,19 @@
  */
 
 import React from 'react';
+import moment from 'moment'
 import { Link } from 'react-router';
-import { fetchBTC, fetchETH, getPortfolio,updateCoinAPI } from "../actions";
-import { PORT_GET,PORT_UPDATE } from "../actions/index";
+import { fetchBTC, fetchETH, getPortfolio,updateCoinAPI,getData,eraseData } from "../actions";
+import { PORT_GET,PORT_UPDATE,GET_DATA } from "../actions/index";
 import Logo, {smallAnim} from './load-logo';
 import { connect } from "react-redux";
+import axios from 'axios';
+
+import Alert from './alert-message';
+import ReLineChart from './feature-comp/line-chart';
+
+//--- CT API Url
+const ct_url = "https://cryptonthus.herokuapp.com/api";
 
 //DashBoard
 class Dashboard extends React.Component{
@@ -22,6 +30,9 @@ class Dashboard extends React.Component{
         this.touchEnd.bind(this);
         this.touchStart.bind(this);
         this.updateCoinVal.bind(this);
+
+        this.props.getData('eth');
+        this.props.getData('btc');
     }
 
     coinObj = {
@@ -29,15 +40,19 @@ class Dashboard extends React.Component{
             name: "BTC",
             full_name: "Bitcoin",
             imgUrl: "imgs/icon/bitcoin.svg",
-            amount: 0
+            amount: 0,
+            data: []
         },
         "ETH":{
             name: "ETH",
             full_name: "Ethereum",
             imgUrl: "imgs/icon/ethereum.svg",
-            amount: 0
+            amount: 0,
+            data: []
         }
     };
+
+
 
     getPortData(){
         this.props.getPortfolio(this.props.userId);
@@ -69,6 +84,7 @@ class Dashboard extends React.Component{
             type: coin,
             value: this.coinObj[coin].amount
         });
+        this.refs.alertRef.showAlert({ message: "Portfolio Updated!", type: "success"});
     }
 
     //Change Coin Value
@@ -83,10 +99,13 @@ class Dashboard extends React.Component{
 
     componentDidMount(){
         this.getPortData();
+
     }
 
-    componentWillReceiveProps(){
-        if(this.props.sign.hasOwnProperty(PORT_GET) && this.state.changePortVal){
+    componentWillReceiveProps(nextProps){
+        if(this.props.sign.hasOwnProperty(PORT_GET)
+            && this.state.changePortVal){
+
             if(this.props.sign[PORT_GET].result.length){
                 this.props
                     .sign[PORT_GET]
@@ -98,6 +117,21 @@ class Dashboard extends React.Component{
             }
 
             this.togglePortalVal()
+        }
+
+        let self = this;
+        if(nextProps.sign[GET_DATA]){
+            let response = nextProps.sign[GET_DATA];
+            if(response.hasOwnProperty('result')){
+                self.coinObj[response.type.toUpperCase()].data = response.result.map((elem)=>{
+                    let date = new Date(+elem.date);
+                    return {
+                        name: moment(date).format("HH:mm"),
+                        value: +elem.value
+                    }
+                });
+                this.props.eraseData();
+            }
         }
     }
 
@@ -173,7 +207,14 @@ class Dashboard extends React.Component{
                                 Update
                             </button>
                         </div>
-                        {/* Chart */}
+                        <div className="coin-chart">
+                            <ReLineChart width={340}
+                                         height={300}
+                                         chartData={coin.data}
+                                         dataKey="value"
+                                         marginStyle={{top: 5, right: 30, left: 10, bottom: 5}}
+                                         strokeColor="#20e5f1"/>
+                        </div>
                     </div>
                 </div>
             )
@@ -198,11 +239,8 @@ class Dashboard extends React.Component{
                             {/* Total Chart */}
                         </div>
                     </div>
-                    <div className="curr-detail">
-
-                    </div>
                 </div>
-
+                <Alert ref="alertRef"/>
             </div>
         );
     }
@@ -217,4 +255,4 @@ function mapStateToProps(state) {
     }
 }
 
-export default connect(mapStateToProps, { getPortfolio,updateCoinAPI})(Dashboard);
+export default connect(mapStateToProps, { getPortfolio,updateCoinAPI,getData,eraseData})(Dashboard);

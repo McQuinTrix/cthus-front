@@ -9,6 +9,8 @@ export const PORT_UPDATE = "port_update";
 export const PROF_UPDATE = "prof_update";
 export const USER_INFO = "get_userInfo";
 export const UPDATE_USERINFO = "update_userInfo";
+export const GET_DATA = "get_data";
+export const ERASE_DATA = "erase_data";
 
 const root_url = "https://api.gemini.com/v1/pubticker/";
 const ct_url = "https://cryptonthus.herokuapp.com/api";
@@ -84,5 +86,21 @@ export function signIn(data){
     return {
         type: SIGN_IN,
         payload: req
+    }
+}
+
+export function getData(type){
+    const req = axios.get(`${ct_url}/get-values/${type}`);
+
+    return {
+        type: GET_DATA,
+        payload: req
+    }
+}
+
+export function eraseData(){
+    return {
+        type: ERASE_DATA,
+        payload: ""
     }
 }
