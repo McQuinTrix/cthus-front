@@ -41274,7 +41274,6 @@
 	    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 	    var action = arguments[1];
 
-	    console.log(action.type);
 	    switch (action.type) {
 	        case _reddit_news.CRYPTO:
 
