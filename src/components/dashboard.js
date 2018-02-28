@@ -213,7 +213,7 @@ class Dashboard extends React.Component{
                                          chartData={coin.data}
                                          chartName={coin.full_name}
                                          dataKey="value"
-                                         marginStyle={{top: 5, right: 30, left: 10, bottom: 5}}
+                                         marginStyle={{top: 5, right: 30, left: 0, bottom: 5}}
                                          strokeColor="#20e5f1"/>
                         </div>
                     </div>

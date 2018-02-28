@@ -10,19 +10,25 @@ import { connect } from "react-redux";
 
 //News
 class News extends React.Component{
-    constructor(props){
-        super(props);
-    }
 
     //news object
     newsObj = {};
 
-    formNewsComp(type){
+    constructor(props){
+        super(props);
+        this.newsObj[BTC_NEWS] = "";
+        this.newsObj[ETH_NEWS] = "";
+        this.newsObj[CRYPTO] = "";
+        this.newsObj[CRY_MAR] = "";
+    }
+
+    formNewsComp(type,index){
         let newsHTML = [];
-debugger;
-        newsHTML.push(<h1>{type}</h1>)
-        this.newsObj[type].data.children.forEach((elem)=>{
-            newsHTML.push(<div className="news-container">
+
+        this.newsObj[type].forEach((elem,index2)=>{
+            newsHTML.push(<div className="news-container"
+                               onClick={()=>{navigator.app.loadUrl(, { openExternal:true })}}
+                               key={index2}>
                 <div className="news-image">
                     <img src={elem.data.thumbnail}/>
                 </div>
@@ -39,32 +45,82 @@ debugger;
     }
 
     componentWillMount(){
-        this.props.getNews(CRYPTO,3);
-        this.props.getNews(BTC_NEWS,3);
-        this.props.getNews(ETH_NEWS,3);
-        this.props.getNews(CRY_MAR,3);
+        this.props.getNews(CRYPTO,15);
+        this.props.getNews(BTC_NEWS,15);
+        this.props.getNews(ETH_NEWS,15);
+        this.props.getNews(CRY_MAR,15);
+    }
+
+    cleanData(data,type){
+        let regex,
+            propToCheck = "",
+            isMatch = false;
+        switch (type){
+            case CRYPTO:
+                regex = /(NEWS|DEVELOPMENT|EXCHANGE|POLITICS|RELEASE|MEDIA|SECURITY|PRIVACY)/;
+                propToCheck = "link_flair_text";
+                isMatch = true;
+                break;
+
+            case CRY_MAR:
+                regex = /(ICOs|News|Educational|Exchange)/;
+                propToCheck = "link_flair_text";
+                isMatch = true;
+                break;
+
+            case BTC_NEWS:
+                regex = /^self/;
+                propToCheck = "thumbnail";
+                isMatch = false;
+                break;
+
+            case ETH_NEWS:
+                regex = /^self/;
+                propToCheck = "thumbnail";
+                isMatch = false;
+                break;
+
+            default:
+                break;
+        }
+        data.children = data.children.filter((elem,index)=>{
+            if(elem.data[propToCheck]){
+                if(elem.data[propToCheck].match(regex) && isMatch){
+                    return true;
+                }else if(!elem.data[propToCheck].match(regex) && !isMatch){
+                    return true;
+                }
+            }
+            return false;
+        });
+        return data.children;
     }
 
     componentWillReceiveProps(nextProps){
         let self = this,
             news_update = nextProps.news[NEWS_UPDATE];
-        debugger;
-        if(news_update){
-            this.newsObj[news_update.type] = news_update.data;
+        if(news_update && news_update.hasOwnProperty("data")){
+            this.newsObj[news_update.type] = this.cleanData(news_update.data.data,news_update.type);
         }
     }
 
     render(){
         let sectionComp = [];
 
-        Object.keys(this.newsObj).forEach((elem)=>{
-            let sectionHTML = <div className="news-cover">{this.formNewsComp(elem)}</div>;
-            sectionComp.push(sectionHTML);
+        Object.keys(this.newsObj).forEach((elem,index)=>{
+            if(Array.isArray(this.newsObj[elem])){
+                let sectionHTML = (<div className="news-cover" key={index}>
+                        <h3 className="news-head">{elem}</h3>
+                        <div className="news-links">
+                            {this.formNewsComp(elem,index)}
+                        </div>
+                    </div>);
+                sectionComp.push(sectionHTML);
+            }
         });
 
         return (
             <div>
-                <h2>News</h2>
                 <div className="latest-news">
                     {sectionComp}
                 </div>

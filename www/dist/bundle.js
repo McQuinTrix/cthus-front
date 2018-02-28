@@ -50826,7 +50826,7 @@
 	                                chartData: coin.data,
 	                                chartName: coin.full_name,
 	                                dataKey: 'value',
-	                                marginStyle: { top: 5, right: 30, left: 10, bottom: 5 },
+	                                marginStyle: { top: 5, right: 30, left: 0, bottom: 5 },
 	                                strokeColor: '#20e5f1' })
 	                        )
 	                    )
@@ -106634,7 +106634,7 @@
 	                            _react2.default.createElement('stop', { offset: '95%', stopColor: strokeColor, stopOpacity: 0.3 })
 	                        )
 	                    ),
-	                    _react2.default.createElement(_recharts.XAxis, { dataKey: 'name', stroke: '#fff' }),
+	                    _react2.default.createElement(_recharts.XAxis, { dataKey: 'name', stroke: '#fff', fontSiz: true }),
 	                    _react2.default.createElement(_recharts.YAxis, { domain: ['dataMin', 'dataMax'], stroke: '#fff' }),
 	                    _react2.default.createElement(_recharts.Tooltip, null),
 	                    _react2.default.createElement(_recharts.Area, { type: 'monotone',
@@ -107448,6 +107448,11 @@
 	        var _this = _possibleConstructorReturn(this, (News.__proto__ || Object.getPrototypeOf(News)).call(this, props));
 
 	        _this.newsObj = {};
+
+	        _this.newsObj[_reddit_news.BTC_NEWS] = "";
+	        _this.newsObj[_reddit_news.ETH_NEWS] = "";
+	        _this.newsObj[_reddit_news.CRYPTO] = "";
+	        _this.newsObj[_reddit_news.CRY_MAR] = "";
 	        return _this;
 	    }
 
@@ -107456,18 +107461,13 @@
 
 	    _createClass(News, [{
 	        key: 'formNewsComp',
-	        value: function formNewsComp(type) {
+	        value: function formNewsComp(type, index) {
 	            var newsHTML = [];
-	            debugger;
-	            newsHTML.push(_react2.default.createElement(
-	                'h1',
-	                null,
-	                type
-	            ));
-	            this.newsObj[type].data.children.forEach(function (elem) {
+
+	            this.newsObj[type].forEach(function (elem, index2) {
 	                newsHTML.push(_react2.default.createElement(
 	                    'div',
-	                    { className: 'news-container' },
+	                    { className: 'news-container', key: index2 },
 	                    _react2.default.createElement(
 	                        'div',
 	                        { className: 'news-image' },
@@ -107495,19 +107495,64 @@
 	    }, {
 	        key: 'componentWillMount',
 	        value: function componentWillMount() {
-	            this.props.getNews(_reddit_news.CRYPTO, 3);
-	            this.props.getNews(_reddit_news.BTC_NEWS, 3);
-	            this.props.getNews(_reddit_news.ETH_NEWS, 3);
-	            this.props.getNews(_reddit_news.CRY_MAR, 3);
+	            this.props.getNews(_reddit_news.CRYPTO, 15);
+	            this.props.getNews(_reddit_news.BTC_NEWS, 15);
+	            this.props.getNews(_reddit_news.ETH_NEWS, 15);
+	            this.props.getNews(_reddit_news.CRY_MAR, 15);
+	        }
+	    }, {
+	        key: 'cleanData',
+	        value: function cleanData(data, type) {
+	            var regex = void 0,
+	                propToCheck = "",
+	                isMatch = false;
+	            switch (type) {
+	                case _reddit_news.CRYPTO:
+	                    regex = /(NEWS|DEVELOPMENT|EXCHANGE|POLITICS|RELEASE|MEDIA|SECURITY|PRIVACY)/;
+	                    propToCheck = "link_flair_text";
+	                    isMatch = true;
+	                    break;
+
+	                case _reddit_news.CRY_MAR:
+	                    regex = /(ICOs|News|Educational|Exchange)/;
+	                    propToCheck = "link_flair_text";
+	                    isMatch = true;
+	                    break;
+
+	                case _reddit_news.BTC_NEWS:
+	                    regex = /^self/;
+	                    propToCheck = "thumbnail";
+	                    isMatch = false;
+	                    break;
+
+	                case _reddit_news.ETH_NEWS:
+	                    regex = /^self/;
+	                    propToCheck = "thumbnail";
+	                    isMatch = false;
+	                    break;
+
+	                default:
+	                    break;
+	            }
+	            data.children = data.children.filter(function (elem, index) {
+	                if (elem.data[propToCheck]) {
+	                    if (elem.data[propToCheck].match(regex) && isMatch) {
+	                        return true;
+	                    } else if (!elem.data[propToCheck].match(regex) && !isMatch) {
+	                        return true;
+	                    }
+	                }
+	                return false;
+	            });
+	            return data.children;
 	        }
 	    }, {
 	        key: 'componentWillReceiveProps',
 	        value: function componentWillReceiveProps(nextProps) {
 	            var self = this,
 	                news_update = nextProps.news[_reddit_news.NEWS_UPDATE];
-	            debugger;
-	            if (news_update) {
-	                this.newsObj[news_update.type] = news_update.data;
+	            if (news_update && news_update.hasOwnProperty("data")) {
+	                this.newsObj[news_update.type] = this.cleanData(news_update.data.data, news_update.type);
 	            }
 	        }
 	    }, {
@@ -107517,23 +107562,29 @@
 
 	            var sectionComp = [];
 
-	            Object.keys(this.newsObj).forEach(function (elem) {
-	                var sectionHTML = _react2.default.createElement(
-	                    'div',
-	                    { className: 'news-cover' },
-	                    _this2.formNewsComp(elem)
-	                );
-	                sectionComp.push(sectionHTML);
+	            Object.keys(this.newsObj).forEach(function (elem, index) {
+	                if (Array.isArray(_this2.newsObj[elem])) {
+	                    var sectionHTML = _react2.default.createElement(
+	                        'div',
+	                        { className: 'news-cover', key: index },
+	                        _react2.default.createElement(
+	                            'h3',
+	                            { className: 'news-head' },
+	                            elem
+	                        ),
+	                        _react2.default.createElement(
+	                            'div',
+	                            { className: 'news-links' },
+	                            _this2.formNewsComp(elem, index)
+	                        )
+	                    );
+	                    sectionComp.push(sectionHTML);
+	                }
 	            });
 
 	            return _react2.default.createElement(
 	                'div',
 	                null,
-	                _react2.default.createElement(
-	                    'h2',
-	                    null,
-	                    'News'
-	                ),
 	                _react2.default.createElement(
 	                    'div',
 	                    { className: 'latest-news' },

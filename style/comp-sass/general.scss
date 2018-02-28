@@ -25,3 +25,64 @@ html,body,#crypton-body,.canvas-container{
     margin-left: 1px;
   }
 }
+
+.recharts-cartesian-axis-tick-value{
+  font-size: 0.75rem;
+}
+
+.news-container{
+  display: flex;
+  padding: 5px 2px;
+  margin: 10px 0px;
+  background-color: #4a4949;
+  width: 100%;
+  border-radius: 7px;
+  .news-image{
+    margin: 0 3px;
+    height: 80px;
+    img{
+      height: 80px;
+      width: 90px;
+      border-radius: 8px;
+    }
+  }
+  .news-desc{
+    width: calc(100% - 110px);
+    padding: 0 5px;
+    .news-head{
+
+    }
+    h3{
+      margin: 2px;
+      font-size: 1rem;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      overflow: hidden;
+      width: 100%;
+      display: inline-block;
+    }
+    .news-time{
+      font-weight: 100;
+      font-size: 0.75rem;
+    }
+  }
+}
+
+.news-cover{
+  border-width: 0px;
+  border-top: 7px;
+  border-style: dotted;
+  margin-top: 50px;
+  .news-head{
+    margin: 3px 0;
+    font-size: 1.5rem;
+    position: relative;
+    top: -25px;
+    background-color: #333333;
+    display: inline-block;
+    padding: 0 18px 0 0;
+  }
+  .news-link{
+    margin-top: -25px;
+  }
+}

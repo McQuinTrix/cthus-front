@@ -33,7 +33,7 @@ export default class ReAreaChart extends React.Component{
                         <stop offset="95%" stopColor={strokeColor} stopOpacity={0.3}/>
                     </linearGradient>
                 </defs>
-                <XAxis dataKey="name" stroke="#fff"/>
+                <XAxis dataKey="name" stroke="#fff" fontSiz/>
                 <YAxis domain={['dataMin', 'dataMax']} stroke="#fff"/>
                 <Tooltip />
                 <Area type="monotone"
