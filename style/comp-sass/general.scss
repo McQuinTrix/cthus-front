@@ -61,9 +61,22 @@ html,body,#crypton-body,.canvas-container{
       width: 100%;
       display: inline-block;
     }
-    .news-time{
+    .news-time,.news-source{
+      background-color: #00aebf;
+
       font-weight: 100;
       font-size: 0.75rem;
+      display: inline-block;
+
+      padding: 2px 5px;
+      color: white;
+    }
+    .news-time{
+      border-radius: 4px 0 0 4px;
+    }
+    .news-source{
+      background-color: tomato;
+      border-radius: 0 4px 4px 0;
     }
   }
 }
@@ -85,4 +98,8 @@ html,body,#crypton-body,.canvas-container{
   .news-link{
     margin-top: -25px;
   }
+}
+
+.margin-top-5{
+  margin-top: -5px;
 }

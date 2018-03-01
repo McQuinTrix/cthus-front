@@ -24,13 +24,13 @@ gulp.task('copy', function(){
 
     //Font awesome font files
     gulp.src(['node_modules/font-awesome/fonts/**'])
-        .pipe(gulp.dest('www/style/fa/fonts'))
+        .pipe(gulp.dest('www/style/fa/fonts'));
 
     gulp.src(['dist/**'])
-       .pipe(gulp.dest('www/dist'))
+       .pipe(gulp.dest('www/dist'));
 
     gulp.src(['*.html'])
-       .pipe(gulp.dest('www'))
+       .pipe(gulp.dest('www'));
 
     gulp.src(['imgs/**/*'])
         .pipe(gulp.dest('www/imgs'))

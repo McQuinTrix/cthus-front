@@ -107428,6 +107428,10 @@
 
 	var _reactRedux = __webpack_require__(160);
 
+	var _loadLogo = __webpack_require__(545);
+
+	var _loadLogo2 = _interopRequireDefault(_loadLogo);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -107465,13 +107469,22 @@
 	            var newsHTML = [];
 
 	            this.newsObj[type].forEach(function (elem, index2) {
+
 	                newsHTML.push(_react2.default.createElement(
 	                    'div',
-	                    { className: 'news-container', key: index2 },
+	                    { className: 'news-container',
+	                        onClick: function onClick() {
+	                            debugger;cordova.InAppBrowser.open(elem.data.url, '_system');
+	                        },
+	                        key: index2 },
 	                    _react2.default.createElement(
 	                        'div',
 	                        { className: 'news-image' },
-	                        _react2.default.createElement('img', { src: elem.data.thumbnail })
+	                        elem.data.thumbnail.length > 8 ? _react2.default.createElement('img', { src: elem.data.thumbnail }) : _react2.default.createElement(
+	                            'div',
+	                            { className: 'margin-top-5' },
+	                            _react2.default.createElement(_loadLogo2.default, { height: 90 })
+	                        )
 	                    ),
 	                    _react2.default.createElement(
 	                        'div',
@@ -107482,9 +107495,14 @@
 	                            elem.data.title
 	                        ),
 	                        _react2.default.createElement(
-	                            'div',
+	                            'span',
 	                            { className: 'news-time' },
 	                            (0, _moment2.default)().utc(elem.data.created_utc).format("MMM DD,YYYY")
+	                        ),
+	                        _react2.default.createElement(
+	                            'span',
+	                            { className: 'news-source' },
+	                            elem.data.domain
 	                        )
 	                    )
 	                ));

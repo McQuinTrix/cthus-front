@@ -7,6 +7,7 @@ import { getNews,NEWS_UPDATE,CRYPTO,BTC_NEWS,ETH_NEWS,CRY_MAR } from '../actions
 import moment from 'moment';
 
 import { connect } from "react-redux";
+import Logo from "./load-logo";
 
 //News
 class News extends React.Component{
@@ -26,17 +27,26 @@ class News extends React.Component{
         let newsHTML = [];
 
         this.newsObj[type].forEach((elem,index2)=>{
+
             newsHTML.push(<div className="news-container"
-                               onClick={()=>{navigator.app.loadUrl(, { openExternal:true })}}
+                               onClick={()=>{ debugger; cordova.InAppBrowser.open(elem.data.url, '_system');}}
                                key={index2}>
                 <div className="news-image">
-                    <img src={elem.data.thumbnail}/>
+                    {elem.data.thumbnail.length >8 ?
+                        <img src={elem.data.thumbnail}/> :
+                        <div className="margin-top-5">
+                            <Logo height={90}/>
+                        </div>
+                    }
                 </div>
                 <div className="news-desc">
                     <h3>{elem.data.title}</h3>
-                    <div className="news-time">
+                    <span className="news-time">
                         {moment().utc(elem.data.created_utc).format("MMM DD,YYYY")}
-                    </div>
+                    </span>
+                    <span className="news-source">
+                        {elem.data.domain}
+                    </span>
                 </div>
             </div>);
         });
