@@ -127,3 +127,14 @@ html, body, #crypton-body, .canvas-container {
 .au-container {
   font-weight: 100;
   font-size: 1.5rem; }
+
+.dash-worth {
+  border: 1px solid #00aebf;
+  border-radius: 3px;
+  position: relative;
+  top: -3px; }
+  .dash-worth span {
+    display: inline-block;
+    padding: 1px 1em; }
+  .dash-worth span:first-child {
+    background-color: #00aebf; }

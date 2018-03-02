@@ -58,7 +58,6 @@ export default function (state={},action) {
             break;
 
         case CLEAR_SIGN_IN:
-            debugger;
             obj[SIGN_IN] = {};
             return Object.assign({},state,obj);
         default:

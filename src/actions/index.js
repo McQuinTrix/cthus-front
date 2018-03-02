@@ -107,7 +107,6 @@ export function eraseData(){
 }
 
 export function clearSignIn() {
-    debugger;
     return {
         type: CLEAR_SIGN_IN,
         payload: ""

@@ -39636,7 +39636,6 @@
 	}
 
 	function clearSignIn() {
-	    debugger;
 	    return {
 	        type: CLEAR_SIGN_IN,
 	        payload: ""
@@ -41257,7 +41256,6 @@
 	            break;
 
 	        case _index.CLEAR_SIGN_IN:
-	            debugger;
 	            obj[_index.SIGN_IN] = {};
 	            return Object.assign({}, state, obj);
 	        default:

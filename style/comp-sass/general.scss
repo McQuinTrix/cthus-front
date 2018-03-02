@@ -139,3 +139,20 @@ html,body,#crypton-body,.canvas-container{
   font-weight: 100;
   font-size: 1.5rem;
 }
+
+.dash-worth{
+  border: 1px solid #00aebf;
+  border-radius: 3px;
+  position: relative;
+  top: -3px;
+  span{
+    display: inline-block;
+    padding: 1px 1em;
+  }
+  span:first-child{
+    background-color: #00aebf;
+  }
+  span:nth-child(1){
+
+  }
+}
