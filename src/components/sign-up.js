@@ -79,10 +79,6 @@ class SignUp extends React.Component{
     componentWillMount(){
         //Change Sign Up Bool variable to prop value
         this.signUpBool = this.props.params.id === "true";
-
-        if(this.props.sign){
-
-        }
     }
 
     componentDidMount(){
@@ -95,9 +91,9 @@ class SignUp extends React.Component{
     render(){
         let pageState = this.pageState,
             otherState = this.otherState;
-
+debugger;
         //Error can be shown
-        if(this.props.sign[SIGN_IN]){
+        if(this.props.sign[SIGN_IN] && this.props.sign[SIGN_IN].hasOwnProperty("data")){
             window.localStorage.setItem(userId,this.props.sign[SIGN_IN].data.userId);
             this.props.history.push('/canvas/'+this.props.sign[SIGN_IN].data.userId);
         }

@@ -14,7 +14,7 @@ import {userId} from './home-page.js';
 
 //Redux stuff
 import { connect } from "react-redux";
-import { fetchBTC, fetchETH, getPortfolio } from "../actions";
+import { fetchBTC, fetchETH, getPortfolio,clearSignIn } from "../actions";
 import { PORT_GET } from "../actions/index";
 
 const canvasState = {
@@ -54,6 +54,9 @@ class Canvas extends React.Component{
     }
 
     componentWillMount(){
+
+        this.props.clearSignIn();
+
         intVal = setInterval(this.getTicker,3000,this);
         setTimeout(()=>{
             this.alert = { message: "You are logged in.", type: "success"};
@@ -210,9 +213,9 @@ class AboutUs extends React.Component{
     render(){
         return (
             <div>
-                <h2>About Us</h2>
-                <div className="about-us">
-
+                <h1>About Us</h1>
+                <div className="au-container">
+                    <u>Cryptonthus</u> is a crypto-assets portfolio application with news updates(from reddit communities).
                 </div>
             </div>
         );
@@ -229,4 +232,9 @@ function mapStateToProps(state) {
     }
 }
 
-export default connect(mapStateToProps, { fetchBTC, fetchETH,getPortfolio})(Canvas);
+export default connect(mapStateToProps, {
+    fetchBTC,
+    fetchETH,
+    getPortfolio,
+    clearSignIn
+})(Canvas);

@@ -291,22 +291,15 @@ body{
 }
 
 .coin-amount{
-    font-weight: bolder;
-    font-size: 17px;
+    font-weight: lighter;
+    font-size: 15px;
     display: flex;
     align-items: center;
     padding: 10px 15px;
 }
 
-.coin-amount.up-tick{
-    background-color: #268426;
-}
-.coin-amount.down-tick{
-    background-color: #b32222;
-}
-
 .ca-cover{
-    height: 23px;
+    height: 56px;
     overflow: hidden;
     text-align: right;
 }

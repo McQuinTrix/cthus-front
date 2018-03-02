@@ -25,7 +25,7 @@ class Dashboard extends React.Component{
         this.state = {
             eth: 0,
             btc: 0,
-            updateCoin: "",
+            updateCoin: "BTC",
             changePortVal: true
         };
         this.touchEnd.bind(this);
@@ -42,14 +42,16 @@ class Dashboard extends React.Component{
             full_name: "Bitcoin",
             imgUrl: "imgs/icon/bitcoin.svg",
             amount: 0,
-            data: []
+            data: [],
+            lastDayVal: 0
         },
         "ETH":{
             name: "ETH",
             full_name: "Ethereum",
             imgUrl: "imgs/icon/ethereum.svg",
             amount: 0,
-            data: []
+            data: [],
+            lastDayVal: 0
         }
     };
 
@@ -68,9 +70,9 @@ class Dashboard extends React.Component{
         let endX = origEvent.changedTouches[0].pageX;
 
         if(this.startX > endX+100){
-            alert("Swiped Right -> Left");
+            //alert("Swiped Right -> Left");
         }else if(this.startX+100 < endX){
-            alert("Swiped Left -> Right");
+            //alert("Swiped Left -> Right");
         }
     }
 
@@ -122,14 +124,18 @@ class Dashboard extends React.Component{
         let self = this;
         if(nextProps.sign[GET_DATA]){
             let response = nextProps.sign[GET_DATA];
+
             if(response.hasOwnProperty('result')){
-                self.coinObj[response.type.toUpperCase()].data = response.result.map((elem)=>{
+                let coinObj = self.coinObj[response.type.toUpperCase()];
+                coinObj.data = response.result.map((elem)=>{
                     let date = new Date(+elem.date);
                     return {
-                        name: moment(date).format("HH:mm"),
+                        name: moment(date).format("MM/DD"),
                         value: +elem.value
                     }
                 });
+                coinObj.data.reverse();
+                coinObj.lastDayVal = coinObj.data[coinObj.data.length - 48];
                 this.props.eraseData();
             }
         }
@@ -142,6 +148,10 @@ class Dashboard extends React.Component{
         })
     }
 
+    componentWillMount(){
+
+    }
+
     render(){
 
         let coinHTML =[],
@@ -150,7 +160,14 @@ class Dashboard extends React.Component{
             BTC = this.props.btc,
             ETH = this.props.eth;
 
+        //Forming the HTML for each coin
         Object.keys(coinObj).forEach((elem,ind)=>{
+
+            let coin = coinObj[elem],
+                coverClass = "coin-cover",
+                coinShrtClass = "coin-short";
+
+            //TODO: Remove Name dependency
             if(elem === "BTC"){
                 amount = amount + ((+BTC)* coinObj[elem].amount);
                 coinObj[elem].currVal = +BTC;
@@ -159,11 +176,16 @@ class Dashboard extends React.Component{
                 coinObj[elem].currVal = +ETH;
             }
 
-            let coin = coinObj[elem],
-                coverClass = "coin-cover";
-
+            //If the coin is being updated
             if(elem === this.state.updateCoin){
                 coverClass += " update-active";
+            }
+
+            //To check if green or red
+            if(+coin.lastDayVal.value < coin.currVal){
+                coinShrtClass += " up-tick";
+            }else{
+                coinShrtClass += " down-tick";
             }
 
             coinHTML.push(
@@ -171,7 +193,7 @@ class Dashboard extends React.Component{
                      key={ind}
                      onTouchEnd={(e)=>{this.touchEnd(e,e.nativeEvent)}}
                      onTouchStart={(e)=>{this.touchStart(e,e.nativeEvent)}}>
-                    <div className="coin-short"
+                    <div className={coinShrtClass}
                          onClick={()=>{this.openUpdater(elem)}}>
                         <div className="coin-intro">
                             <div className="coin-image-cover">
@@ -187,11 +209,19 @@ class Dashboard extends React.Component{
                                     {coin.amount}
                                 </div>
                                 <div className="coin-curr">
-                                    {(+coin.currVal).toLocaleString()}
+                                    <span className="coin-type">Price</span>
+                                    <span className="coin-amt">
+                                        $ {(+coin.currVal).toLocaleString()}
+                                    </span>
                                 </div>
-                                <div className="coin-fiat">
-                                    {((+coin.currVal)*coin.amount).toFixed(2).toLocaleString()}
-                                </div>
+                                {/*
+                                    <div className="coin-fiat">
+                                        <span className="coin-type">Value </span>
+                                        <span className="coin-amt">
+                                        $ {((+coin.currVal) * coin.amount).toFixed(2).toLocaleString()}
+                                    </span>
+                                    </div>
+                                */}
                             </div>
                         </div>
                     </div>
@@ -208,13 +238,23 @@ class Dashboard extends React.Component{
                             </button>
                         </div>
                         <div className="coin-chart">
-                            <ReAreaChart width={340}
-                                         height={300}
-                                         chartData={coin.data}
-                                         chartName={coin.full_name}
-                                         dataKey="value"
-                                         marginStyle={{top: 5, right: 30, left: 0, bottom: 5}}
-                                         strokeColor="#20e5f1"/>
+                            {
+                                coin.data.length > 0
+
+                                    ?
+
+                                    <ReAreaChart width={340}
+                                        height={300}
+                                        chartData={coin.data}
+                                        chartName={coin.full_name}
+                                        dataKey="value"
+                                        marginStyle={{top: 5, right: 30, left: 0, bottom: 5}}
+                                        strokeColor="#20e5f1"/>
+
+                                    :
+
+                                    <div>Loading ...</div>
+                            }
                         </div>
                     </div>
                 </div>
@@ -226,18 +266,13 @@ class Dashboard extends React.Component{
                 <div className="dash-head">
                     <h2 className="dash-h2">Portfolio</h2>
                     <div className="dash-worth">
-                        ${amount.toFixed(2)}
+                        $ {amount.toFixed(2)}
                     </div>
                 </div>
                 <div className="dash-body">
                     <div className="curr-main">
                         <div className="curr-cover">
                             {coinHTML}
-                        </div>
-                        <div className="curr-chart">
-                            {/* BTC Chart */}
-                            {/* ETH Chart */}
-                            {/* Total Chart */}
                         </div>
                     </div>
                 </div>

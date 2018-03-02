@@ -11,6 +11,7 @@ export const USER_INFO = "get_userInfo";
 export const UPDATE_USERINFO = "update_userInfo";
 export const GET_DATA = "get_data";
 export const ERASE_DATA = "erase_data";
+export const CLEAR_SIGN_IN = "clear_sign_in";
 
 const root_url = "https://api.gemini.com/v1/pubticker/";
 const ct_url = "https://cryptonthus.herokuapp.com/api";
@@ -101,6 +102,14 @@ export function getData(type){
 export function eraseData(){
     return {
         type: ERASE_DATA,
+        payload: ""
+    }
+}
+
+export function clearSignIn() {
+    debugger;
+    return {
+        type: CLEAR_SIGN_IN,
         payload: ""
     }
 }

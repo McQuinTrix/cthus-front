@@ -39511,7 +39511,7 @@
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
-	exports.ERASE_DATA = exports.GET_DATA = exports.UPDATE_USERINFO = exports.USER_INFO = exports.PROF_UPDATE = exports.PORT_UPDATE = exports.PORT_GET = exports.SIGN_IN = exports.SIGN_UP = exports.FETCH_ETH = exports.FETCH_BTC = undefined;
+	exports.CLEAR_SIGN_IN = exports.ERASE_DATA = exports.GET_DATA = exports.UPDATE_USERINFO = exports.USER_INFO = exports.PROF_UPDATE = exports.PORT_UPDATE = exports.PORT_GET = exports.SIGN_IN = exports.SIGN_UP = exports.FETCH_ETH = exports.FETCH_BTC = undefined;
 	exports.fetchBTC = fetchBTC;
 	exports.fetchETH = fetchETH;
 	exports.signUp = signUp;
@@ -39522,6 +39522,7 @@
 	exports.signIn = signIn;
 	exports.getData = getData;
 	exports.eraseData = eraseData;
+	exports.clearSignIn = clearSignIn;
 
 	var _axios = __webpack_require__(508);
 
@@ -39540,6 +39541,7 @@
 	var UPDATE_USERINFO = exports.UPDATE_USERINFO = "update_userInfo";
 	var GET_DATA = exports.GET_DATA = "get_data";
 	var ERASE_DATA = exports.ERASE_DATA = "erase_data";
+	var CLEAR_SIGN_IN = exports.CLEAR_SIGN_IN = "clear_sign_in";
 
 	var root_url = "https://api.gemini.com/v1/pubticker/";
 	var ct_url = "https://cryptonthus.herokuapp.com/api";
@@ -39629,6 +39631,14 @@
 	function eraseData() {
 	    return {
 	        type: ERASE_DATA,
+	        payload: ""
+	    };
+	}
+
+	function clearSignIn() {
+	    debugger;
+	    return {
+	        type: CLEAR_SIGN_IN,
 	        payload: ""
 	    };
 	}
@@ -41192,6 +41202,7 @@
 	    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 	    var action = arguments[1];
 
+	    var obj = {};
 	    switch (action.type) {
 	        case _index.SIGN_UP:
 	            if (action.payload.status === 200) {
@@ -41200,56 +41211,54 @@
 	            break;
 	        case _index.SIGN_IN:
 	            if (action.payload.status === 200) {
-	                var _obj = {};
-	                _obj[_index.SIGN_IN] = action.payload.data;
-	                return Object.assign({}, state, _obj);
+	                obj[_index.SIGN_IN] = action.payload.data;
+	                return Object.assign({}, state, obj);
 	            }
 	            break;
 	        case _index.PORT_GET:
 	            if (action.payload.status === 200) {
-	                var _obj2 = {};
-	                _obj2[_index.PORT_GET] = action.payload.data;
-	                return Object.assign({}, state, _obj2);
+	                obj[_index.PORT_GET] = action.payload.data;
+	                return Object.assign({}, state, obj);
 	            }
 	            break;
 	        case _index.PORT_UPDATE:
 	            if (action.payload.status === 200) {
-	                var _obj3 = {};
-	                _obj3[_index.PORT_UPDATE] = action.payload.data;
-	                return Object.assign({}, state, _obj3);
+	                obj[_index.PORT_UPDATE] = action.payload.data;
+	                return Object.assign({}, state, obj);
 	            }
 	            break;
 	        case _index.PROF_UPDATE:
 	            if (action.payload.status === 200) {
-	                var _obj4 = {};
-	                _obj4[_index.PROF_UPDATE] = action.payload.data;
-	                return Object.assign({}, state, _obj4);
+	                obj[_index.PROF_UPDATE] = action.payload.data;
+	                return Object.assign({}, state, obj);
 	            }
 	            break;
 	        case _index.USER_INFO:
 	            if (action.payload.status === 200) {
-	                var _obj5 = {};
-	                _obj5[_index.USER_INFO] = action.payload.data;
-	                return Object.assign({}, state, _obj5);
+	                obj[_index.USER_INFO] = action.payload.data;
+	                return Object.assign({}, state, obj);
 	            }
 	            break;
 	        case _index.UPDATE_USERINFO:
 	            if (action.payload.status === 200) {
-	                var _obj6 = {};
-	                _obj6[_index.UPDATE_USERINFO] = action.payload.data;
-	                return Object.assign({}, state, _obj6);
+	                obj[_index.UPDATE_USERINFO] = action.payload.data;
+	                return Object.assign({}, state, obj);
 	            }
 	            break;
 	        case _index.GET_DATA:
 	            if (action.payload.status === 200) {
-	                var _obj7 = {};
-	                _obj7[_index.GET_DATA] = action.payload.data;
-	                return Object.assign({}, state, _obj7);
+	                obj[_index.GET_DATA] = action.payload.data;
+	                return Object.assign({}, state, obj);
 	            }
 	            break;
 	        case _index.ERASE_DATA:
-	            var obj = {};
 	            obj[_index.GET_DATA] = {};
+	            return Object.assign({}, state, obj);
+	            break;
+
+	        case _index.CLEAR_SIGN_IN:
+	            debugger;
+	            obj[_index.SIGN_IN] = {};
 	            return Object.assign({}, state, obj);
 	        default:
 	            return state;
@@ -50591,14 +50600,16 @@
 	                full_name: "Bitcoin",
 	                imgUrl: "imgs/icon/bitcoin.svg",
 	                amount: 0,
-	                data: []
+	                data: [],
+	                lastDayVal: 0
 	            },
 	            "ETH": {
 	                name: "ETH",
 	                full_name: "Ethereum",
 	                imgUrl: "imgs/icon/ethereum.svg",
 	                amount: 0,
-	                data: []
+	                data: [],
+	                lastDayVal: 0
 	            }
 	        };
 	        _this.startX = 0;
@@ -50606,7 +50617,7 @@
 	        _this.state = {
 	            eth: 0,
 	            btc: 0,
-	            updateCoin: "",
+	            updateCoin: "BTC",
 	            changePortVal: true
 	        };
 	        _this.touchEnd.bind(_this);
@@ -50637,9 +50648,9 @@
 	            var endX = origEvent.changedTouches[0].pageX;
 
 	            if (this.startX > endX + 100) {
-	                alert("Swiped Right -> Left");
+	                //alert("Swiped Right -> Left");
 	            } else if (this.startX + 100 < endX) {
-	                alert("Swiped Left -> Right");
+	                //alert("Swiped Left -> Right");
 	            }
 	        }
 	    }, {
@@ -50695,14 +50706,18 @@
 	            var self = this;
 	            if (nextProps.sign[_index.GET_DATA]) {
 	                var response = nextProps.sign[_index.GET_DATA];
+
 	                if (response.hasOwnProperty('result')) {
-	                    self.coinObj[response.type.toUpperCase()].data = response.result.map(function (elem) {
+	                    var coinObj = self.coinObj[response.type.toUpperCase()];
+	                    coinObj.data = response.result.map(function (elem) {
 	                        var date = new Date(+elem.date);
 	                        return {
-	                            name: (0, _moment2.default)(date).format("HH:mm"),
+	                            name: (0, _moment2.default)(date).format("MM/DD"),
 	                            value: +elem.value
 	                        };
 	                    });
+	                    coinObj.data.reverse();
+	                    coinObj.lastDayVal = coinObj.data[coinObj.data.length - 48];
 	                    this.props.eraseData();
 	                }
 	            }
@@ -50716,6 +50731,9 @@
 	            });
 	        }
 	    }, {
+	        key: 'componentWillMount',
+	        value: function componentWillMount() {}
+	    }, {
 	        key: 'render',
 	        value: function render() {
 	            var _this3 = this;
@@ -50726,7 +50744,14 @@
 	                BTC = this.props.btc,
 	                ETH = this.props.eth;
 
+	            //Forming the HTML for each coin
 	            Object.keys(coinObj).forEach(function (elem, ind) {
+
+	                var coin = coinObj[elem],
+	                    coverClass = "coin-cover",
+	                    coinShrtClass = "coin-short";
+
+	                //TODO: Remove Name dependency
 	                if (elem === "BTC") {
 	                    amount = amount + +BTC * coinObj[elem].amount;
 	                    coinObj[elem].currVal = +BTC;
@@ -50735,11 +50760,16 @@
 	                    coinObj[elem].currVal = +ETH;
 	                }
 
-	                var coin = coinObj[elem],
-	                    coverClass = "coin-cover";
-
+	                //If the coin is being updated
 	                if (elem === _this3.state.updateCoin) {
 	                    coverClass += " update-active";
+	                }
+
+	                //To check if green or red
+	                if (+coin.lastDayVal.value < coin.currVal) {
+	                    coinShrtClass += " up-tick";
+	                } else {
+	                    coinShrtClass += " down-tick";
 	                }
 
 	                coinHTML.push(_react2.default.createElement(
@@ -50754,7 +50784,7 @@
 	                        } },
 	                    _react2.default.createElement(
 	                        'div',
-	                        { className: 'coin-short',
+	                        { className: coinShrtClass,
 	                            onClick: function onClick() {
 	                                _this3.openUpdater(elem);
 	                            } },
@@ -50786,12 +50816,17 @@
 	                                _react2.default.createElement(
 	                                    'div',
 	                                    { className: 'coin-curr' },
-	                                    (+coin.currVal).toLocaleString()
-	                                ),
-	                                _react2.default.createElement(
-	                                    'div',
-	                                    { className: 'coin-fiat' },
-	                                    (+coin.currVal * coin.amount).toFixed(2).toLocaleString()
+	                                    _react2.default.createElement(
+	                                        'span',
+	                                        { className: 'coin-type' },
+	                                        'Price'
+	                                    ),
+	                                    _react2.default.createElement(
+	                                        'span',
+	                                        { className: 'coin-amt' },
+	                                        '$ ',
+	                                        (+coin.currVal).toLocaleString()
+	                                    )
 	                                )
 	                            )
 	                        )
@@ -50821,13 +50856,17 @@
 	                        _react2.default.createElement(
 	                            'div',
 	                            { className: 'coin-chart' },
-	                            _react2.default.createElement(_areaChart2.default, { width: 340,
+	                            coin.data.length > 0 ? _react2.default.createElement(_areaChart2.default, { width: 340,
 	                                height: 300,
 	                                chartData: coin.data,
 	                                chartName: coin.full_name,
 	                                dataKey: 'value',
 	                                marginStyle: { top: 5, right: 30, left: 0, bottom: 5 },
-	                                strokeColor: '#20e5f1' })
+	                                strokeColor: '#20e5f1' }) : _react2.default.createElement(
+	                                'div',
+	                                null,
+	                                'Loading ...'
+	                            )
 	                        )
 	                    )
 	                ));
@@ -50847,7 +50886,7 @@
 	                    _react2.default.createElement(
 	                        'div',
 	                        { className: 'dash-worth' },
-	                        '$',
+	                        '$ ',
 	                        amount.toFixed(2)
 	                    )
 	                ),
@@ -50861,8 +50900,7 @@
 	                            'div',
 	                            { className: 'curr-cover' },
 	                            coinHTML
-	                        ),
-	                        _react2.default.createElement('div', { className: 'curr-chart' })
+	                        )
 	                    )
 	                ),
 	                _react2.default.createElement(_alertMessage2.default, { ref: 'alertRef' })
@@ -106780,8 +106818,6 @@
 	        value: function componentWillMount() {
 	            //Change Sign Up Bool variable to prop value
 	            this.signUpBool = this.props.params.id === "true";
-
-	            if (this.props.sign) {}
 	        }
 	    }, {
 	        key: 'componentDidMount',
@@ -106796,9 +106832,9 @@
 	        value: function render() {
 	            var pageState = this.pageState,
 	                otherState = this.otherState;
-
+	            debugger;
 	            //Error can be shown
-	            if (this.props.sign[_actions.SIGN_IN]) {
+	            if (this.props.sign[_actions.SIGN_IN] && this.props.sign[_actions.SIGN_IN].hasOwnProperty("data")) {
 	                window.localStorage.setItem(_homePage.userId, this.props.sign[_actions.SIGN_IN].data.userId);
 	                this.props.history.push('/canvas/' + this.props.sign[_actions.SIGN_IN].data.userId);
 	            }
@@ -107016,6 +107052,8 @@
 	        value: function componentWillMount() {
 	            var _this2 = this;
 
+	            this.props.clearSignIn();
+
 	            intVal = setInterval(this.getTicker, 3000, this);
 	            setTimeout(function () {
 	                _this2.alert = { message: "You are logged in.", type: "success" };
@@ -107224,11 +107262,20 @@
 	                'div',
 	                null,
 	                _react2.default.createElement(
-	                    'h2',
+	                    'h1',
 	                    null,
 	                    'About Us'
 	                ),
-	                _react2.default.createElement('div', { className: 'about-us' })
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'au-container' },
+	                    _react2.default.createElement(
+	                        'u',
+	                        null,
+	                        'Cryptonthus'
+	                    ),
+	                    ' is a crypto-assets portfolio application with news updates(from reddit communities).'
+	                )
 	            );
 	        }
 	    }]);
@@ -107246,7 +107293,12 @@
 	    };
 	}
 
-	exports.default = (0, _reactRedux.connect)(mapStateToProps, { fetchBTC: _actions.fetchBTC, fetchETH: _actions.fetchETH, getPortfolio: _actions.getPortfolio })(Canvas);
+	exports.default = (0, _reactRedux.connect)(mapStateToProps, {
+	    fetchBTC: _actions.fetchBTC,
+	    fetchETH: _actions.fetchETH,
+	    getPortfolio: _actions.getPortfolio,
+	    clearSignIn: _actions.clearSignIn
+	})(Canvas);
 
 /***/ }),
 /* 1125 */
