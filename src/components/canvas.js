@@ -11,6 +11,7 @@ import Dashboard from "./dashboard";
 import UserProfile from "./user-profile";
 import News from "./news.js";
 import {userId} from './home-page.js';
+import {browserHistory} from 'react-router';
 
 //Redux stuff
 import { connect } from "react-redux";
@@ -70,12 +71,11 @@ class Canvas extends React.Component{
 
     exit(){
         window.localStorage.removeItem(userId);
-        if(true){
-            this.props.history.go(-2);
-        }else{
-            this.props.history.go(-1);
-        }
-
+        browserHistory.replace({
+            pathname: '/',
+            state: {}
+        });
+        this.props.history.push('/')
     }
 
     //Render

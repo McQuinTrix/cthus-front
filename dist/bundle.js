@@ -106830,7 +106830,6 @@
 	        value: function render() {
 	            var pageState = this.pageState,
 	                otherState = this.otherState;
-	            debugger;
 	            //Error can be shown
 	            if (this.props.sign[_actions.SIGN_IN] && this.props.sign[_actions.SIGN_IN].hasOwnProperty("data")) {
 	                window.localStorage.setItem(_homePage.userId, this.props.sign[_actions.SIGN_IN].data.userId);
@@ -106976,6 +106975,8 @@
 
 	var _homePage = __webpack_require__(544);
 
+	var _reactRouter = __webpack_require__(199);
+
 	var _reactRedux = __webpack_require__(160);
 
 	var _actions = __webpack_require__(507);
@@ -107067,11 +107068,11 @@
 	        key: 'exit',
 	        value: function exit() {
 	            window.localStorage.removeItem(_homePage.userId);
-	            if (true) {
-	                this.props.history.go(-2);
-	            } else {
-	                this.props.history.go(-1);
-	            }
+	            _reactRouter.browserHistory.replace({
+	                pathname: '/',
+	                state: {}
+	            });
+	            this.props.history.push('/');
 	        }
 
 	        //Render

@@ -91,7 +91,6 @@ class SignUp extends React.Component{
     render(){
         let pageState = this.pageState,
             otherState = this.otherState;
-debugger;
         //Error can be shown
         if(this.props.sign[SIGN_IN] && this.props.sign[SIGN_IN].hasOwnProperty("data")){
             window.localStorage.setItem(userId,this.props.sign[SIGN_IN].data.userId);

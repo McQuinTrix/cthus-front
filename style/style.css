@@ -12,6 +12,7 @@ body{
 
 .hp-container{
     text-align:right;
+    padding:  0.5em;
 }
 
 .hp-header{
@@ -36,6 +37,9 @@ body{
 }
 .hp-button-black:visited{
     color: #373d44;
+}
+.hp-btc-label{
+    font-weight: bold;
 }
 
 
