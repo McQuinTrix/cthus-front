@@ -2,13 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="e097aae1-3239-4cf4-8697-d1e90d5eec71" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dist/bundle.js" afterPath="$PROJECT_DIR$/dist/bundle.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/platforms/browser/www/dist/bundle.js" afterPath="$PROJECT_DIR$/platforms/browser/www/dist/bundle.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/components/canvas.js" afterPath="$PROJECT_DIR$/src/components/canvas.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/components/sign-up.js" afterPath="$PROJECT_DIR$/src/components/sign-up.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/style/style.css" afterPath="$PROJECT_DIR$/style/style.css" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/www/dist/bundle.js" afterPath="$PROJECT_DIR$/www/dist/bundle.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/www/style/style.css" afterPath="$PROJECT_DIR$/www/style/style.css" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -72,8 +67,8 @@
       <file leaf-file-name="style.css" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/style/style.css">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="324">
-              <caret line="41" column="21" lean-forward="false" selection-start-line="41" selection-start-column="21" selection-end-line="41" selection-end-column="21" />
+            <state relative-caret-position="307">
+              <caret line="40" column="21" lean-forward="false" selection-start-line="40" selection-start-column="21" selection-end-line="40" selection-end-column="21" />
               <folding />
             </state>
           </provider>
@@ -568,12 +563,12 @@
       <workItem from="1519705099984" duration="20874000" />
       <workItem from="1519971070699" duration="3972000" />
       <workItem from="1519980297922" duration="550000" />
-      <workItem from="1520155283609" duration="1399000" />
+      <workItem from="1520155283609" duration="1837000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="220560000" />
+    <option name="totallyTimeSpent" value="220998000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -971,8 +966,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/style/style.css">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="324">
-          <caret line="41" column="21" lean-forward="false" selection-start-line="41" selection-start-column="21" selection-end-line="41" selection-end-column="21" />
+        <state relative-caret-position="307">
+          <caret line="40" column="21" lean-forward="false" selection-start-line="40" selection-start-column="21" selection-end-line="40" selection-end-column="21" />
           <folding />
         </state>
       </provider>
