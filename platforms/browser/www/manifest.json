@@ -1,11 +1,11 @@
 {
   "background_color": "#FFF",
   "display": "standalone",
-  "name": "cryptonthus",
-  "short_name": "cryptonthus",
-  "version": "com.phonegap.helloworld",
-  "description": "A blank PhoneGap app.",
-  "author": "PhoneGap Team",
+  "name": "Cryptonthus",
+  "short_name": "Cryptonthus",
+  "version": "com.cryptonthus.cryptonthus",
+  "description": "Cryptonthus is a crypto-assets portfolio application with news updates(from reddit communities).",
+  "author": "Harshal Carpenter",
   "icons": [],
   "start_url": "index.html"
 }
