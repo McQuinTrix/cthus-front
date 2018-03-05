@@ -32,8 +32,11 @@ gulp.task('copy', function(){
     gulp.src(['*.html'])
        .pipe(gulp.dest('www'));
 
+    gulp.src(['config.xml'])
+        .pipe(gulp.dest('www'));
+
     gulp.src(['imgs/**/*'])
-        .pipe(gulp.dest('www/imgs'))
+        .pipe(gulp.dest('www/imgs'));
 });
 
 //Running Webpack

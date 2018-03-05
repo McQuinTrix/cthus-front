@@ -38,7 +38,7 @@ body{
 .hp-button-black:visited{
     color: #373d44;
 }
-.hp-btc-label{
+.hp-btc-label,.hp-eth-label{
     font-weight: bold;
 }
 
