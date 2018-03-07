@@ -6,11 +6,17 @@
   width: 100%;
   text-align: center;
   z-index: 100; }
+  .alert-mess .a-summ {
+    display: inline-block;
+    color: white;
+    font-size: 18px;
+    font-weight: bold; }
   .alert-mess .a-mess {
     font-size: 18px;
-    font-weight: bold;
+    font-weight: 100;
     padding: 15px 5px;
-    color: white; }
+    color: white;
+    display: inline-block; }
 
 .success-class {
   background-color: rgba(86, 212, 86, 0.93); }
