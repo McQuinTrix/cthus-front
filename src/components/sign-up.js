@@ -108,7 +108,7 @@ class SignUp extends React.Component{
 
             this.refs.alertBox.showAlert(
                 {
-                    message: "Sign In Failed.",
+                    message: signInState.data.message || "Sign In Failed.",
                     type: "error"
                 }
             );

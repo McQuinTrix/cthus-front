@@ -7,7 +7,11 @@ export default function (state={},action) {
     switch(action.type){
         case SIGN_UP:
             if(action.payload.status === 200){
-                return Object.assign({}, state, {"SIGN_STATUS": action.payload.data});
+                obj[SIGN_IN] = {
+                    isSignedIn: action.payload.data.isSuccess,
+                    data: action.payload.data.data
+                };
+                return Object.assign({}, state, obj);
             }
             break;
 
@@ -15,7 +19,7 @@ export default function (state={},action) {
             if(action.payload.status === 200){
                 obj[SIGN_IN] = {
                     isSignedIn: action.payload.data.isSuccess,
-                    data: action.payload.data
+                    data: action.payload.data.data
                 };
                 return Object.assign({}, state, obj );
             }else{

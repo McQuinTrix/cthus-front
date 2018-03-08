@@ -39544,8 +39544,8 @@
 	var CLEAR_SIGN_IN = exports.CLEAR_SIGN_IN = "clear_sign_in";
 
 	var root_url = "https://api.gemini.com/v1/pubticker/";
-	//const ct_url = "https://cryptonthus.herokuapp.com/api";
-	var ct_url = "http://localhost:8000/api";
+	var ct_url = "https://cryptonthus.herokuapp.com/api";
+	//const ct_url = "http://localhost:8000/api";
 
 	function fetchBTC() {
 	    var req = _axios2.default.get(root_url + "/btcusd");
@@ -41205,7 +41205,11 @@
 	    switch (action.type) {
 	        case _index.SIGN_UP:
 	            if (action.payload.status === 200) {
-	                return Object.assign({}, state, { "SIGN_STATUS": action.payload.data });
+	                obj[_index.SIGN_IN] = {
+	                    isSignedIn: action.payload.data.isSuccess,
+	                    data: action.payload.data.data
+	                };
+	                return Object.assign({}, state, obj);
 	            }
 	            break;
 
@@ -41213,7 +41217,7 @@
 	            if (action.payload.status === 200) {
 	                obj[_index.SIGN_IN] = {
 	                    isSignedIn: action.payload.data.isSuccess,
-	                    data: action.payload.data
+	                    data: action.payload.data.data
 	                };
 	                return Object.assign({}, state, obj);
 	            } else {
@@ -106856,7 +106860,7 @@
 	            } else if (signInState && signInState.isSignedIn === false) {
 
 	                this.refs.alertBox.showAlert({
-	                    message: "Sign In Failed.",
+	                    message: signInState.data.message || "Sign In Failed.",
 	                    type: "error"
 	                });
 
