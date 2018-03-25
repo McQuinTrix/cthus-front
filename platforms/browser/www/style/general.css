@@ -6,11 +6,17 @@
   width: 100%;
   text-align: center;
   z-index: 100; }
+  .alert-mess .a-summ {
+    display: inline-block;
+    color: white;
+    font-size: 18px;
+    font-weight: bold; }
   .alert-mess .a-mess {
     font-size: 18px;
-    font-weight: bold;
+    font-weight: 100;
     padding: 15px 5px;
-    color: white; }
+    color: white;
+    display: inline-block; }
 
 .success-class {
   background-color: rgba(86, 212, 86, 0.93); }
@@ -55,21 +61,17 @@ html, body, #crypton-body, .canvas-container {
   width: 100%;
   border-radius: 7px; }
   .news-container .news-image {
-    margin: 0 3px;
-    height: 80px; }
+    margin: 0 3px; }
     .news-container .news-image img {
-      height: 80px;
-      width: 90px;
+      height: 120px;
+      width: 110px;
       border-radius: 8px; }
   .news-container .news-desc {
     width: calc(100% - 110px);
     padding: 0 5px; }
     .news-container .news-desc h3 {
       margin: 2px;
-      font-size: 1rem;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-      overflow: hidden;
+      font-size: 0.9rem;
       width: 100%;
       display: inline-block; }
     .news-container .news-desc .news-time, .news-container .news-desc .news-source {

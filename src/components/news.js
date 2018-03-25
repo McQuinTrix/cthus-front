@@ -29,24 +29,30 @@ class News extends React.Component{
         this.newsObj[type].forEach((elem,index2)=>{
 
             newsHTML.push(<div className="news-container"
-                               onClick={()=>{ debugger; cordova.InAppBrowser.open(elem.data.url, '_system');}}
+                               onClick={()=>{
+                                   cordova.InAppBrowser.open(elem.data.url, '_system');
+                               }}
                                key={index2}>
                 <div className="news-image">
-                    {elem.data.thumbnail.length >8 ?
+                    {elem.data.thumbnail.length > 8 ?
+
                         <img src={elem.data.thumbnail}/> :
+
                         <div className="margin-top-5">
-                            <Logo height={90}/>
+                            <Logo height={120}/>
                         </div>
                     }
                 </div>
                 <div className="news-desc">
-                    <h3>{elem.data.title}</h3>
-                    <span className="news-time">
+                    <div>
+                        <span className="news-time">
                         {moment().utc(elem.data.created_utc).format("MMM DD,YYYY")}
-                    </span>
-                    <span className="news-source">
-                        {elem.data.domain}
-                    </span>
+                        </span>
+                        <span className="news-source">
+                            {elem.data.domain}
+                        </span>
+                    </div>
+                    <h3>{elem.data.title}</h3>
                 </div>
             </div>);
         });

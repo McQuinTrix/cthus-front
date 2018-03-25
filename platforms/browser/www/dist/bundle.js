@@ -41205,15 +41205,27 @@
 	    switch (action.type) {
 	        case _index.SIGN_UP:
 	            if (action.payload.status === 200) {
-	                return Object.assign({}, state, { "SIGN_STATUS": action.payload.data });
-	            }
-	            break;
-	        case _index.SIGN_IN:
-	            if (action.payload.status === 200) {
-	                obj[_index.SIGN_IN] = action.payload.data;
+	                obj[_index.SIGN_IN] = {
+	                    isSignedIn: action.payload.data.isSuccess,
+	                    data: action.payload.data.data
+	                };
 	                return Object.assign({}, state, obj);
 	            }
 	            break;
+
+	        case _index.SIGN_IN:
+	            if (action.payload.status === 200) {
+	                obj[_index.SIGN_IN] = {
+	                    isSignedIn: action.payload.data.isSuccess,
+	                    data: action.payload.data.data
+	                };
+	                return Object.assign({}, state, obj);
+	            } else {
+	                obj[_index.SIGN_IN] = { isSignedIn: false, data: "Sign In Failed" };
+	                return Object.assign({}, state, obj);
+	            }
+	            break;
+
 	        case _index.PORT_GET:
 	            if (action.payload.status === 200) {
 	                obj[_index.PORT_GET] = action.payload.data;
@@ -106724,6 +106736,10 @@
 
 	var _homePage = __webpack_require__(544);
 
+	var _alertMessage = __webpack_require__(669);
+
+	var _alertMessage2 = _interopRequireDefault(_alertMessage);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
@@ -106806,10 +106822,16 @@
 	    }, {
 	        key: 'changeInput',
 	        value: function changeInput(event) {
-	            console.log(event.target.name);
 	            var val = event.target.value;
 
 	            this.setState(_defineProperty({}, event.target.name, val));
+	        }
+	    }, {
+	        key: 'handleKeyPress',
+	        value: function handleKeyPress(event) {
+	            if (event.key === 'Enter') {
+	                this.save();
+	            }
 	        }
 	    }, {
 	        key: 'componentWillMount',
@@ -106826,15 +106848,29 @@
 	            this.checkForCookie();
 	        }
 	    }, {
+	        key: 'componentWillReceiveProps',
+	        value: function componentWillReceiveProps(nextProps) {
+
+	            var signInState = nextProps.sign[_actions.SIGN_IN];
+	            if (signInState && signInState.isSignedIn) {
+
+	                window.localStorage.setItem(_homePage.userId, signInState.data.userId);
+	                this.props.history.push('/canvas/' + signInState.data.userId);
+	            } else if (signInState && signInState.isSignedIn === false) {
+
+	                this.refs.alertBox.showAlert({
+	                    message: signInState.data.message || "Sign In Failed.",
+	                    type: "error"
+	                });
+
+	                this.props.clearSignIn();
+	            }
+	        }
+	    }, {
 	        key: 'render',
 	        value: function render() {
 	            var pageState = this.pageState,
 	                otherState = this.otherState;
-	            //Error can be shown
-	            if (this.props.sign[_actions.SIGN_IN] && this.props.sign[_actions.SIGN_IN].hasOwnProperty("data")) {
-	                window.localStorage.setItem(_homePage.userId, this.props.sign[_actions.SIGN_IN].data.userId);
-	                this.props.history.push('/canvas/' + this.props.sign[_actions.SIGN_IN].data.userId);
-	            }
 
 	            return _react2.default.createElement(
 	                'div',
@@ -106883,6 +106919,7 @@
 	                                key: 'pass',
 	                                value: this.state.password,
 	                                onChange: this.changeInput.bind(this),
+	                                onKeyPress: this.handleKeyPress.bind(this),
 	                                className: 'su-inp' })
 	                        )
 	                    ),
@@ -106915,7 +106952,8 @@
 	                            'Back'
 	                        )
 	                    )
-	                )
+	                ),
+	                _react2.default.createElement(_alertMessage2.default, { ref: 'alertBox' })
 	            );
 	        }
 	    }]);
@@ -106935,7 +106973,7 @@
 	    return { sign: state.sign };
 	}
 
-	exports.default = (0, _reactRedux.connect)(mapStateToProps, { signUp: _actions.signUp, signIn: _actions.signIn })(SignUp);
+	exports.default = (0, _reactRedux.connect)(mapStateToProps, { signUp: _actions.signUp, signIn: _actions.signIn, clearSignIn: _actions.clearSignIn })(SignUp);
 
 /***/ }),
 /* 1124 */
@@ -107525,7 +107563,7 @@
 	                    'div',
 	                    { className: 'news-container',
 	                        onClick: function onClick() {
-	                            debugger;cordova.InAppBrowser.open(elem.data.url, '_system');
+	                            cordova.InAppBrowser.open(elem.data.url, '_system');
 	                        },
 	                        key: index2 },
 	                    _react2.default.createElement(
@@ -107534,26 +107572,30 @@
 	                        elem.data.thumbnail.length > 8 ? _react2.default.createElement('img', { src: elem.data.thumbnail }) : _react2.default.createElement(
 	                            'div',
 	                            { className: 'margin-top-5' },
-	                            _react2.default.createElement(_loadLogo2.default, { height: 90 })
+	                            _react2.default.createElement(_loadLogo2.default, { height: 120 })
 	                        )
 	                    ),
 	                    _react2.default.createElement(
 	                        'div',
 	                        { className: 'news-desc' },
 	                        _react2.default.createElement(
+	                            'div',
+	                            null,
+	                            _react2.default.createElement(
+	                                'span',
+	                                { className: 'news-time' },
+	                                (0, _moment2.default)().utc(elem.data.created_utc).format("MMM DD,YYYY")
+	                            ),
+	                            _react2.default.createElement(
+	                                'span',
+	                                { className: 'news-source' },
+	                                elem.data.domain
+	                            )
+	                        ),
+	                        _react2.default.createElement(
 	                            'h3',
 	                            null,
 	                            elem.data.title
-	                        ),
-	                        _react2.default.createElement(
-	                            'span',
-	                            { className: 'news-time' },
-	                            (0, _moment2.default)().utc(elem.data.created_utc).format("MMM DD,YYYY")
-	                        ),
-	                        _react2.default.createElement(
-	                            'span',
-	                            { className: 'news-source' },
-	                            elem.data.domain
 	                        )
 	                    )
 	                ));

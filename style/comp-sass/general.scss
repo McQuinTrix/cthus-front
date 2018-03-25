@@ -39,10 +39,9 @@ html,body,#crypton-body,.canvas-container{
   border-radius: 7px;
   .news-image{
     margin: 0 3px;
-    height: 80px;
     img{
-      height: 80px;
-      width: 90px;
+      height: 120px;
+      width: 110px;
       border-radius: 8px;
     }
   }
@@ -54,10 +53,7 @@ html,body,#crypton-body,.canvas-container{
     }
     h3{
       margin: 2px;
-      font-size: 1rem;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-      overflow: hidden;
+      font-size: 0.9rem;
       width: 100%;
       display: inline-block;
     }

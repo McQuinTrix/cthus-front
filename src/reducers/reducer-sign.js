@@ -7,15 +7,27 @@ export default function (state={},action) {
     switch(action.type){
         case SIGN_UP:
             if(action.payload.status === 200){
-                return Object.assign({}, state, {"SIGN_STATUS": action.payload.data});
+                obj[SIGN_IN] = {
+                    isSignedIn: action.payload.data.isSuccess,
+                    data: action.payload.data.data
+                };
+                return Object.assign({}, state, obj);
             }
             break;
+
         case SIGN_IN:
             if(action.payload.status === 200){
-                obj[SIGN_IN] = action.payload.data;
+                obj[SIGN_IN] = {
+                    isSignedIn: action.payload.data.isSuccess,
+                    data: action.payload.data.data
+                };
+                return Object.assign({}, state, obj );
+            }else{
+                obj[SIGN_IN] = {isSignedIn: false, data: "Sign In Failed"};
                 return Object.assign({}, state, obj );
             }
             break;
+
         case PORT_GET:
             if(action.payload.status === 200){
                 obj[PORT_GET] = action.payload.data;

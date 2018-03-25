@@ -6,9 +6,11 @@ import React from 'react';
 import { Link,browserHistory } from 'react-router';
 import Logo, {smallAnim} from './load-logo';
 import { connect } from "react-redux";
-import { signUp, signIn,SIGN_IN } from "../actions";
+import { signUp, signIn,SIGN_IN,clearSignIn } from "../actions";
 import PropTypes from 'prop-types';
 import {userId} from './home-page.js';
+
+import Alert from './alert-message';
 
 class SignUp extends React.Component{
     signUpBool= true;
@@ -68,12 +70,17 @@ class SignUp extends React.Component{
     }
 
     changeInput(event){
-        console.log(event.target.name);
         let val = event.target.value;
 
         this.setState({
             [event.target.name]: val
         })
+    }
+
+    handleKeyPress(event){
+        if (event.key === 'Enter') {
+            this.save();
+        }
     }
 
     componentWillMount(){
@@ -88,14 +95,30 @@ class SignUp extends React.Component{
         this.checkForCookie();
     }
 
+    componentWillReceiveProps(nextProps){
+
+        let signInState = nextProps.sign[SIGN_IN];
+        if( signInState && signInState.isSignedIn){
+
+            window.localStorage.setItem(userId,signInState.data.userId);
+            this.props.history.push('/canvas/'+signInState.data.userId);
+
+        }else if(signInState && signInState.isSignedIn === false){
+
+            this.refs.alertBox.showAlert(
+                {
+                    message: signInState.data.message || "Sign In Failed.",
+                    type: "error"
+                }
+            );
+
+            this.props.clearSignIn();
+        }
+    }
+
     render(){
         let pageState = this.pageState,
             otherState = this.otherState;
-        //Error can be shown
-        if(this.props.sign[SIGN_IN] && this.props.sign[SIGN_IN].hasOwnProperty("data")){
-            window.localStorage.setItem(userId,this.props.sign[SIGN_IN].data.userId);
-            this.props.history.push('/canvas/'+this.props.sign[SIGN_IN].data.userId);
-        }
 
         return (
             <div className="su-box">
@@ -125,6 +148,7 @@ class SignUp extends React.Component{
                                    key="pass"
                                    value={this.state.password}
                                    onChange={this.changeInput.bind(this)}
+                                   onKeyPress={this.handleKeyPress.bind(this)}
                                    className="su-inp"/>
                         </label>
                     </div>
@@ -138,6 +162,7 @@ class SignUp extends React.Component{
                         <a className="su-link" onClick={browserHistory.goBack}>Back</a>
                     </div>
                 </div>
+                <Alert ref="alertBox"/>
             </div>
         );
     }
@@ -155,4 +180,4 @@ function mapStateToProps(state) {
     return {sign: state.sign}
 }
 
-export default connect(mapStateToProps, {  signUp, signIn })(SignUp);
+export default connect(mapStateToProps, {  signUp, signIn,clearSignIn })(SignUp);
