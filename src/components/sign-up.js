@@ -98,7 +98,6 @@ class SignUp extends React.Component{
     componentWillReceiveProps(nextProps){
 
         let signInState = nextProps.sign[SIGN_IN];
-        debugger;
         if( signInState && signInState.isSignedIn){
 
             window.localStorage.setItem(userId,signInState.data.userId);

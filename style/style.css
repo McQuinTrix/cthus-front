@@ -272,7 +272,7 @@ body{
 .coin-intro{
     display: flex;
     align-items: center;
-    padding: 20px 15px;
+    padding: 1.25em 0 1.25em 0.938em;;
 }
 
 .coin-short{

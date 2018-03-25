@@ -15,7 +15,7 @@ export const CLEAR_SIGN_IN = "clear_sign_in";
 
 const root_url = "https://api.gemini.com/v1/pubticker/";
 const ct_url = "https://cryptonthus.herokuapp.com/api";
-//const ct_url = "http://localhost:8000/api";
+//const ct_url = "http://localhost:8001/api";
 
 export function fetchBTC() {
     const req = axios.get(`${root_url}/btcusd`);

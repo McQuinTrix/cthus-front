@@ -39545,7 +39545,7 @@
 
 	var root_url = "https://api.gemini.com/v1/pubticker/";
 	var ct_url = "https://cryptonthus.herokuapp.com/api";
-	//const ct_url = "http://localhost:8000/api";
+	//const ct_url = "http://localhost:8001/api";
 
 	function fetchBTC() {
 	    var req = _axios2.default.get(root_url + "/btcusd");
@@ -106852,7 +106852,6 @@
 	        value: function componentWillReceiveProps(nextProps) {
 
 	            var signInState = nextProps.sign[_actions.SIGN_IN];
-	            debugger;
 	            if (signInState && signInState.isSignedIn) {
 
 	                window.localStorage.setItem(_homePage.userId, signInState.data.userId);
@@ -107564,7 +107563,7 @@
 	                    'div',
 	                    { className: 'news-container',
 	                        onClick: function onClick() {
-	                            debugger;cordova.InAppBrowser.open(elem.data.url, '_system');
+	                            cordova.InAppBrowser.open(elem.data.url, '_system');
 	                        },
 	                        key: index2 },
 	                    _react2.default.createElement(
@@ -107573,26 +107572,30 @@
 	                        elem.data.thumbnail.length > 8 ? _react2.default.createElement('img', { src: elem.data.thumbnail }) : _react2.default.createElement(
 	                            'div',
 	                            { className: 'margin-top-5' },
-	                            _react2.default.createElement(_loadLogo2.default, { height: 90 })
+	                            _react2.default.createElement(_loadLogo2.default, { height: 120 })
 	                        )
 	                    ),
 	                    _react2.default.createElement(
 	                        'div',
 	                        { className: 'news-desc' },
 	                        _react2.default.createElement(
+	                            'div',
+	                            null,
+	                            _react2.default.createElement(
+	                                'span',
+	                                { className: 'news-time' },
+	                                (0, _moment2.default)().utc(elem.data.created_utc).format("MMM DD,YYYY")
+	                            ),
+	                            _react2.default.createElement(
+	                                'span',
+	                                { className: 'news-source' },
+	                                elem.data.domain
+	                            )
+	                        ),
+	                        _react2.default.createElement(
 	                            'h3',
 	                            null,
 	                            elem.data.title
-	                        ),
-	                        _react2.default.createElement(
-	                            'span',
-	                            { className: 'news-time' },
-	                            (0, _moment2.default)().utc(elem.data.created_utc).format("MMM DD,YYYY")
-	                        ),
-	                        _react2.default.createElement(
-	                            'span',
-	                            { className: 'news-source' },
-	                            elem.data.domain
 	                        )
 	                    )
 	                ));
