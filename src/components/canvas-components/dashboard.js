@@ -196,32 +196,30 @@ class Dashboard extends React.Component{
                     <div className={coinShrtClass}
                          onClick={()=>{this.openUpdater(elem)}}>
                         <div className="coin-intro">
-                            <div className="coin-image-cover">
-                                <img src={coin.imgUrl} className="coin-image"/>
+                            <div className="coin-intro-cover">
+                                <div className="coin-image-cover">
+                                    <img src={coin.imgUrl} className="coin-image"/>
+                                </div>
+                                <div className="coin-name">
+                                    {coin.full_name}
+                                </div>
                             </div>
-                            <div className="coin-name">
-                                {coin.full_name}
+                            <div className="coin-curr">
+                                <span className="coin-type">Price</span>
+                                <span className="coin-amt">
+                                    $ {(+coin.currVal).toLocaleString()}
+                                </span>
                             </div>
                         </div>
                         <div className="coin-amount">
-                            <div className="ca-cover">
-                                <div className="coin-total">
-                                    {coin.amount}
-                                </div>
-                                <div className="coin-curr">
-                                    <span className="coin-type">Price</span>
-                                    <span className="coin-amt">
-                                        $ {(+coin.currVal).toLocaleString()}
-                                    </span>
-                                </div>
-                                {/*
-                                    <div className="coin-fiat">
-                                        <span className="coin-type">Value </span>
-                                        <span className="coin-amt">
-                                        $ {((+coin.currVal) * coin.amount).toFixed(2).toLocaleString()}
-                                    </span>
-                                    </div>
-                                */}
+                            <div className="coin-total">
+                                {coin.amount}
+                            </div>
+                            <div className="coin-fiat">
+                                <span className="coin-type">Value </span>
+                                <span className="coin-amt">
+                                    $ {((+coin.currVal) * coin.amount).toFixed(2).toLocaleString()}
+                                </span>
                             </div>
                         </div>
                     </div>

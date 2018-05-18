@@ -270,31 +270,7 @@ body{
 }
 
 .coin-image-cover{
-    display: flex;
-}
 
-.coin-name{
-    padding: 0 10px;
-    font-size: 2vh;
-    font-weight: bold;
-}
-
-.coin-image{
-    height: 50px;
-}
-
-.coin-amount{
-    font-weight: lighter;
-    font-size: 2vh;
-    display: flex;
-    align-items: center;
-    padding: 10px 15px 10px 0;
-}
-
-.ca-cover{
-    height: 56px;
-    overflow: hidden;
-    text-align: right;
 }
 .coin-total{
     font-size: 2.8vh;

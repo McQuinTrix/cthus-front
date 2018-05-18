@@ -50801,13 +50801,32 @@
 	                            { className: 'coin-intro' },
 	                            _react2.default.createElement(
 	                                'div',
-	                                { className: 'coin-image-cover' },
-	                                _react2.default.createElement('img', { src: coin.imgUrl, className: 'coin-image' })
+	                                { className: 'coin-intro-cover' },
+	                                _react2.default.createElement(
+	                                    'div',
+	                                    { className: 'coin-image-cover' },
+	                                    _react2.default.createElement('img', { src: coin.imgUrl, className: 'coin-image' })
+	                                ),
+	                                _react2.default.createElement(
+	                                    'div',
+	                                    { className: 'coin-name' },
+	                                    coin.full_name
+	                                )
 	                            ),
 	                            _react2.default.createElement(
 	                                'div',
-	                                { className: 'coin-name' },
-	                                coin.full_name
+	                                { className: 'coin-curr' },
+	                                _react2.default.createElement(
+	                                    'span',
+	                                    { className: 'coin-type' },
+	                                    'Price'
+	                                ),
+	                                _react2.default.createElement(
+	                                    'span',
+	                                    { className: 'coin-amt' },
+	                                    '$ ',
+	                                    (+coin.currVal).toLocaleString()
+	                                )
 	                            )
 	                        ),
 	                        _react2.default.createElement(
@@ -50815,26 +50834,22 @@
 	                            { className: 'coin-amount' },
 	                            _react2.default.createElement(
 	                                'div',
-	                                { className: 'ca-cover' },
+	                                { className: 'coin-total' },
+	                                coin.amount
+	                            ),
+	                            _react2.default.createElement(
+	                                'div',
+	                                { className: 'coin-fiat' },
 	                                _react2.default.createElement(
-	                                    'div',
-	                                    { className: 'coin-total' },
-	                                    coin.amount
+	                                    'span',
+	                                    { className: 'coin-type' },
+	                                    'Value '
 	                                ),
 	                                _react2.default.createElement(
-	                                    'div',
-	                                    { className: 'coin-curr' },
-	                                    _react2.default.createElement(
-	                                        'span',
-	                                        { className: 'coin-type' },
-	                                        'Price'
-	                                    ),
-	                                    _react2.default.createElement(
-	                                        'span',
-	                                        { className: 'coin-amt' },
-	                                        '$ ',
-	                                        (+coin.currVal).toLocaleString()
-	                                    )
+	                                    'span',
+	                                    { className: 'coin-amt' },
+	                                    '$ ',
+	                                    (+coin.currVal * coin.amount).toFixed(2).toLocaleString()
 	                                )
 	                            )
 	                        )
