@@ -269,24 +269,13 @@ body{
     display: block;
 }
 
-.coin-intro{
-    display: flex;
-    align-items: center;
-    padding: 20px 15px;
-}
-
-.coin-short{
-    display: flex;
-    justify-content: space-between;
-}
-
 .coin-image-cover{
     display: flex;
 }
 
 .coin-name{
     padding: 0 10px;
-    font-size: 18px;
+    font-size: 2vh;
     font-weight: bold;
 }
 
@@ -296,10 +285,10 @@ body{
 
 .coin-amount{
     font-weight: lighter;
-    font-size: 15px;
+    font-size: 2vh;
     display: flex;
     align-items: center;
-    padding: 10px 15px;
+    padding: 10px 15px 10px 0;
 }
 
 .ca-cover{
@@ -308,7 +297,7 @@ body{
     text-align: right;
 }
 .coin-total{
-    font-size: 22px;
+    font-size: 2.8vh;
 }
 
 .update-button{

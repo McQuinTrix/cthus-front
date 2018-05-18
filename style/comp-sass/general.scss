@@ -1,4 +1,5 @@
 @import "alert-mess";
+@import "home-page/_home";
 
 html,body,#crypton-body,.canvas-container{
   height: 100%;
@@ -151,4 +152,8 @@ html,body,#crypton-body,.canvas-container{
   span:nth-child(1){
 
   }
+}
+
+@media(max-width: 370px) {
+
 }

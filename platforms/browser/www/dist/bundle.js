@@ -50555,8 +50555,6 @@
 
 	var _reactRouter = __webpack_require__(199);
 
-	var _actions = __webpack_require__(507);
-
 	var _index = __webpack_require__(507);
 
 	var _loadLogo = __webpack_require__(545);
@@ -50929,7 +50927,7 @@
 	    };
 	}
 
-	exports.default = (0, _reactRedux.connect)(mapStateToProps, { getPortfolio: _actions.getPortfolio, updateCoinAPI: _actions.updateCoinAPI, getData: _actions.getData, eraseData: _actions.eraseData })(Dashboard);
+	exports.default = (0, _reactRedux.connect)(mapStateToProps, { getPortfolio: _index.getPortfolio, updateCoinAPI: _index.updateCoinAPI, getData: _index.getData, eraseData: _index.eraseData })(Dashboard);
 
 /***/ }),
 /* 548 */
@@ -107011,6 +107009,10 @@
 
 	var _news2 = _interopRequireDefault(_news);
 
+	var _aboutUs = __webpack_require__(1127);
+
+	var _aboutUs2 = _interopRequireDefault(_aboutUs);
+
 	var _homePage = __webpack_require__(544);
 
 	var _reactRouter = __webpack_require__(199);
@@ -107229,7 +107231,7 @@
 	                        _react2.default.createElement(
 	                            'div',
 	                            { className: 'about-us ' + (currentState === canvasState.info ? '' : 'hide') },
-	                            _react2.default.createElement(AboutUs, null)
+	                            _react2.default.createElement(_aboutUs2.default, null)
 	                        )
 	                    )
 	                ),
@@ -107280,46 +107282,6 @@
 	    return Chat;
 	}(_react2.default.Component);
 
-	//About Us
-
-
-	var AboutUs = function (_React$Component3) {
-	    _inherits(AboutUs, _React$Component3);
-
-	    function AboutUs(props) {
-	        _classCallCheck(this, AboutUs);
-
-	        return _possibleConstructorReturn(this, (AboutUs.__proto__ || Object.getPrototypeOf(AboutUs)).call(this, props));
-	    }
-
-	    _createClass(AboutUs, [{
-	        key: 'render',
-	        value: function render() {
-	            return _react2.default.createElement(
-	                'div',
-	                null,
-	                _react2.default.createElement(
-	                    'h1',
-	                    null,
-	                    'About Us'
-	                ),
-	                _react2.default.createElement(
-	                    'div',
-	                    { className: 'au-container' },
-	                    _react2.default.createElement(
-	                        'u',
-	                        null,
-	                        'Cryptonthus'
-	                    ),
-	                    ' is a crypto-assets portfolio application with news updates(from reddit communities).'
-	                )
-	            );
-	        }
-	    }]);
-
-	    return AboutUs;
-	}(_react2.default.Component);
-
 	//Redux
 
 	function mapStateToProps(state) {
@@ -107354,8 +107316,6 @@
 	var _react2 = _interopRequireDefault(_react);
 
 	var _reactRedux = __webpack_require__(160);
-
-	var _actions = __webpack_require__(507);
 
 	var _index = __webpack_require__(507);
 
@@ -107491,7 +107451,7 @@
 	    };
 	}
 
-	exports.default = (0, _reactRedux.connect)(mapStateToProps, { updateUser: _actions.updateUser, getUser: _actions.getUser })(UserProfile);
+	exports.default = (0, _reactRedux.connect)(mapStateToProps, { updateUser: _index.updateUser, getUser: _index.getUser })(UserProfile);
 
 /***/ }),
 /* 1126 */
@@ -107716,6 +107676,73 @@
 	}
 
 	exports.default = (0, _reactRedux.connect)(mapStateToProps, { getNews: _reddit_news.getNews })(News);
+
+/***/ }),
+/* 1127 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(2);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /**
+	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * Created by harshalcarpenter on 5/17/18.
+	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                */
+
+
+	//About Us
+	var AboutUs = function (_React$Component) {
+	    _inherits(AboutUs, _React$Component);
+
+	    function AboutUs(props) {
+	        _classCallCheck(this, AboutUs);
+
+	        return _possibleConstructorReturn(this, (AboutUs.__proto__ || Object.getPrototypeOf(AboutUs)).call(this, props));
+	    }
+
+	    _createClass(AboutUs, [{
+	        key: "render",
+	        value: function render() {
+	            return _react2.default.createElement(
+	                "div",
+	                null,
+	                _react2.default.createElement(
+	                    "h1",
+	                    null,
+	                    "About Us"
+	                ),
+	                _react2.default.createElement(
+	                    "div",
+	                    { className: "au-container" },
+	                    _react2.default.createElement(
+	                        "u",
+	                        null,
+	                        "Cryptonthus"
+	                    ),
+	                    " is a crypto-assets portfolio application with news updates(from reddit communities)."
+	                )
+	            );
+	        }
+	    }]);
+
+	    return AboutUs;
+	}(_react2.default.Component);
+
+	exports.default = AboutUs;
 
 /***/ })
 /******/ ]);

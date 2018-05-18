@@ -10,7 +10,7 @@ import promise from "redux-promise";
 
 //Components
 import HomePage from './components/home-page';
-import DashBoard from './components/dashboard';
+import DashBoard from './components/canvas-components/dashboard';
 import Logo from './components/load-logo';
 import SignUp from './components/sign-up';
 import Canvas from './components/canvas';
