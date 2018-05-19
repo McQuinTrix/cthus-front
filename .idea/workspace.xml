@@ -2,20 +2,15 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="e097aae1-3239-4cf4-8697-d1e90d5eec71" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/style/comp-sass/canvas-elements/dashboard.scss" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/style/comp-sass/home-page/_home.scss" afterPath="$PROJECT_DIR$/style/comp-sass/canvas-elements/_home.scss" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dist/bundle.js" afterPath="$PROJECT_DIR$/dist/bundle.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/platforms/browser/www/dist/bundle.js" afterPath="$PROJECT_DIR$/platforms/browser/www/dist/bundle.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/platforms/browser/www/style/general.css" afterPath="$PROJECT_DIR$/platforms/browser/www/style/general.css" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/platforms/browser/www/style/style.css" afterPath="$PROJECT_DIR$/platforms/browser/www/style/style.css" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/components/canvas-components/dashboard.js" afterPath="$PROJECT_DIR$/src/components/canvas-components/dashboard.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/style/comp-sass/general.scss" afterPath="$PROJECT_DIR$/style/comp-sass/general.scss" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/style/comp-sass/canvas-elements/dashboard.scss" afterPath="$PROJECT_DIR$/style/comp-sass/canvas-elements/dashboard.scss" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/style/general.css" afterPath="$PROJECT_DIR$/style/general.css" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/style/style.css" afterPath="$PROJECT_DIR$/style/style.css" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/www/dist/bundle.js" afterPath="$PROJECT_DIR$/www/dist/bundle.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/www/style/general.css" afterPath="$PROJECT_DIR$/www/style/general.css" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/www/style/style.css" afterPath="$PROJECT_DIR$/www/style/style.css" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -68,8 +63,8 @@
       <file leaf-file-name="dashboard.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/components/canvas-components/dashboard.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="305">
-              <caret line="216" column="34" lean-forward="false" selection-start-line="216" selection-start-column="34" selection-end-line="216" selection-end-column="34" />
+            <state relative-caret-position="322">
+              <caret line="217" column="55" lean-forward="false" selection-start-line="217" selection-start-column="55" selection-end-line="217" selection-end-column="55" />
               <folding />
             </state>
           </provider>
@@ -78,8 +73,8 @@
       <file leaf-file-name="dashboard.scss" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/style/comp-sass/canvas-elements/dashboard.scss">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="455">
-              <caret line="66" column="1" lean-forward="false" selection-start-line="66" selection-start-column="1" selection-end-line="66" selection-end-column="1" />
+            <state relative-caret-position="410">
+              <caret line="83" column="1" lean-forward="false" selection-start-line="83" selection-start-column="1" selection-end-line="83" selection-end-column="1" />
               <folding />
             </state>
           </provider>
@@ -132,7 +127,13 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="0">
               <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-              <folding />
+              <folding>
+                <marker date="1526744781743" expanded="true" signature="3567:3573" ph="{...}" />
+                <marker date="1526744781743" expanded="true" signature="3589:3633" ph="{...}" />
+                <marker date="1526744781743" expanded="true" signature="3647:3736" ph="{...}" />
+                <marker date="1526744781743" expanded="true" signature="3756:3808" ph="{...}" />
+                <marker date="1526744781743" expanded="true" signature="3840:3874" ph="{...}" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -222,8 +223,8 @@
         <option value="$PROJECT_DIR$/src/components/canvas.js" />
         <option value="$PROJECT_DIR$/style/comp-sass/canvas-elements/_home.scss" />
         <option value="$PROJECT_DIR$/style/style.css" />
-        <option value="$PROJECT_DIR$/src/components/canvas-components/dashboard.js" />
         <option value="$PROJECT_DIR$/style/comp-sass/general.scss" />
+        <option value="$PROJECT_DIR$/src/components/canvas-components/dashboard.js" />
         <option value="$PROJECT_DIR$/style/comp-sass/canvas-elements/dashboard.scss" />
       </list>
     </option>
@@ -259,8 +260,7 @@
     <handled-path value="$PROJECT_DIR$/node_modules" />
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="63" />
-    <option name="y" value="262" />
+    <option name="y" value="102" />
     <option name="width" value="1440" />
     <option name="height" value="807" />
   </component>
@@ -589,12 +589,12 @@
       <workItem from="1521960890074" duration="2076000" />
       <workItem from="1523773805469" duration="2486000" />
       <workItem from="1523932025057" duration="364000" />
-      <workItem from="1526613280696" duration="4913000" />
+      <workItem from="1526613280696" duration="6108000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="244247000" />
+    <option name="totallyTimeSpent" value="245442000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -606,7 +606,7 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="63" y="262" width="1440" height="807" extended-state="0" />
+    <frame x="0" y="102" width="1440" height="807" extended-state="0" />
     <layout>
       <window_info id="Gulp" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.23396759" sideWeight="0.6066946" order="4" side_tool="true" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.17970401" sideWeight="0.3888889" order="0" side_tool="false" content_ui="combo" />
@@ -972,14 +972,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/components/canvas-components/dashboard.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="305">
-          <caret line="216" column="34" lean-forward="false" selection-start-line="216" selection-start-column="34" selection-end-line="216" selection-end-column="34" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/style/style.css">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="154">
@@ -992,7 +984,13 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
+          <folding>
+            <marker date="1526744781743" expanded="true" signature="3567:3573" ph="{...}" />
+            <marker date="1526744781743" expanded="true" signature="3589:3633" ph="{...}" />
+            <marker date="1526744781743" expanded="true" signature="3647:3736" ph="{...}" />
+            <marker date="1526744781743" expanded="true" signature="3756:3808" ph="{...}" />
+            <marker date="1526744781743" expanded="true" signature="3840:3874" ph="{...}" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -1004,10 +1002,18 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/components/canvas-components/dashboard.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="322">
+          <caret line="217" column="55" lean-forward="false" selection-start-line="217" selection-start-column="55" selection-end-line="217" selection-end-column="55" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/style/comp-sass/canvas-elements/dashboard.scss">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="455">
-          <caret line="66" column="1" lean-forward="false" selection-start-line="66" selection-start-column="1" selection-end-line="66" selection-end-column="1" />
+        <state relative-caret-position="410">
+          <caret line="83" column="1" lean-forward="false" selection-start-line="83" selection-start-column="1" selection-end-line="83" selection-end-column="1" />
           <folding />
         </state>
       </provider>

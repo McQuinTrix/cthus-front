@@ -52,7 +52,8 @@
   justify-content: space-between; }
 
 .coin-intro-cover {
-  display: flex; }
+  display: flex;
+  padding: 1px 4px; }
 
 .coin-curr {
   display: inline-block;
@@ -69,17 +70,26 @@
     display: inline-block;
     padding: 0px 5px; }
 
+.coin-amount .coin-fiat {
+  padding-bottom: 5px; }
+
 .coin-short.up-tick .coin-curr {
   border: 2px solid #268426; }
 
 .coin-short.up-tick .coin-type {
   background-color: #268426; }
 
+.coin-short.up-tick .coin-amount .coin-fiat {
+  color: #72ff72; }
+
 .coin-short.down-tick .coin-curr {
   border: 2px solid #b32222; }
 
 .coin-short.down-tick .coin-type {
   background-color: #b32222; }
+
+.coin-short.down-tick .coin-amount .coin-fiat {
+  color: #ff4b4b; }
 
 html, body, #crypton-body, .canvas-container {
   height: 100%; }

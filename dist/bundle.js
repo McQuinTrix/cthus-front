@@ -50842,11 +50842,6 @@
 	                                { className: 'coin-fiat' },
 	                                _react2.default.createElement(
 	                                    'span',
-	                                    { className: 'coin-type' },
-	                                    'Value '
-	                                ),
-	                                _react2.default.createElement(
-	                                    'span',
 	                                    { className: 'coin-amt' },
 	                                    '$ ',
 	                                    (+coin.currVal * coin.amount).toFixed(2).toLocaleString()

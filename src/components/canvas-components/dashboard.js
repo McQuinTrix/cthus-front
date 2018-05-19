@@ -216,7 +216,6 @@ class Dashboard extends React.Component{
                                 {coin.amount}
                             </div>
                             <div className="coin-fiat">
-                                <span className="coin-type">Value </span>
                                 <span className="coin-amt">
                                     $ {((+coin.currVal) * coin.amount).toFixed(2).toLocaleString()}
                                 </span>
