@@ -8,6 +8,7 @@ import moment from 'moment';
 
 import { connect } from "react-redux";
 import Logo from "../load-logo";
+import NewsBox from "./news-box/news-box";
 
 //News
 class News extends React.Component{
@@ -17,44 +18,19 @@ class News extends React.Component{
 
     constructor(props){
         super(props);
-        this.newsObj[BTC_NEWS] = "";
-        this.newsObj[ETH_NEWS] = "";
-        this.newsObj[CRYPTO] = "";
-        this.newsObj[CRY_MAR] = "";
+        this.newsObj[BTC_NEWS] = {};
+        this.newsObj[ETH_NEWS] = {};
+        this.newsObj[CRYPTO] = {};
+        this.newsObj[CRY_MAR] = {};
     }
 
-    formNewsComp(type,index){
+    formNewsComp(type,classType){
         let newsHTML = [];
 
-        this.newsObj[type].forEach((elem,index2)=>{
-
-            newsHTML.push(<div className="news-container"
-                               onClick={()=>{
-                                   cordova.InAppBrowser.open(elem.data.url, '_system');
-                               }}
-                               key={index2}>
-                <div className="news-image">
-                    {elem.data.thumbnail.length > 8 ?
-
-                        <img src={elem.data.thumbnail}/> :
-
-                        <div className="margin-top-5">
-                            <Logo height={120}/>
-                        </div>
-                    }
-                </div>
-                <div className="news-desc">
-                    <div>
-                        <span className="news-time">
-                        {moment().utc(elem.data.created_utc).format("MMM DD,YYYY")}
-                        </span>
-                        <span className="news-source">
-                            {elem.data.domain}
-                        </span>
-                    </div>
-                    <h3>{elem.data.title}</h3>
-                </div>
-            </div>);
+        this.newsObj[type].children.forEach((item,index)=>{
+            newsHTML.push(
+                <NewsBox article={item} key={index} classType={classType}/>
+            );
         });
 
         return newsHTML;
@@ -109,12 +85,12 @@ class News extends React.Component{
             }
             return false;
         });
-        return data.children;
+        return data;
     }
 
     componentWillReceiveProps(nextProps){
-        let self = this,
-            news_update = nextProps.news[NEWS_UPDATE];
+        let news_update = nextProps.news[NEWS_UPDATE];
+
         if(news_update && news_update.hasOwnProperty("data")){
             this.newsObj[news_update.type] = this.cleanData(news_update.data.data,news_update.type);
         }
@@ -123,24 +99,29 @@ class News extends React.Component{
     render(){
         let sectionComp = [];
 
-        Object.keys(this.newsObj).forEach((elem,index)=>{
-            if(Array.isArray(this.newsObj[elem])){
-                let sectionHTML = (<div className="news-cover" key={index}>
-                        <h3 className="news-head">{elem}</h3>
-                        <div className="news-links">
-                            {this.formNewsComp(elem,index)}
-                        </div>
-                    </div>);
+        Object.keys(this.newsObj).forEach((item,index)=>{
+            if(!this.newsObj[item].hasOwnProperty("children")){
+                return ;
+            }
+            let children = this.newsObj[item].children,
+                classType = this.newsObj[item].classType;
+            if(Array.isArray(children)){
+                let sectionHTML = ( <div className="news-cover" key={index}>
+                                        <h3 className="news-head">
+                                            {item}
+                                        </h3>
+                                        <div className="news-links">
+                                            {this.formNewsComp(item,classType)}
+                                        </div>
+                                    </div>);
                 sectionComp.push(sectionHTML);
             }
         });
 
         return (
-            <div>
                 <div className="latest-news">
                     {sectionComp}
                 </div>
-            </div>
         );
     }
 }

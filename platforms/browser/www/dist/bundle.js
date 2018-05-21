@@ -41283,7 +41283,7 @@
 /* 535 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	'use strict';
+	"use strict";
 
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
@@ -41293,37 +41293,35 @@
 	    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 	    var action = arguments[1];
 
+	    var obj = {};
 	    switch (action.type) {
 	        case _reddit_news.CRYPTO:
-
 	            if (action.payload.status === 200) {
-	                var obj = {};
+	                action.payload.data.data["classType"] = "crypto";
 	                obj[_reddit_news.NEWS_UPDATE] = { type: action.type, data: action.payload.data };
 	                return Object.assign({}, state, obj);
 	            }
 	            break;
 	        case _reddit_news.BTC_NEWS:
-
 	            if (action.payload.status === 200) {
-	                var _obj = {};
-	                _obj[_reddit_news.NEWS_UPDATE] = { type: action.type, data: action.payload.data };
-	                return Object.assign({}, state, _obj);
+	                action.payload.data.data["classType"] = "bitcoin";
+	                obj[_reddit_news.NEWS_UPDATE] = { type: action.type, data: action.payload.data };
+	                return Object.assign({}, state, obj);
 	            }
 	            break;
 	        case _reddit_news.ETH_NEWS:
-
 	            if (action.payload.status === 200) {
-	                var _obj2 = {};
-	                _obj2[_reddit_news.NEWS_UPDATE] = { type: action.type, data: action.payload.data };
-	                return Object.assign({}, state, _obj2);
+	                action.payload.data.data["classType"] = "ethereum";
+	                obj[_reddit_news.NEWS_UPDATE] = { type: action.type, data: action.payload.data };
+	                return Object.assign({}, state, obj);
 	            }
 	            break;
 	        case _reddit_news.CRY_MAR:
-
 	            if (action.payload.status === 200) {
-	                var _obj3 = {};
-	                _obj3[_reddit_news.NEWS_UPDATE] = { type: action.type, data: action.payload.data };
-	                return Object.assign({}, state, _obj3);
+	                debugger;
+	                action.payload.data.data["classType"] = "cryptomarkets";
+	                obj[_reddit_news.NEWS_UPDATE] = { type: action.type, data: action.payload.data };
+	                return Object.assign({}, state, obj);
 	            }
 	            break;
 	        default:
@@ -107019,7 +107017,7 @@
 
 	var _news2 = _interopRequireDefault(_news);
 
-	var _aboutUs = __webpack_require__(1127);
+	var _aboutUs = __webpack_require__(1131);
 
 	var _aboutUs2 = _interopRequireDefault(_aboutUs);
 
@@ -107491,6 +107489,10 @@
 
 	var _loadLogo2 = _interopRequireDefault(_loadLogo);
 
+	var _newsBox = __webpack_require__(1127);
+
+	var _newsBox2 = _interopRequireDefault(_newsBox);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -107512,10 +107514,10 @@
 
 	        _this.newsObj = {};
 
-	        _this.newsObj[_reddit_news.BTC_NEWS] = "";
-	        _this.newsObj[_reddit_news.ETH_NEWS] = "";
-	        _this.newsObj[_reddit_news.CRYPTO] = "";
-	        _this.newsObj[_reddit_news.CRY_MAR] = "";
+	        _this.newsObj[_reddit_news.BTC_NEWS] = {};
+	        _this.newsObj[_reddit_news.ETH_NEWS] = {};
+	        _this.newsObj[_reddit_news.CRYPTO] = {};
+	        _this.newsObj[_reddit_news.CRY_MAR] = {};
 	        return _this;
 	    }
 
@@ -107524,51 +107526,11 @@
 
 	    _createClass(News, [{
 	        key: 'formNewsComp',
-	        value: function formNewsComp(type, index) {
+	        value: function formNewsComp(type, classType) {
 	            var newsHTML = [];
 
-	            this.newsObj[type].forEach(function (elem, index2) {
-
-	                newsHTML.push(_react2.default.createElement(
-	                    'div',
-	                    { className: 'news-container',
-	                        onClick: function onClick() {
-	                            cordova.InAppBrowser.open(elem.data.url, '_system');
-	                        },
-	                        key: index2 },
-	                    _react2.default.createElement(
-	                        'div',
-	                        { className: 'news-image' },
-	                        elem.data.thumbnail.length > 8 ? _react2.default.createElement('img', { src: elem.data.thumbnail }) : _react2.default.createElement(
-	                            'div',
-	                            { className: 'margin-top-5' },
-	                            _react2.default.createElement(_loadLogo2.default, { height: 120 })
-	                        )
-	                    ),
-	                    _react2.default.createElement(
-	                        'div',
-	                        { className: 'news-desc' },
-	                        _react2.default.createElement(
-	                            'div',
-	                            null,
-	                            _react2.default.createElement(
-	                                'span',
-	                                { className: 'news-time' },
-	                                (0, _moment2.default)().utc(elem.data.created_utc).format("MMM DD,YYYY")
-	                            ),
-	                            _react2.default.createElement(
-	                                'span',
-	                                { className: 'news-source' },
-	                                elem.data.domain
-	                            )
-	                        ),
-	                        _react2.default.createElement(
-	                            'h3',
-	                            null,
-	                            elem.data.title
-	                        )
-	                    )
-	                ));
+	            this.newsObj[type].children.forEach(function (item, index) {
+	                newsHTML.push(_react2.default.createElement(_newsBox2.default, { article: item, key: index, classType: classType }));
 	            });
 
 	            return newsHTML;
@@ -107625,13 +107587,13 @@
 	                }
 	                return false;
 	            });
-	            return data.children;
+	            return data;
 	        }
 	    }, {
 	        key: 'componentWillReceiveProps',
 	        value: function componentWillReceiveProps(nextProps) {
-	            var self = this,
-	                news_update = nextProps.news[_reddit_news.NEWS_UPDATE];
+	            var news_update = nextProps.news[_reddit_news.NEWS_UPDATE];
+
 	            if (news_update && news_update.hasOwnProperty("data")) {
 	                this.newsObj[news_update.type] = this.cleanData(news_update.data.data, news_update.type);
 	            }
@@ -107643,20 +107605,25 @@
 
 	            var sectionComp = [];
 
-	            Object.keys(this.newsObj).forEach(function (elem, index) {
-	                if (Array.isArray(_this2.newsObj[elem])) {
+	            Object.keys(this.newsObj).forEach(function (item, index) {
+	                if (!_this2.newsObj[item].hasOwnProperty("children")) {
+	                    return;
+	                }
+	                var children = _this2.newsObj[item].children,
+	                    classType = _this2.newsObj[item].classType;
+	                if (Array.isArray(children)) {
 	                    var sectionHTML = _react2.default.createElement(
 	                        'div',
 	                        { className: 'news-cover', key: index },
 	                        _react2.default.createElement(
 	                            'h3',
 	                            { className: 'news-head' },
-	                            elem
+	                            item
 	                        ),
 	                        _react2.default.createElement(
 	                            'div',
 	                            { className: 'news-links' },
-	                            _this2.formNewsComp(elem, index)
+	                            _this2.formNewsComp(item, classType)
 	                        )
 	                    );
 	                    sectionComp.push(sectionHTML);
@@ -107665,12 +107632,8 @@
 
 	            return _react2.default.createElement(
 	                'div',
-	                null,
-	                _react2.default.createElement(
-	                    'div',
-	                    { className: 'latest-news' },
-	                    sectionComp
-	                )
+	                { className: 'latest-news' },
+	                sectionComp
 	            );
 	        }
 	    }]);
@@ -107689,6 +107652,261 @@
 
 /***/ }),
 /* 1127 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(2);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _newsDesc = __webpack_require__(1128);
+
+	var _newsThumbnail = __webpack_require__(1130);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /**
+	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * Created by harshalcarpenter on 5/19/18.
+	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                */
+
+	var NewsBox = function (_React$Component) {
+	    _inherits(NewsBox, _React$Component);
+
+	    function NewsBox(props) {
+	        _classCallCheck(this, NewsBox);
+
+	        return _possibleConstructorReturn(this, (NewsBox.__proto__ || Object.getPrototypeOf(NewsBox)).call(this, props));
+	    }
+
+	    _createClass(NewsBox, [{
+	        key: 'itemClick',
+	        value: function itemClick(data) {
+	            cordova.InAppBrowser.open(data.url, '_system');
+	        }
+	    }, {
+	        key: 'render',
+	        value: function render() {
+	            var _this2 = this;
+
+	            var article = this.props.article,
+	                data = article.data,
+	                className = "news-container news-" + (this.props.classType || "");
+
+	            return _react2.default.createElement(
+	                'div',
+	                { className: className,
+	                    onClick: function onClick() {
+	                        _this2.itemClick(data);
+	                    } },
+	                _react2.default.createElement(_newsThumbnail.NewsThumbnail, { data: data }),
+	                _react2.default.createElement(_newsDesc.NewsDesc, { data: data })
+	            );
+	        }
+	    }]);
+
+	    return NewsBox;
+	}(_react2.default.Component);
+
+	exports.default = NewsBox;
+
+/***/ }),
+/* 1128 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.NewsDesc = undefined;
+
+	var _react = __webpack_require__(2);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _moment = __webpack_require__(548);
+
+	var _moment2 = _interopRequireDefault(_moment);
+
+	var _newsReaction = __webpack_require__(1129);
+
+	var _newsReaction2 = _interopRequireDefault(_newsReaction);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var NewsDesc = exports.NewsDesc = function NewsDesc(props) {
+	    var data = props.data,
+	        postedDate = (0, _moment2.default)().utc(data.created_utc).format("MMM DD,YYYY");
+
+	    return _react2.default.createElement(
+	        'div',
+	        { className: 'news-desc' },
+	        _react2.default.createElement(
+	            'div',
+	            null,
+	            _react2.default.createElement(
+	                'span',
+	                { className: 'news-time' },
+	                postedDate
+	            ),
+	            _react2.default.createElement(
+	                'span',
+	                { className: 'news-source' },
+	                data.domain
+	            )
+	        ),
+	        _react2.default.createElement(
+	            'h3',
+	            null,
+	            data.title
+	        ),
+	        _react2.default.createElement(_newsReaction2.default, { userDetail: {}, newsDetail: data })
+	    );
+	}; /**
+	    * Created by harshalcarpenter on 5/19/18.
+	    */
+
+/***/ }),
+/* 1129 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(2);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /**
+	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * Created by harshalcarpenter on 5/20/18.
+	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                */
+
+	var NewsReact = function (_React$Component) {
+	    _inherits(NewsReact, _React$Component);
+
+	    function NewsReact(props) {
+	        _classCallCheck(this, NewsReact);
+
+	        return _possibleConstructorReturn(this, (NewsReact.__proto__ || Object.getPrototypeOf(NewsReact)).call(this, props));
+	    }
+
+	    _createClass(NewsReact, [{
+	        key: "render",
+	        value: function render() {
+	            var _this2 = this;
+
+	            var newsDetail = this.props.newsDetail,
+	                userDetail = this.props.userDetail,
+	                commonReactionClass = "news-reaction";
+
+	            if (newsDetail.id && userDetail.reactions && userDetail.reactions.hasOwnProperty(newsDetail.name)) {
+
+	                if (userDetail.reactions[newsDetail.id]) {
+	                    commonReactionClass += " reaction-like";
+	                } else {
+	                    commonReactionClass += " reaction-dislike";
+	                }
+	            }
+
+	            return _react2.default.createElement(
+	                "div",
+	                { className: commonReactionClass },
+	                _react2.default.createElement(
+	                    "span",
+	                    { className: "reaction reaction-like-span", onClick: function onClick() {
+	                            _this2.reaction(true);
+	                        } },
+	                    _react2.default.createElement("i", { className: "fa fa-thumbs-o-up" }),
+	                    _react2.default.createElement("i", { className: "fa fa-thumbs-up" }),
+	                    "Like"
+	                ),
+	                _react2.default.createElement(
+	                    "span",
+	                    { className: "reaction reaction-dislike-span", onClick: function onClick() {
+	                            _this2.reaction(false);
+	                        } },
+	                    _react2.default.createElement("i", { className: "fa fa-thumbs-o-down" }),
+	                    _react2.default.createElement("i", { className: "fa fa-thumbs-down" })
+	                )
+	            );
+	        }
+	    }]);
+
+	    return NewsReact;
+	}(_react2.default.Component);
+
+	exports.default = NewsReact;
+
+/***/ }),
+/* 1130 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.NewsThumbnail = undefined;
+
+	var _react = __webpack_require__(2);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _loadLogo = __webpack_require__(545);
+
+	var _loadLogo2 = _interopRequireDefault(_loadLogo);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	/**
+	 * Created by harshalcarpenter on 5/19/18.
+	 */
+	var NewsThumbnail = exports.NewsThumbnail = function NewsThumbnail(props) {
+	    var data = props.data;
+
+	    if (data.thumbnail.length > 8) {
+	        return _react2.default.createElement(
+	            'div',
+	            { className: 'news-image' },
+	            _react2.default.createElement('img', { src: data.thumbnail })
+	        );
+	    }
+
+	    return _react2.default.createElement(
+	        'div',
+	        { className: 'news-image' },
+	        _react2.default.createElement(
+	            'div',
+	            { className: 'margin-top-5' },
+	            _react2.default.createElement(_loadLogo2.default, { height: 120 })
+	        )
+	    );
+	};
+
+/***/ }),
+/* 1131 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
