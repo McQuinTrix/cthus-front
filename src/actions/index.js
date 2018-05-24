@@ -12,10 +12,11 @@ export const UPDATE_USERINFO = "update_userInfo";
 export const GET_DATA = "get_data";
 export const ERASE_DATA = "erase_data";
 export const CLEAR_SIGN_IN = "clear_sign_in";
+export const CONFIRM_EMAIL = "confirm_email";
 
 const root_url = "https://api.gemini.com/v1/pubticker/";
 const ct_url = "https://cryptonthus.herokuapp.com/api";
-//const ct_url = "http://localhost:8001/api";
+//const ct_url = "http://localhost:8000/api";
 
 export function fetchBTC() {
     const req = axios.get(`${root_url}/btcusd`);
@@ -96,6 +97,15 @@ export function getData(type){
     return {
         type: GET_DATA,
         payload: req
+    }
+}
+
+export function confirmEmail(userId) {
+    const request = axios.post(`${ct_url}/confirm-email/${userId}`)
+
+    return {
+        type: CONFIRM_EMAIL,
+        payload: request
     }
 }
 

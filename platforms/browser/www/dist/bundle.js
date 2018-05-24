@@ -95,12 +95,14 @@
 
 	var _canvas2 = _interopRequireDefault(_canvas);
 
+	var _confirmEmail = __webpack_require__(1132);
+
+	var _confirmEmail2 = _interopRequireDefault(_confirmEmail);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var createStoreWithMiddleware = (0, _redux.applyMiddleware)(_reduxPromise2.default)(_redux.createStore);
-
 	//Components
-
+	var createStoreWithMiddleware = (0, _redux.applyMiddleware)(_reduxPromise2.default)(_redux.createStore);
 
 	_reactDom2.default.render(_react2.default.createElement(
 	    _reactRedux.Provider,
@@ -111,6 +113,7 @@
 	        _react2.default.createElement(
 	            'div',
 	            null,
+	            _react2.default.createElement(_reactRouter.Route, { path: '/confirm-email/:userid', components: _confirmEmail2.default }),
 	            _react2.default.createElement(_reactRouter.Route, { path: '/canvas/:userid', components: _canvas2.default }),
 	            _react2.default.createElement(_reactRouter.Route, { path: '/signup/:id', component: _signUp2.default }),
 	            _react2.default.createElement(_reactRouter.Route, { path: '/dashboard', component: _dashboard2.default }),
@@ -39511,7 +39514,7 @@
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
-	exports.CLEAR_SIGN_IN = exports.ERASE_DATA = exports.GET_DATA = exports.UPDATE_USERINFO = exports.USER_INFO = exports.PROF_UPDATE = exports.PORT_UPDATE = exports.PORT_GET = exports.SIGN_IN = exports.SIGN_UP = exports.FETCH_ETH = exports.FETCH_BTC = undefined;
+	exports.CONFIRM_EMAIL = exports.CLEAR_SIGN_IN = exports.ERASE_DATA = exports.GET_DATA = exports.UPDATE_USERINFO = exports.USER_INFO = exports.PROF_UPDATE = exports.PORT_UPDATE = exports.PORT_GET = exports.SIGN_IN = exports.SIGN_UP = exports.FETCH_ETH = exports.FETCH_BTC = undefined;
 	exports.fetchBTC = fetchBTC;
 	exports.fetchETH = fetchETH;
 	exports.signUp = signUp;
@@ -39521,6 +39524,7 @@
 	exports.updateUser = updateUser;
 	exports.signIn = signIn;
 	exports.getData = getData;
+	exports.confirmEmail = confirmEmail;
 	exports.eraseData = eraseData;
 	exports.clearSignIn = clearSignIn;
 
@@ -39542,10 +39546,11 @@
 	var GET_DATA = exports.GET_DATA = "get_data";
 	var ERASE_DATA = exports.ERASE_DATA = "erase_data";
 	var CLEAR_SIGN_IN = exports.CLEAR_SIGN_IN = "clear_sign_in";
+	var CONFIRM_EMAIL = exports.CONFIRM_EMAIL = "confirm_email";
 
 	var root_url = "https://api.gemini.com/v1/pubticker/";
-	var ct_url = "https://cryptonthus.herokuapp.com/api";
-	//const ct_url = "http://localhost:8001/api";
+	//const ct_url = "https://cryptonthus.herokuapp.com/api";
+	var ct_url = "http://localhost:8000/api";
 
 	function fetchBTC() {
 	    var req = _axios2.default.get(root_url + "/btcusd");
@@ -39625,6 +39630,15 @@
 	    return {
 	        type: GET_DATA,
 	        payload: req
+	    };
+	}
+
+	function confirmEmail(userId) {
+	    var request = _axios2.default.post(ct_url + "/confirm-email/" + userId);
+
+	    return {
+	        type: CONFIRM_EMAIL,
+	        payload: request
 	    };
 	}
 
@@ -41270,6 +41284,13 @@
 	        case _index.CLEAR_SIGN_IN:
 	            obj[_index.SIGN_IN] = {};
 	            return Object.assign({}, state, obj);
+	            break;
+	        case _index.CONFIRM_EMAIL:
+	            if (action.payload.status) {
+	                obj[_index.CONFIRM_EMAIL] = action.payload.data;
+	            }
+	            return Object.assign({}, state, obj);
+	            break;
 	        default:
 	            return state;
 	            break;
@@ -107971,6 +107992,72 @@
 	}(_react2.default.Component);
 
 	exports.default = AboutUs;
+
+/***/ }),
+/* 1132 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(2);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactRedux = __webpack_require__(160);
+
+	var _index = __webpack_require__(507);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /**
+	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * Created by harshalcarpenter on 5/23/18.
+	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                */
+
+
+	var ConfirmEmailComponent = function (_React$Component) {
+	    _inherits(ConfirmEmailComponent, _React$Component);
+
+	    function ConfirmEmailComponent(props) {
+	        _classCallCheck(this, ConfirmEmailComponent);
+
+	        return _possibleConstructorReturn(this, (ConfirmEmailComponent.__proto__ || Object.getPrototypeOf(ConfirmEmailComponent)).call(this, props));
+	    }
+
+	    _createClass(ConfirmEmailComponent, [{
+	        key: 'componentWillMount',
+	        value: function componentWillMount() {
+	            this.props.confirmEmail(this.props.params.userid);
+	            debugger;
+	        }
+	    }, {
+	        key: 'render',
+	        value: function render() {
+	            return _react2.default.createElement(
+	                'div',
+	                null,
+	                'Your email is confirmed! Thank you!'
+	            );
+	        }
+	    }]);
+
+	    return ConfirmEmailComponent;
+	}(_react2.default.Component);
+
+	function mapStateToProps(state) {
+	    return { sign: state.sign };
+	}
+
+	exports.default = (0, _reactRedux.connect)(mapStateToProps, { confirmEmail: _index.confirmEmail })(ConfirmEmailComponent);
 
 /***/ })
 /******/ ]);

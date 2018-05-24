@@ -1,6 +1,6 @@
 import { SIGN_UP, SIGN_IN, PORT_GET, PORT_UPDATE,
         PROF_UPDATE, USER_INFO,UPDATE_USERINFO,
-        GET_DATA,ERASE_DATA, CLEAR_SIGN_IN } from '../actions/index';
+        GET_DATA,ERASE_DATA, CLEAR_SIGN_IN, CONFIRM_EMAIL } from '../actions/index';
 
 export default function (state={},action) {
     let obj = {};
@@ -72,6 +72,13 @@ export default function (state={},action) {
         case CLEAR_SIGN_IN:
             obj[SIGN_IN] = {};
             return Object.assign({},state,obj);
+            break;
+        case CONFIRM_EMAIL:
+            if(action.payload.status) {
+                obj[CONFIRM_EMAIL] = action.payload.data;
+            }
+            return Object.assign({},state,obj);
+            break;
         default:
             return state;
             break;
