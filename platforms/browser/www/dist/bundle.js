@@ -87,15 +87,15 @@
 
 	var _loadLogo2 = _interopRequireDefault(_loadLogo);
 
-	var _signUp = __webpack_require__(1123);
+	var _signUp = __webpack_require__(1126);
 
 	var _signUp2 = _interopRequireDefault(_signUp);
 
-	var _canvas = __webpack_require__(1124);
+	var _canvas = __webpack_require__(1127);
 
 	var _canvas2 = _interopRequireDefault(_canvas);
 
-	var _confirmEmail = __webpack_require__(1132);
+	var _confirmEmail = __webpack_require__(1135);
 
 	var _confirmEmail2 = _interopRequireDefault(_confirmEmail);
 
@@ -39549,8 +39549,8 @@
 	var CONFIRM_EMAIL = exports.CONFIRM_EMAIL = "confirm_email";
 
 	var root_url = "https://api.gemini.com/v1/pubticker/";
-	//const ct_url = "https://cryptonthus.herokuapp.com/api";
-	var ct_url = "http://localhost:8000/api";
+	var ct_url = "https://cryptonthus.herokuapp.com/api";
+	//const ct_url = "http://localhost:8000/api";
 
 	function fetchBTC() {
 	    var req = _axios2.default.get(root_url + "/btcusd");
@@ -50594,9 +50594,11 @@
 
 	var _lineChart2 = _interopRequireDefault(_lineChart);
 
-	var _areaChart = __webpack_require__(1122);
+	var _coinIntro = __webpack_require__(1122);
 
-	var _areaChart2 = _interopRequireDefault(_areaChart);
+	var _coinAmount = __webpack_require__(1123);
+
+	var _coinChart = __webpack_require__(1124);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -50639,6 +50641,7 @@
 	                lastDayVal: 0
 	            }
 	        };
+	        _this.addInput = 0;
 	        _this.startX = 0;
 
 	        _this.state = {
@@ -50687,12 +50690,24 @@
 	            this.forceUpdate();
 	        }
 	    }, {
+	        key: 'addCoinVal',
+	        value: function addCoinVal(coin, event) {
+	            this.addInput = event.target.value;
+	            this.forceUpdate();
+	        }
+	    }, {
 	        key: 'updatePortfolio',
-	        value: function updatePortfolio(coin) {
+	        value: function updatePortfolio(coin, type) {
+	            var amt = +this.coinObj[coin].amount;
+	            if (type === 'add') {
+	                amt += +this.addInput;
+	                this.coinObj[coin].amount = amt;
+	            }
+
 	            this.props.updateCoinAPI({
 	                userId: this.props.userId,
 	                type: coin,
-	                value: this.coinObj[coin].amount
+	                value: amt
 	            });
 	            this.refs.alertRef.showAlert({ message: "Portfolio Updated!", type: "success" });
 	        }
@@ -50772,7 +50787,7 @@
 	                ETH = this.props.eth;
 
 	            //Forming the HTML for each coin
-	            Object.keys(coinObj).forEach(function (elem, ind) {
+	            Object.keys(coinObj).forEach(function (elem, index) {
 
 	                var coin = coinObj[elem],
 	                    coverClass = "coin-cover",
@@ -50802,7 +50817,7 @@
 	                coinHTML.push(_react2.default.createElement(
 	                    'div',
 	                    { className: coverClass,
-	                        key: ind,
+	                        key: index,
 	                        onTouchEnd: function onTouchEnd(e) {
 	                            _this3.touchEnd(e, e.nativeEvent);
 	                        },
@@ -50815,96 +50830,55 @@
 	                            onClick: function onClick() {
 	                                _this3.openUpdater(elem);
 	                            } },
-	                        _react2.default.createElement(
-	                            'div',
-	                            { className: 'coin-intro' },
-	                            _react2.default.createElement(
-	                                'div',
-	                                { className: 'coin-intro-cover' },
-	                                _react2.default.createElement(
-	                                    'div',
-	                                    { className: 'coin-image-cover' },
-	                                    _react2.default.createElement('img', { src: coin.imgUrl, className: 'coin-image' })
-	                                ),
-	                                _react2.default.createElement(
-	                                    'div',
-	                                    { className: 'coin-name' },
-	                                    coin.full_name
-	                                )
-	                            ),
-	                            _react2.default.createElement(
-	                                'div',
-	                                { className: 'coin-curr' },
-	                                _react2.default.createElement(
-	                                    'span',
-	                                    { className: 'coin-type' },
-	                                    'Price'
-	                                ),
-	                                _react2.default.createElement(
-	                                    'span',
-	                                    { className: 'coin-amt' },
-	                                    '$ ',
-	                                    (+coin.currVal).toLocaleString()
-	                                )
-	                            )
-	                        ),
-	                        _react2.default.createElement(
-	                            'div',
-	                            { className: 'coin-amount' },
-	                            _react2.default.createElement(
-	                                'div',
-	                                { className: 'coin-total' },
-	                                coin.amount
-	                            ),
-	                            _react2.default.createElement(
-	                                'div',
-	                                { className: 'coin-fiat' },
-	                                _react2.default.createElement(
-	                                    'span',
-	                                    { className: 'coin-amt' },
-	                                    '$ ',
-	                                    (+coin.currVal * coin.amount).toFixed(2).toLocaleString()
-	                                )
-	                            )
-	                        )
+	                        _react2.default.createElement(_coinIntro.CoinIntro, { coin: coin }),
+	                        _react2.default.createElement(_coinAmount.CoinAmount, { coin: coin })
 	                    ),
 	                    _react2.default.createElement(
 	                        'div',
 	                        { className: 'coin-more' },
 	                        _react2.default.createElement(
 	                            'div',
-	                            { className: 'coin-update' },
-	                            _react2.default.createElement('input', { type: 'number',
-	                                className: 'coin-input',
-	                                value: coin.amount,
-	                                onChange: function onChange(e) {
-	                                    _this3.updateCoinVal(elem, e);
-	                                } }),
+	                            { className: 'coin-update-cover' },
 	                            _react2.default.createElement(
-	                                'button',
-	                                { className: 'update-button',
-	                                    onClick: function onClick() {
-	                                        _this3.updatePortfolio(elem);
-	                                    } },
-	                                _react2.default.createElement('i', { className: 'fa fa-refresh' }),
-	                                'Update'
+	                                'div',
+	                                { className: 'coin-update' },
+	                                _react2.default.createElement('input', { type: 'number',
+	                                    className: 'coin-input',
+	                                    value: coin.amount,
+	                                    onChange: function onChange(e) {
+	                                        _this3.updateCoinVal(elem, e);
+	                                    } }),
+	                                _react2.default.createElement(
+	                                    'button',
+	                                    { className: 'update-button',
+	                                        onClick: function onClick() {
+	                                            _this3.updatePortfolio(elem, 'update');
+	                                        } },
+	                                    _react2.default.createElement('i', { className: 'fa fa-refresh' }),
+	                                    'Update'
+	                                )
+	                            ),
+	                            _react2.default.createElement(
+	                                'div',
+	                                { className: 'coin-update' },
+	                                _react2.default.createElement('input', { type: 'number',
+	                                    className: 'coin-input',
+	                                    value: _this3.addInput,
+	                                    onChange: function onChange(e) {
+	                                        _this3.addCoinVal(elem, e);
+	                                    } }),
+	                                _react2.default.createElement(
+	                                    'button',
+	                                    { className: 'update-button',
+	                                        onClick: function onClick() {
+	                                            _this3.updatePortfolio(elem, 'add');
+	                                        } },
+	                                    _react2.default.createElement('i', { className: 'fa fa-plus', 'aria-hidden': 'true' }),
+	                                    'Add'
+	                                )
 	                            )
 	                        ),
-	                        _react2.default.createElement(
-	                            'div',
-	                            { className: 'coin-chart' },
-	                            coin.data.length > 0 ? _react2.default.createElement(_areaChart2.default, { width: 340,
-	                                height: 300,
-	                                chartData: coin.data,
-	                                chartName: coin.full_name,
-	                                dataKey: 'value',
-	                                marginStyle: { top: 5, right: 30, left: 0, bottom: 5 },
-	                                strokeColor: '#20e5f1' }) : _react2.default.createElement(
-	                                'div',
-	                                null,
-	                                'Loading ...'
-	                            )
-	                        )
+	                        _react2.default.createElement(_coinChart.CoinChart, { coin: coin })
 	                    )
 	                ));
 	            });
@@ -50949,7 +50923,6 @@
 	}(_react2.default.Component);
 
 	function mapStateToProps(state) {
-	    //return {sign: state.sign}
 	    return {
 	        tick: state.ticker,
 	        sign: state.sign
@@ -106643,6 +106616,164 @@
 /* 1122 */
 /***/ (function(module, exports, __webpack_require__) {
 
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.CoinIntro = undefined;
+
+	var _react = __webpack_require__(2);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var CoinIntro = exports.CoinIntro = function CoinIntro(props) {
+	    var coinObj = props.coin,
+	        coinImage = coinObj.imgUrl,
+	        coinFullName = coinObj.full_name,
+	        coinCurrentValue = (+coinObj.currVal).toLocaleString();
+	    return _react2.default.createElement(
+	        "div",
+	        { className: "coin-intro" },
+	        _react2.default.createElement(
+	            "div",
+	            { className: "coin-intro-cover" },
+	            _react2.default.createElement(
+	                "div",
+	                { className: "coin-image-cover" },
+	                _react2.default.createElement("img", { src: coinImage, className: "coin-image" })
+	            ),
+	            _react2.default.createElement(
+	                "div",
+	                { className: "coin-name" },
+	                coinFullName
+	            )
+	        ),
+	        _react2.default.createElement(
+	            "div",
+	            { className: "coin-curr" },
+	            _react2.default.createElement(
+	                "span",
+	                { className: "coin-type" },
+	                "Price"
+	            ),
+	            _react2.default.createElement(
+	                "span",
+	                { className: "coin-amt" },
+	                "$ ",
+	                coinCurrentValue
+	            )
+	        )
+	    );
+	}; /**
+	    * Created by harshalcarpenter on 5/26/18.
+	    */
+
+/***/ }),
+/* 1123 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.CoinAmount = undefined;
+
+	var _react = __webpack_require__(2);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var CoinAmount = exports.CoinAmount = function CoinAmount(props) {
+	    var coin = props.coin,
+	        coinTotal = coin.amount,
+	        coinAmt = (+coin.currVal * coinTotal).toFixed(2).toLocaleString();
+	    return _react2.default.createElement(
+	        "div",
+	        { className: "coin-amount" },
+	        _react2.default.createElement(
+	            "div",
+	            { className: "coin-total" },
+	            coinTotal
+	        ),
+	        _react2.default.createElement(
+	            "div",
+	            { className: "coin-fiat" },
+	            _react2.default.createElement(
+	                "span",
+	                { className: "coin-amt" },
+	                "$ ",
+	                coinAmt
+	            )
+	        )
+	    );
+	}; /**
+	    * Created by harshalcarpenter on 5/26/18.
+	    */
+
+/***/ }),
+/* 1124 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.CoinChart = undefined;
+
+	var _react = __webpack_require__(2);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _areaChart = __webpack_require__(1125);
+
+	var _areaChart2 = _interopRequireDefault(_areaChart);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	/**
+	 * Created by harshalcarpenter on 5/26/18.
+	 */
+
+	var CoinChart = exports.CoinChart = function CoinChart(props) {
+	    var coin = props.coin,
+	        width = 340;
+
+	    if (document.querySelector('.coin-intro')) {
+	        width = parseInt(window.getComputedStyle(document.querySelector('.coin-intro')).width) - 20;
+	        debugger;
+	    }
+
+	    if (coin.data.length === 0) {
+	        return _react2.default.createElement(
+	            'div',
+	            null,
+	            'Loading ...'
+	        );
+	    }
+
+	    return _react2.default.createElement(
+	        'div',
+	        { className: 'coin-chart' },
+	        _react2.default.createElement(_areaChart2.default, { width: width,
+	            height: 300,
+	            chartData: coin.data,
+	            chartName: coin.full_name,
+	            dataKey: 'value',
+	            marginStyle: { top: 5, right: 30, left: 0, bottom: 5 },
+	            strokeColor: '#20e5f1' })
+	    );
+	};
+
+/***/ }),
+/* 1125 */
+/***/ (function(module, exports, __webpack_require__) {
+
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
@@ -106732,7 +106863,7 @@
 	exports.default = ReAreaChart;
 
 /***/ }),
-/* 1123 */
+/* 1126 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -107003,7 +107134,7 @@
 	exports.default = (0, _reactRedux.connect)(mapStateToProps, { signUp: _actions.signUp, signIn: _actions.signIn, clearSignIn: _actions.clearSignIn })(SignUp);
 
 /***/ }),
-/* 1124 */
+/* 1127 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -107030,15 +107161,15 @@
 
 	var _dashboard2 = _interopRequireDefault(_dashboard);
 
-	var _userProfile = __webpack_require__(1125);
+	var _userProfile = __webpack_require__(1128);
 
 	var _userProfile2 = _interopRequireDefault(_userProfile);
 
-	var _news = __webpack_require__(1126);
+	var _news = __webpack_require__(1129);
 
 	var _news2 = _interopRequireDefault(_news);
 
-	var _aboutUs = __webpack_require__(1131);
+	var _aboutUs = __webpack_require__(1134);
 
 	var _aboutUs2 = _interopRequireDefault(_aboutUs);
 
@@ -107329,7 +107460,7 @@
 	})(Canvas);
 
 /***/ }),
-/* 1125 */
+/* 1128 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -107483,7 +107614,7 @@
 	exports.default = (0, _reactRedux.connect)(mapStateToProps, { updateUser: _index.updateUser, getUser: _index.getUser })(UserProfile);
 
 /***/ }),
-/* 1126 */
+/* 1129 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -107510,7 +107641,7 @@
 
 	var _loadLogo2 = _interopRequireDefault(_loadLogo);
 
-	var _newsBox = __webpack_require__(1127);
+	var _newsBox = __webpack_require__(1130);
 
 	var _newsBox2 = _interopRequireDefault(_newsBox);
 
@@ -107672,7 +107803,7 @@
 	exports.default = (0, _reactRedux.connect)(mapStateToProps, { getNews: _reddit_news.getNews })(News);
 
 /***/ }),
-/* 1127 */
+/* 1130 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -107687,9 +107818,9 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _newsDesc = __webpack_require__(1128);
+	var _newsDesc = __webpack_require__(1131);
 
-	var _newsThumbnail = __webpack_require__(1130);
+	var _newsThumbnail = __webpack_require__(1133);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -107742,7 +107873,7 @@
 	exports.default = NewsBox;
 
 /***/ }),
-/* 1128 */
+/* 1131 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -107760,7 +107891,7 @@
 
 	var _moment2 = _interopRequireDefault(_moment);
 
-	var _newsReaction = __webpack_require__(1129);
+	var _newsReaction = __webpack_require__(1132);
 
 	var _newsReaction2 = _interopRequireDefault(_newsReaction);
 
@@ -107799,7 +107930,7 @@
 	    */
 
 /***/ }),
-/* 1129 */
+/* 1132 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -107881,7 +108012,7 @@
 	exports.default = NewsReact;
 
 /***/ }),
-/* 1130 */
+/* 1133 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -107927,7 +108058,7 @@
 	};
 
 /***/ }),
-/* 1131 */
+/* 1134 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -107994,7 +108125,7 @@
 	exports.default = AboutUs;
 
 /***/ }),
-/* 1132 */
+/* 1135 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';

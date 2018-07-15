@@ -13,7 +13,10 @@ import axios from 'axios';
 
 import Alert from '../alert-message';
 import ReLineChart from '../feature-comp/line-chart';
-import ReAreaChart from '../feature-comp/area-chart';
+
+import {CoinIntro} from './dashboard-components/coin-intro';
+import {CoinAmount} from './dashboard-components/coin-amount';
+import {CoinChart} from './dashboard-components/coin-chart';
 
 //--- CT API Url
 const ct_url = "https://cryptonthus.herokuapp.com/api";
@@ -54,8 +57,7 @@ class Dashboard extends React.Component{
             lastDayVal: 0
         }
     };
-
-
+    addInput = 0;
 
     getPortData(){
         this.props.getPortfolio(this.props.userId);
@@ -81,11 +83,22 @@ class Dashboard extends React.Component{
         this.forceUpdate();
     }
 
-    updatePortfolio(coin){
+    addCoinVal(coin,event){
+        this.addInput = event.target.value;
+        this.forceUpdate();
+    }
+
+    updatePortfolio(coin,type){
+        let amt = +this.coinObj[coin].amount;
+        if(type === 'add'){
+            amt += +this.addInput;
+            this.coinObj[coin].amount = amt;
+        }
+
         this.props.updateCoinAPI({
             userId: this.props.userId,
             type: coin,
-            value: this.coinObj[coin].amount
+            value: amt
         });
         this.refs.alertRef.showAlert({ message: "Portfolio Updated!", type: "success"});
     }
@@ -161,7 +174,7 @@ class Dashboard extends React.Component{
             ETH = this.props.eth;
 
         //Forming the HTML for each coin
-        Object.keys(coinObj).forEach((elem,ind)=>{
+        Object.keys(coinObj).forEach((elem,index)=>{
 
             let coin = coinObj[elem],
                 coverClass = "coin-cover",
@@ -190,69 +203,45 @@ class Dashboard extends React.Component{
 
             coinHTML.push(
                 <div className={coverClass}
-                     key={ind}
+                     key={index}
                      onTouchEnd={(e)=>{this.touchEnd(e,e.nativeEvent)}}
                      onTouchStart={(e)=>{this.touchStart(e,e.nativeEvent)}}>
+
                     <div className={coinShrtClass}
                          onClick={()=>{this.openUpdater(elem)}}>
-                        <div className="coin-intro">
-                            <div className="coin-intro-cover">
-                                <div className="coin-image-cover">
-                                    <img src={coin.imgUrl} className="coin-image"/>
-                                </div>
-                                <div className="coin-name">
-                                    {coin.full_name}
-                                </div>
-                            </div>
-                            <div className="coin-curr">
-                                <span className="coin-type">Price</span>
-                                <span className="coin-amt">
-                                    $ {(+coin.currVal).toLocaleString()}
-                                </span>
-                            </div>
-                        </div>
-                        <div className="coin-amount">
-                            <div className="coin-total">
-                                {coin.amount}
-                            </div>
-                            <div className="coin-fiat">
-                                <span className="coin-amt">
-                                    $ {((+coin.currVal) * coin.amount).toFixed(2).toLocaleString()}
-                                </span>
-                            </div>
-                        </div>
+
+                        <CoinIntro coin={coin} />
+
+                        <CoinAmount coin={coin}/>
+
                     </div>
                     <div className="coin-more">
-                        <div className="coin-update">
-                            <input type="number"
-                                   className="coin-input"
-                                   value={coin.amount}
-                                   onChange={(e)=>{this.updateCoinVal(elem,e)}} />
-                            <button className="update-button"
-                                    onClick={()=>{this.updatePortfolio(elem)}}>
-                                <i className="fa fa-refresh"></i>
-                                Update
-                            </button>
+                        <div className="coin-update-cover">
+                            <div className="coin-update">
+                                <input type="number"
+                                       className="coin-input"
+                                       value={coin.amount}
+                                       onChange={(e)=>{this.updateCoinVal(elem,e)}} />
+                                <button className="update-button"
+                                        onClick={()=>{this.updatePortfolio(elem,'update')}}>
+                                    <i className="fa fa-refresh"></i>
+                                    Update
+                                </button>
+                            </div>
+                            <div className="coin-update">
+                                <input type="number"
+                                       className="coin-input"
+                                       value={this.addInput}
+                                       onChange={(e)=>{this.addCoinVal(elem,e)}} />
+                                <button className="update-button"
+                                        onClick={()=>{this.updatePortfolio(elem,'add')}}>
+                                    <i className="fa fa-plus" aria-hidden="true"></i>
+                                    Add
+                                </button>
+                            </div>
                         </div>
-                        <div className="coin-chart">
-                            {
-                                coin.data.length > 0
 
-                                    ?
-
-                                    <ReAreaChart width={340}
-                                        height={300}
-                                        chartData={coin.data}
-                                        chartName={coin.full_name}
-                                        dataKey="value"
-                                        marginStyle={{top: 5, right: 30, left: 0, bottom: 5}}
-                                        strokeColor="#20e5f1"/>
-
-                                    :
-
-                                    <div>Loading ...</div>
-                            }
-                        </div>
+                        <CoinChart coin={coin}/>
                     </div>
                 </div>
             )
@@ -281,7 +270,6 @@ class Dashboard extends React.Component{
 
 
 function mapStateToProps(state) {
-    //return {sign: state.sign}
     return {
         tick: state.ticker,
         sign: state.sign

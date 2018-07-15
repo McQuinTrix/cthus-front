@@ -282,7 +282,7 @@ body{
     border-width: 0px;
 }
 
-.update-button .fa-refresh{
+.update-button .fa{
     display: inline-block;
     padding: 0 10px;
 }
@@ -294,6 +294,7 @@ body{
     color: white;
     font-size: 1rem;
     padding: 2px 5px;
+    width: 40vw;
 }
 
 .input-cover{
