@@ -3,10 +3,20 @@
  */
 
 import React from 'react';
+import axios from 'axios';
+import {ct_url} from '../../../../../actions/index';
 
 export default class NewsReact extends React.Component {
     constructor(props){
         super(props);
+    }
+
+    reaction(reactionType){
+        if(reactionType){
+
+        }
+
+        axios.post(`${ct_url}/portfolio`,data);
     }
 
     render(){
