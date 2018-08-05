@@ -2,29 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="e097aae1-3239-4cf4-8697-d1e90d5eec71" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/bundle.js" beforeDir="false" afterPath="$PROJECT_DIR$/dist/bundle.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/platforms/browser/browser.json" beforeDir="false" afterPath="$PROJECT_DIR$/platforms/browser/browser.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/platforms/browser/config.xml" beforeDir="false" afterPath="$PROJECT_DIR$/platforms/browser/config.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/platforms/browser/www/config.xml" beforeDir="false" afterPath="$PROJECT_DIR$/platforms/browser/www/config.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/platforms/browser/www/dist/bundle.js" beforeDir="false" afterPath="$PROJECT_DIR$/platforms/browser/www/dist/bundle.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/platforms/browser/www/manifest.json" beforeDir="false" afterPath="$PROJECT_DIR$/platforms/browser/www/manifest.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/platforms/browser/www/style/fa/css/font-awesome.css.map" beforeDir="false" afterPath="$PROJECT_DIR$/platforms/browser/www/style/fa/css/font-awesome.css.map" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/platforms/browser/www/style/fa/fonts/fontawesome-webfont.svg" beforeDir="false" afterPath="$PROJECT_DIR$/platforms/browser/www/style/fa/fonts/fontawesome-webfont.svg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/platforms/browser/www/style/general.css" beforeDir="false" afterPath="$PROJECT_DIR$/platforms/browser/www/style/general.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/canvas-components/dashboard-components/coin-amount.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/canvas-components/dashboard-components/coin-amount.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/canvas-components/dashboard-components/coin-chart.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/canvas-components/dashboard-components/coin-chart.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/canvas-components/dashboard-components/coin-intro.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/canvas-components/dashboard-components/coin-intro.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/canvas-components/dashboard.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/canvas-components/dashboard.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/confirm-email/confirm-email.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/confirm-email/confirm-email.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/reducers/reducer-news.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/reducers/reducer-news.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/style/general.css" beforeDir="false" afterPath="$PROJECT_DIR$/style/general.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/www/dist/bundle.js" beforeDir="false" afterPath="$PROJECT_DIR$/www/dist/bundle.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/www/style/fa/css/font-awesome.css.map" beforeDir="false" afterPath="$PROJECT_DIR$/www/style/fa/css/font-awesome.css.map" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/www/style/fa/fonts/fontawesome-webfont.svg" beforeDir="false" afterPath="$PROJECT_DIR$/www/style/fa/fonts/fontawesome-webfont.svg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/www/style/general.css" beforeDir="false" afterPath="$PROJECT_DIR$/www/style/general.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/style/comp-sass/general.scss" beforeDir="false" afterPath="$PROJECT_DIR$/style/comp-sass/general.scss" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -92,11 +70,20 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="index.js" pinned="false" current-in-tab="true">
+      <file leaf-file-name="index.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/actions/index.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-545">
-              <caret line="17" column="19" selection-start-line="17" selection-start-column="13" selection-end-line="17" selection-end-column="19" />
+            <state relative-caret-position="190">
+              <caret line="52" column="20" lean-forward="true" selection-start-line="52" selection-start-column="20" selection-end-line="52" selection-end-column="20" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="general.scss" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/style/comp-sass/general.scss">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="186">
+              <caret line="49" column="26" selection-start-line="49" selection-start-column="26" selection-end-line="49" selection-end-column="26" />
             </state>
           </provider>
         </entry>
@@ -112,7 +99,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>coin-b</find>
       <find>coin-n</find>
       <find>coin-short</find>
       <find>coin-intro</find>
@@ -142,6 +128,7 @@
       <find>axios</find>
       <find>coin-fiat</find>
       <find>debugger</find>
+      <find>dash-worth</find>
     </findStrings>
     <dirStrings>
       <dir>$PROJECT_DIR$/src/components</dir>
@@ -187,7 +174,6 @@
         <option value="$PROJECT_DIR$/style/comp-sass/canvas-elements/news.scss.js" />
         <option value="$PROJECT_DIR$/style/comp-sass/canvas-elements/news.scss.scss" />
         <option value="$PROJECT_DIR$/style/comp-sass/canvas-elements/_home.scss" />
-        <option value="$PROJECT_DIR$/style/comp-sass/general.scss" />
         <option value="$PROJECT_DIR$/src/components/canvas-components/news-box/news-desc/news-desc.js" />
         <option value="$PROJECT_DIR$/style/comp-sass/canvas-elements/news.scss" />
         <option value="$PROJECT_DIR$/src/reducers/reducer-sign.js" />
@@ -201,6 +187,7 @@
         <option value="$PROJECT_DIR$/src/components/canvas-components/dashboard-components/coin-intro.js" />
         <option value="$PROJECT_DIR$/src/components/canvas-components/dashboard-components/coin-amount.js" />
         <option value="$PROJECT_DIR$/src/components/canvas-components/dashboard.js" />
+        <option value="$PROJECT_DIR$/style/comp-sass/general.scss" />
       </list>
     </option>
   </component>
@@ -243,7 +230,7 @@
       <path value="$PROJECT_DIR$/www/style/fa/package.json" />
     </packageJsonPaths>
   </component>
-  <component name="ProjectFrameBounds" extendedState="7">
+  <component name="ProjectFrameBounds" extendedState="6">
     <option name="y" value="22" />
     <option name="width" value="1440" />
     <option name="height" value="798" />
@@ -430,12 +417,12 @@
       <workItem from="1527364771537" duration="3741000" />
       <workItem from="1531626853401" duration="6528000" />
       <workItem from="1532240508494" duration="1625000" />
-      <workItem from="1533485653084" duration="8877000" />
+      <workItem from="1533485653084" duration="9172000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="289637000" />
+    <option name="totallyTimeSpent" value="289932000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -447,7 +434,7 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-7" y="-7" width="1488" height="878" extended-state="7" />
+    <frame x="-7" y="-7" width="1488" height="878" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info anchor="bottom" id="TODO" order="6" weight="0.32882273" />
@@ -637,13 +624,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/style/comp-sass/general.scss">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="561">
-          <caret line="33" selection-start-line="33" selection-end-line="33" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/components/canvas-components/news.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="34">
@@ -777,8 +757,15 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/actions/index.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-545">
-          <caret line="17" column="19" selection-start-line="17" selection-start-column="13" selection-end-line="17" selection-end-column="19" />
+        <state relative-caret-position="190">
+          <caret line="52" column="20" lean-forward="true" selection-start-line="52" selection-start-column="20" selection-end-line="52" selection-end-column="20" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/style/comp-sass/general.scss">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="186">
+          <caret line="49" column="26" selection-start-line="49" selection-start-column="26" selection-end-line="49" selection-end-column="26" />
         </state>
       </provider>
     </entry>
