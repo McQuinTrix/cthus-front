@@ -11,7 +11,6 @@ export const CoinChart = (props) =>{
 
     if(document.querySelector('.coin-intro')){
         width = parseInt(window.getComputedStyle(document.querySelector('.coin-intro')).width) - 20;
-        debugger;
     }
 
     if(coin.data.length === 0){

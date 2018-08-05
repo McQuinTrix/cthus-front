@@ -39514,7 +39514,7 @@
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
-	exports.CONFIRM_EMAIL = exports.CLEAR_SIGN_IN = exports.ERASE_DATA = exports.GET_DATA = exports.UPDATE_USERINFO = exports.USER_INFO = exports.PROF_UPDATE = exports.PORT_UPDATE = exports.PORT_GET = exports.SIGN_IN = exports.SIGN_UP = exports.FETCH_ETH = exports.FETCH_BTC = undefined;
+	exports.ct_url = exports.CONFIRM_EMAIL = exports.CLEAR_SIGN_IN = exports.ERASE_DATA = exports.GET_DATA = exports.UPDATE_USERINFO = exports.USER_INFO = exports.PROF_UPDATE = exports.PORT_UPDATE = exports.PORT_GET = exports.SIGN_IN = exports.SIGN_UP = exports.FETCH_ETH = exports.FETCH_BTC = undefined;
 	exports.fetchBTC = fetchBTC;
 	exports.fetchETH = fetchETH;
 	exports.signUp = signUp;
@@ -39549,7 +39549,7 @@
 	var CONFIRM_EMAIL = exports.CONFIRM_EMAIL = "confirm_email";
 
 	var root_url = "https://api.gemini.com/v1/pubticker/";
-	var ct_url = "https://cryptonthus.herokuapp.com/api";
+	var ct_url = exports.ct_url = "https://cryptonthus.herokuapp.com/api";
 	//const ct_url = "http://localhost:8000/api";
 
 	function fetchBTC() {
@@ -41339,7 +41339,6 @@
 	            break;
 	        case _reddit_news.CRY_MAR:
 	            if (action.payload.status === 200) {
-	                debugger;
 	                action.payload.data.data["classType"] = "cryptomarkets";
 	                obj[_reddit_news.NEWS_UPDATE] = { type: action.type, data: action.payload.data };
 	                return Object.assign({}, state, obj);
@@ -50698,16 +50697,17 @@
 	    }, {
 	        key: 'updatePortfolio',
 	        value: function updatePortfolio(coin, type) {
-	            var amt = +this.coinObj[coin].amount;
+	            var amount = +this.coinObj[coin].amount;
 	            if (type === 'add') {
-	                amt += +this.addInput;
-	                this.coinObj[coin].amount = amt;
+	                amount += +this.addInput;
+	                this.coinObj[coin].amount = amount;
 	            }
+	            this.addInput = 0;
 
 	            this.props.updateCoinAPI({
 	                userId: this.props.userId,
 	                type: coin,
-	                value: amt
+	                value: amount
 	            });
 	            this.refs.alertRef.showAlert({ message: "Portfolio Updated!", type: "success" });
 	        }
@@ -50717,6 +50717,7 @@
 	    }, {
 	        key: 'openUpdater',
 	        value: function openUpdater(type) {
+	            this.addInput = 0;
 	            if (type === this.state.updateCoin) {
 	                type = "";
 	            }
@@ -50898,7 +50899,7 @@
 	                        'div',
 	                        { className: 'dash-worth' },
 	                        '$ ',
-	                        amount.toFixed(2)
+	                        amount.toLocaleString(undefined, { minimumFractionDigits: 2 })
 	                    )
 	                ),
 	                _react2.default.createElement(
@@ -106663,7 +106664,7 @@
 	                "span",
 	                { className: "coin-amt" },
 	                "$ ",
-	                coinCurrentValue
+	                coinCurrentValue.toLocaleString()
 	            )
 	        )
 	    );
@@ -106691,7 +106692,8 @@
 	var CoinAmount = exports.CoinAmount = function CoinAmount(props) {
 	    var coin = props.coin,
 	        coinTotal = coin.amount,
-	        coinAmt = (+coin.currVal * coinTotal).toFixed(2).toLocaleString();
+	        coinAmt = (+coin.currVal * coinTotal).toLocaleString(undefined, { minimumFractionDigits: 2 });
+	    debugger;
 	    return _react2.default.createElement(
 	        "div",
 	        { className: "coin-amount" },
@@ -106746,7 +106748,6 @@
 
 	    if (document.querySelector('.coin-intro')) {
 	        width = parseInt(window.getComputedStyle(document.querySelector('.coin-intro')).width) - 20;
-	        debugger;
 	    }
 
 	    if (coin.data.length === 0) {
@@ -107933,7 +107934,7 @@
 /* 1132 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
@@ -107944,6 +107945,12 @@
 	var _react = __webpack_require__(2);
 
 	var _react2 = _interopRequireDefault(_react);
+
+	var _axios = __webpack_require__(508);
+
+	var _axios2 = _interopRequireDefault(_axios);
+
+	var _index = __webpack_require__(507);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -107965,7 +107972,14 @@
 	    }
 
 	    _createClass(NewsReact, [{
-	        key: "render",
+	        key: 'reaction',
+	        value: function reaction(reactionType) {
+	            if (reactionType) {}
+
+	            _axios2.default.post(_index.ct_url + '/portfolio', data);
+	        }
+	    }, {
+	        key: 'render',
 	        value: function render() {
 	            var _this2 = this;
 
@@ -107983,24 +107997,24 @@
 	            }
 
 	            return _react2.default.createElement(
-	                "div",
+	                'div',
 	                { className: commonReactionClass },
 	                _react2.default.createElement(
-	                    "span",
-	                    { className: "reaction reaction-like-span", onClick: function onClick() {
+	                    'span',
+	                    { className: 'reaction reaction-like-span', onClick: function onClick() {
 	                            _this2.reaction(true);
 	                        } },
-	                    _react2.default.createElement("i", { className: "fa fa-thumbs-o-up" }),
-	                    _react2.default.createElement("i", { className: "fa fa-thumbs-up" }),
-	                    "Like"
+	                    _react2.default.createElement('i', { className: 'fa fa-thumbs-o-up' }),
+	                    _react2.default.createElement('i', { className: 'fa fa-thumbs-up' }),
+	                    'Like'
 	                ),
 	                _react2.default.createElement(
-	                    "span",
-	                    { className: "reaction reaction-dislike-span", onClick: function onClick() {
+	                    'span',
+	                    { className: 'reaction reaction-dislike-span', onClick: function onClick() {
 	                            _this2.reaction(false);
 	                        } },
-	                    _react2.default.createElement("i", { className: "fa fa-thumbs-o-down" }),
-	                    _react2.default.createElement("i", { className: "fa fa-thumbs-down" })
+	                    _react2.default.createElement('i', { className: 'fa fa-thumbs-o-down' }),
+	                    _react2.default.createElement('i', { className: 'fa fa-thumbs-down' })
 	                )
 	            );
 	        }
@@ -108168,7 +108182,6 @@
 	        key: 'componentWillMount',
 	        value: function componentWillMount() {
 	            this.props.confirmEmail(this.props.params.userid);
-	            debugger;
 	        }
 	    }, {
 	        key: 'render',
