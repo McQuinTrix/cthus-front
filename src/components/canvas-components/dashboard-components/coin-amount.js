@@ -7,7 +7,8 @@ import React from 'react';
 export const CoinAmount = (props) => {
     let coin = props.coin,
         coinTotal = coin.amount,
-        coinAmt = ((+coin.currVal) * coinTotal).toFixed(2).toLocaleString()
+        coinAmt = ((+coin.currVal) * coinTotal).toLocaleString(undefined,{ minimumFractionDigits: 2 });
+    debugger;
     return (
         <div className="coin-amount">
             <div className="coin-total">

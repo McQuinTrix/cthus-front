@@ -89,22 +89,24 @@ class Dashboard extends React.Component{
     }
 
     updatePortfolio(coin,type){
-        let amt = +this.coinObj[coin].amount;
+        let amount = +this.coinObj[coin].amount;
         if(type === 'add'){
-            amt += +this.addInput;
-            this.coinObj[coin].amount = amt;
+            amount += +this.addInput;
+            this.coinObj[coin].amount = amount;
         }
+        this.addInput = 0;
 
         this.props.updateCoinAPI({
             userId: this.props.userId,
             type: coin,
-            value: amt
+            value: amount
         });
         this.refs.alertRef.showAlert({ message: "Portfolio Updated!", type: "success"});
     }
 
     //Change Coin Value
     openUpdater(type){
+        this.addInput = 0;
         if(type === this.state.updateCoin){
             type = "";
         }
@@ -252,7 +254,7 @@ class Dashboard extends React.Component{
                 <div className="dash-head">
                     <h2 className="dash-h2">Portfolio</h2>
                     <div className="dash-worth">
-                        $ {amount.toFixed(2)}
+                        $ {amount.toLocaleString(undefined,{ minimumFractionDigits: 2 })}
                     </div>
                 </div>
                 <div className="dash-body">

@@ -39549,8 +39549,8 @@
 	var CONFIRM_EMAIL = exports.CONFIRM_EMAIL = "confirm_email";
 
 	var root_url = "https://api.gemini.com/v1/pubticker/";
-	//export const ct_url = "https://cryptonthus.herokuapp.com/api";
-	var ct_url = exports.ct_url = "http://localhost:8000/api";
+	var ct_url = "https://cryptonthus.herokuapp.com/api";
+	//const ct_url = "http://localhost:8000/api";
 
 	function fetchBTC() {
 	    var req = _axios2.default.get(root_url + "/btcusd");
@@ -41339,7 +41339,6 @@
 	            break;
 	        case _reddit_news.CRY_MAR:
 	            if (action.payload.status === 200) {
-	                debugger;
 	                action.payload.data.data["classType"] = "cryptomarkets";
 	                obj[_reddit_news.NEWS_UPDATE] = { type: action.type, data: action.payload.data };
 	                return Object.assign({}, state, obj);
@@ -50698,16 +50697,17 @@
 	    }, {
 	        key: 'updatePortfolio',
 	        value: function updatePortfolio(coin, type) {
-	            var amt = +this.coinObj[coin].amount;
+	            var amount = +this.coinObj[coin].amount;
 	            if (type === 'add') {
-	                amt += +this.addInput;
-	                this.coinObj[coin].amount = amt;
+	                amount += +this.addInput;
+	                this.coinObj[coin].amount = amount;
 	            }
+	            this.addInput = 0;
 
 	            this.props.updateCoinAPI({
 	                userId: this.props.userId,
 	                type: coin,
-	                value: amt
+	                value: amount
 	            });
 	            this.refs.alertRef.showAlert({ message: "Portfolio Updated!", type: "success" });
 	        }
@@ -50717,6 +50717,7 @@
 	    }, {
 	        key: 'openUpdater',
 	        value: function openUpdater(type) {
+	            this.addInput = 0;
 	            if (type === this.state.updateCoin) {
 	                type = "";
 	            }
@@ -50898,7 +50899,7 @@
 	                        'div',
 	                        { className: 'dash-worth' },
 	                        '$ ',
-	                        amount.toFixed(2)
+	                        amount.toLocaleString(undefined, { minimumFractionDigits: 2 })
 	                    )
 	                ),
 	                _react2.default.createElement(
@@ -106663,7 +106664,7 @@
 	                "span",
 	                { className: "coin-amt" },
 	                "$ ",
-	                coinCurrentValue
+	                coinCurrentValue.toLocaleString()
 	            )
 	        )
 	    );
@@ -106691,7 +106692,8 @@
 	var CoinAmount = exports.CoinAmount = function CoinAmount(props) {
 	    var coin = props.coin,
 	        coinTotal = coin.amount,
-	        coinAmt = (+coin.currVal * coinTotal).toFixed(2).toLocaleString();
+	        coinAmt = (+coin.currVal * coinTotal).toLocaleString(undefined, { minimumFractionDigits: 2 });
+	    debugger;
 	    return _react2.default.createElement(
 	        "div",
 	        { className: "coin-amount" },
@@ -107976,21 +107978,7 @@
 	    }
 
 	    _createClass(NewsReact, [{
-	        key: 'onReact',
-	        value: function onReact(reactionType) {
-	            var data = {
-	                postId: this.props.newsDetail.id,
-	                postType: "reddit-post",
-	                userId: window.localStorage.getItem("user_id")
-	            };
-	            //if(this.reactionsObj.hasOwnProperty(reactionType.toLowerCase())){
-	            _axios2.default.post(_index.ct_url + '/action/' + reactionType, data);
-	            //}else{
-	            //console.warn("Unknown Reaction");
-	            //}
-	        }
-	    }, {
-	        key: 'render',
+	        key: "render",
 	        value: function render() {
 	            var _this2 = this;
 
@@ -108012,22 +108000,18 @@
 	                'div',
 	                { className: commonReactionClass },
 	                _react2.default.createElement(
-	                    'span',
-	                    { className: 'reaction reaction-like-span',
-	                        onClick: function onClick(event) {
-	                            event.stopPropagation();
-	                            _this2.onReact(_this2.reactionsObj.like);
+	                    "span",
+	                    { className: "reaction reaction-like-span", onClick: function onClick() {
+	                            _this2.reaction(true);
 	                        } },
 	                    _react2.default.createElement('i', { className: 'fa fa-thumbs-o-up' }),
 	                    _react2.default.createElement('i', { className: 'fa fa-thumbs-up' }),
 	                    'Like'
 	                ),
 	                _react2.default.createElement(
-	                    'span',
-	                    { className: 'reaction reaction-dislike-span',
-	                        onClick: function onClick(event) {
-	                            event.stopPropagation();
-	                            _this2.onReact(_this2.reactionsObj.dislike);
+	                    "span",
+	                    { className: "reaction reaction-dislike-span", onClick: function onClick() {
+	                            _this2.reaction(false);
 	                        } },
 	                    _react2.default.createElement('i', { className: 'fa fa-thumbs-o-down' }),
 	                    _react2.default.createElement('i', { className: 'fa fa-thumbs-down' })
@@ -108198,7 +108182,6 @@
 	        key: 'componentWillMount',
 	        value: function componentWillMount() {
 	            this.props.confirmEmail(this.props.params.userid);
-	            debugger;
 	        }
 	    }, {
 	        key: 'render',
@@ -108222,3 +108205,30 @@
 
 /***/ })
 /******/ ]);
+	//export const ct_url = "https://cryptonthus.herokuapp.com/api";
+	var ct_url = exports.ct_url = "http://localhost:8000/api";
+	        key: 'onReact',
+	        value: function onReact(reactionType) {
+	            var data = {
+	                postId: this.props.newsDetail.id,
+	                postType: "reddit-post",
+	                userId: window.localStorage.getItem("user_id")
+	            };
+	            //if(this.reactionsObj.hasOwnProperty(reactionType.toLowerCase())){
+	            _axios2.default.post(_index.ct_url + '/action/' + reactionType, data);
+	            //}else{
+	            //console.warn("Unknown Reaction");
+	            //}
+	        }
+	    }, {
+	        key: 'render',
+	                    'span',
+	                    { className: 'reaction reaction-like-span',
+	                        onClick: function onClick(event) {
+	                            event.stopPropagation();
+	                            _this2.onReact(_this2.reactionsObj.like);
+	                    'span',
+	                    { className: 'reaction reaction-dislike-span',
+	                        onClick: function onClick(event) {
+	                            event.stopPropagation();
+	                            _this2.onReact(_this2.reactionsObj.dislike);

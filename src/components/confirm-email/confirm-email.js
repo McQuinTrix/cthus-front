@@ -12,7 +12,6 @@ class ConfirmEmailComponent extends React.Component{
 
     componentWillMount(){
         this.props.confirmEmail(this.props.params.userid);
-        debugger;
     }
 
     render(){

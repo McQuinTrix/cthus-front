@@ -29,7 +29,6 @@ export default function (state={},action) {
             break;
         case CRY_MAR:
             if(action.payload.status === 200){
-                debugger;
                 action.payload.data.data["classType"]  = "cryptomarkets";
                 obj[NEWS_UPDATE] = {type: action.type, data:action.payload.data};
                 return Object.assign({}, state, obj);

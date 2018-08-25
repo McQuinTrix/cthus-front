@@ -22,7 +22,7 @@ export const CoinIntro = (props) => {
             <div className="coin-curr">
                 <span className="coin-type">Price</span>
                 <span className="coin-amt">
-                    $ {coinCurrentValue}
+                    $ {coinCurrentValue.toLocaleString()}
                 </span>
             </div>
         </div>
