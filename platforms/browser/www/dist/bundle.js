@@ -39514,7 +39514,7 @@
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
-	exports.CONFIRM_EMAIL = exports.CLEAR_SIGN_IN = exports.ERASE_DATA = exports.GET_DATA = exports.UPDATE_USERINFO = exports.USER_INFO = exports.PROF_UPDATE = exports.PORT_UPDATE = exports.PORT_GET = exports.SIGN_IN = exports.SIGN_UP = exports.FETCH_ETH = exports.FETCH_BTC = undefined;
+	exports.ct_url = exports.CONFIRM_EMAIL = exports.CLEAR_SIGN_IN = exports.ERASE_DATA = exports.GET_DATA = exports.UPDATE_USERINFO = exports.USER_INFO = exports.PROF_UPDATE = exports.PORT_UPDATE = exports.PORT_GET = exports.SIGN_IN = exports.SIGN_UP = exports.FETCH_ETH = exports.FETCH_BTC = undefined;
 	exports.fetchBTC = fetchBTC;
 	exports.fetchETH = fetchETH;
 	exports.signUp = signUp;
@@ -39549,8 +39549,8 @@
 	var CONFIRM_EMAIL = exports.CONFIRM_EMAIL = "confirm_email";
 
 	var root_url = "https://api.gemini.com/v1/pubticker/";
-	var ct_url = "https://cryptonthus.herokuapp.com/api";
-	//const ct_url = "http://localhost:8000/api";
+	//export const ct_url = "https://cryptonthus.herokuapp.com/api";
+	var ct_url = exports.ct_url = "http://localhost:8000/api";
 
 	function fetchBTC() {
 	    var req = _axios2.default.get(root_url + "/btcusd");
@@ -106746,7 +106746,6 @@
 
 	    if (document.querySelector('.coin-intro')) {
 	        width = parseInt(window.getComputedStyle(document.querySelector('.coin-intro')).width) - 20;
-	        debugger;
 	    }
 
 	    if (coin.data.length === 0) {
@@ -107008,7 +107007,7 @@
 	    }, {
 	        key: 'componentWillReceiveProps',
 	        value: function componentWillReceiveProps(nextProps) {
-
+	            debugger;
 	            var signInState = nextProps.sign[_actions.SIGN_IN];
 	            if (signInState && signInState.isSignedIn) {
 
@@ -107933,7 +107932,7 @@
 /* 1132 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
@@ -107944,6 +107943,12 @@
 	var _react = __webpack_require__(2);
 
 	var _react2 = _interopRequireDefault(_react);
+
+	var _axios = __webpack_require__(508);
+
+	var _axios2 = _interopRequireDefault(_axios);
+
+	var _index = __webpack_require__(507);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -107961,11 +107966,31 @@
 	    function NewsReact(props) {
 	        _classCallCheck(this, NewsReact);
 
-	        return _possibleConstructorReturn(this, (NewsReact.__proto__ || Object.getPrototypeOf(NewsReact)).call(this, props));
+	        var _this = _possibleConstructorReturn(this, (NewsReact.__proto__ || Object.getPrototypeOf(NewsReact)).call(this, props));
+
+	        _this.reactionsObj = {
+	            "like": "2A6NBDFJTX6HCDT8",
+	            "dislike": "VO75CLDFDNPB85W4"
+	        };
+	        return _this;
 	    }
 
 	    _createClass(NewsReact, [{
-	        key: "render",
+	        key: 'onReact',
+	        value: function onReact(reactionType) {
+	            var data = {
+	                postId: this.props.newsDetail.id,
+	                postType: "reddit-post",
+	                userId: window.localStorage.getItem("user_id")
+	            };
+	            //if(this.reactionsObj.hasOwnProperty(reactionType.toLowerCase())){
+	            _axios2.default.post(_index.ct_url + '/action/' + reactionType, data);
+	            //}else{
+	            //console.warn("Unknown Reaction");
+	            //}
+	        }
+	    }, {
+	        key: 'render',
 	        value: function render() {
 	            var _this2 = this;
 
@@ -107973,6 +107998,7 @@
 	                userDetail = this.props.userDetail,
 	                commonReactionClass = "news-reaction";
 
+	            debugger;
 	            if (newsDetail.id && userDetail.reactions && userDetail.reactions.hasOwnProperty(newsDetail.name)) {
 
 	                if (userDetail.reactions[newsDetail.id]) {
@@ -107983,24 +108009,28 @@
 	            }
 
 	            return _react2.default.createElement(
-	                "div",
+	                'div',
 	                { className: commonReactionClass },
 	                _react2.default.createElement(
-	                    "span",
-	                    { className: "reaction reaction-like-span", onClick: function onClick() {
-	                            _this2.reaction(true);
+	                    'span',
+	                    { className: 'reaction reaction-like-span',
+	                        onClick: function onClick(event) {
+	                            event.stopPropagation();
+	                            _this2.onReact(_this2.reactionsObj.like);
 	                        } },
-	                    _react2.default.createElement("i", { className: "fa fa-thumbs-o-up" }),
-	                    _react2.default.createElement("i", { className: "fa fa-thumbs-up" }),
-	                    "Like"
+	                    _react2.default.createElement('i', { className: 'fa fa-thumbs-o-up' }),
+	                    _react2.default.createElement('i', { className: 'fa fa-thumbs-up' }),
+	                    'Like'
 	                ),
 	                _react2.default.createElement(
-	                    "span",
-	                    { className: "reaction reaction-dislike-span", onClick: function onClick() {
-	                            _this2.reaction(false);
+	                    'span',
+	                    { className: 'reaction reaction-dislike-span',
+	                        onClick: function onClick(event) {
+	                            event.stopPropagation();
+	                            _this2.onReact(_this2.reactionsObj.dislike);
 	                        } },
-	                    _react2.default.createElement("i", { className: "fa fa-thumbs-o-down" }),
-	                    _react2.default.createElement("i", { className: "fa fa-thumbs-down" })
+	                    _react2.default.createElement('i', { className: 'fa fa-thumbs-o-down' }),
+	                    _react2.default.createElement('i', { className: 'fa fa-thumbs-down' })
 	                )
 	            );
 	        }
