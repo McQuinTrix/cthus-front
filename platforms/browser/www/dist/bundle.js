@@ -39514,7 +39514,7 @@
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
-	exports.ct_url = exports.CONFIRM_EMAIL = exports.CLEAR_SIGN_IN = exports.ERASE_DATA = exports.GET_DATA = exports.UPDATE_USERINFO = exports.USER_INFO = exports.PROF_UPDATE = exports.PORT_UPDATE = exports.PORT_GET = exports.SIGN_IN = exports.SIGN_UP = exports.FETCH_ETH = exports.FETCH_BTC = undefined;
+	exports.ct_url = exports.USER_REACTIONS = exports.CONFIRM_EMAIL = exports.CLEAR_SIGN_IN = exports.ERASE_DATA = exports.GET_DATA = exports.UPDATE_USERINFO = exports.USER_INFO = exports.PROF_UPDATE = exports.PORT_UPDATE = exports.PORT_GET = exports.SIGN_IN = exports.SIGN_UP = exports.FETCH_ETH = exports.FETCH_BTC = undefined;
 	exports.fetchBTC = fetchBTC;
 	exports.fetchETH = fetchETH;
 	exports.signUp = signUp;
@@ -39527,6 +39527,7 @@
 	exports.confirmEmail = confirmEmail;
 	exports.eraseData = eraseData;
 	exports.clearSignIn = clearSignIn;
+	exports.getReaction = getReaction;
 
 	var _axios = __webpack_require__(508);
 
@@ -39534,23 +39535,24 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var FETCH_BTC = exports.FETCH_BTC = "fetch_btc";
-	var FETCH_ETH = exports.FETCH_ETH = "fetch_eth";
-	var SIGN_UP = exports.SIGN_UP = "sign_up";
-	var SIGN_IN = exports.SIGN_IN = "sign_in";
-	var PORT_GET = exports.PORT_GET = "port_get";
-	var PORT_UPDATE = exports.PORT_UPDATE = "port_update";
-	var PROF_UPDATE = exports.PROF_UPDATE = "prof_update";
-	var USER_INFO = exports.USER_INFO = "get_userInfo";
-	var UPDATE_USERINFO = exports.UPDATE_USERINFO = "update_userInfo";
-	var GET_DATA = exports.GET_DATA = "get_data";
-	var ERASE_DATA = exports.ERASE_DATA = "erase_data";
-	var CLEAR_SIGN_IN = exports.CLEAR_SIGN_IN = "clear_sign_in";
-	var CONFIRM_EMAIL = exports.CONFIRM_EMAIL = "confirm_email";
+	var FETCH_BTC = exports.FETCH_BTC = "fetch_btc",
+	    FETCH_ETH = exports.FETCH_ETH = "fetch_eth",
+	    SIGN_UP = exports.SIGN_UP = "sign_up",
+	    SIGN_IN = exports.SIGN_IN = "sign_in",
+	    PORT_GET = exports.PORT_GET = "port_get",
+	    PORT_UPDATE = exports.PORT_UPDATE = "port_update",
+	    PROF_UPDATE = exports.PROF_UPDATE = "prof_update",
+	    USER_INFO = exports.USER_INFO = "get_userInfo",
+	    UPDATE_USERINFO = exports.UPDATE_USERINFO = "update_userInfo",
+	    GET_DATA = exports.GET_DATA = "get_data",
+	    ERASE_DATA = exports.ERASE_DATA = "erase_data",
+	    CLEAR_SIGN_IN = exports.CLEAR_SIGN_IN = "clear_sign_in",
+	    CONFIRM_EMAIL = exports.CONFIRM_EMAIL = "confirm_email",
+	    USER_REACTIONS = exports.USER_REACTIONS = "user_reactions";
 
 	var root_url = "https://api.gemini.com/v1/pubticker/";
-	var ct_url = "https://cryptonthus.herokuapp.com/api";
-	//const ct_url = "http://localhost:8000/api";
+	//export const ct_url = "https://cryptonthus.herokuapp.com/api";
+	var ct_url = exports.ct_url = "http://localhost:8000/api";
 
 	function fetchBTC() {
 	    var req = _axios2.default.get(root_url + "/btcusd");
@@ -39653,6 +39655,15 @@
 	    return {
 	        type: CLEAR_SIGN_IN,
 	        payload: ""
+	    };
+	}
+
+	function getReaction(postArr, userId) {
+	    var request = _axios2.default.post(ct_url + "/user-reaction/" + userId, { ids: postArr });
+
+	    return {
+	        type: USER_REACTIONS,
+	        payload: request
 	    };
 	}
 
@@ -41258,18 +41269,21 @@
 	                return Object.assign({}, state, obj);
 	            }
 	            break;
+
 	        case _index.USER_INFO:
 	            if (action.payload.status === 200) {
 	                obj[_index.USER_INFO] = action.payload.data;
 	                return Object.assign({}, state, obj);
 	            }
 	            break;
+
 	        case _index.UPDATE_USERINFO:
 	            if (action.payload.status === 200) {
 	                obj[_index.UPDATE_USERINFO] = action.payload.data;
 	                return Object.assign({}, state, obj);
 	            }
 	            break;
+
 	        case _index.GET_DATA:
 	            if (action.payload.status === 200) {
 	                obj[_index.GET_DATA] = action.payload.data;
@@ -41285,12 +41299,23 @@
 	            obj[_index.SIGN_IN] = {};
 	            return Object.assign({}, state, obj);
 	            break;
+
 	        case _index.CONFIRM_EMAIL:
-	            if (action.payload.status) {
+	            if (action.payload.status && action.payload.status === 200) {
+
 	                obj[_index.CONFIRM_EMAIL] = action.payload.data;
 	            }
 	            return Object.assign({}, state, obj);
 	            break;
+
+	        case _index.USER_REACTIONS:
+	            if (action.payload.status && action.payload.status === 200) {
+	                obj[_index.USER_REACTIONS] = action.payload.data;
+	            }
+
+	            return Object.assign({}, state, obj);
+	            break;
+
 	        default:
 	            return state;
 	            break;
@@ -106693,7 +106718,7 @@
 	    var coin = props.coin,
 	        coinTotal = coin.amount,
 	        coinAmt = (+coin.currVal * coinTotal).toLocaleString(undefined, { minimumFractionDigits: 2 });
-	    debugger;
+
 	    return _react2.default.createElement(
 	        "div",
 	        { className: "coin-amount" },
@@ -107009,7 +107034,6 @@
 	    }, {
 	        key: 'componentWillReceiveProps',
 	        value: function componentWillReceiveProps(nextProps) {
-	            debugger;
 	            var signInState = nextProps.sign[_actions.SIGN_IN];
 	            if (signInState && signInState.isSignedIn) {
 
@@ -107377,7 +107401,7 @@
 	                        _react2.default.createElement(
 	                            'div',
 	                            { className: 'news-block ' + (currentState === canvasState.news ? '' : 'hide') },
-	                            _react2.default.createElement(_news2.default, null)
+	                            _react2.default.createElement(_news2.default, { userId: userId })
 	                        ),
 	                        _react2.default.createElement(
 	                            'div',
@@ -107632,6 +107656,8 @@
 
 	var _reddit_news = __webpack_require__(536);
 
+	var _index = __webpack_require__(507);
+
 	var _moment = __webpack_require__(548);
 
 	var _moment2 = _interopRequireDefault(_moment);
@@ -107666,6 +107692,8 @@
 	        var _this = _possibleConstructorReturn(this, (News.__proto__ || Object.getPrototypeOf(News)).call(this, props));
 
 	        _this.newsObj = {};
+	        _this.newsIdArr = [];
+	        _this.newsIdChanged = false;
 
 	        _this.newsObj[_reddit_news.BTC_NEWS] = {};
 	        _this.newsObj[_reddit_news.ETH_NEWS] = {};
@@ -107678,17 +107706,6 @@
 
 
 	    _createClass(News, [{
-	        key: 'formNewsComp',
-	        value: function formNewsComp(type, classType) {
-	            var newsHTML = [];
-
-	            this.newsObj[type].children.forEach(function (item, index) {
-	                newsHTML.push(_react2.default.createElement(_newsBox2.default, { article: item, key: index, classType: classType }));
-	            });
-
-	            return newsHTML;
-	        }
-	    }, {
 	        key: 'componentWillMount',
 	        value: function componentWillMount() {
 	            this.props.getNews(_reddit_news.CRYPTO, 15);
@@ -107697,8 +107714,72 @@
 	            this.props.getNews(_reddit_news.CRY_MAR, 15);
 	        }
 	    }, {
+	        key: 'componentWillReceiveProps',
+	        value: function componentWillReceiveProps(nextProps) {
+	            var news_update = nextProps.news[_reddit_news.NEWS_UPDATE];
+
+	            if (news_update && news_update.hasOwnProperty("data")) {
+	                this.newsObj[news_update.type] = this.cleanData(news_update.data.data, news_update.type);
+	                if (this.newsIdChanged) {
+	                    this.getReactionAPI(this.newsIdArr);
+	                }
+	            }
+	        }
+	    }, {
+	        key: 'formSectionComponent',
+	        value: function formSectionComponent() {
+	            var _this2 = this;
+
+	            var sectionComp = [];
+
+	            Object.keys(this.newsObj).forEach(function (item, index) {
+
+	                if (!_this2.newsObj[item].hasOwnProperty("children")) {
+	                    return;
+	                }
+
+	                var children = _this2.newsObj[item].children,
+	                    classType = _this2.newsObj[item].classType;
+
+	                if (Array.isArray(children)) {
+	                    var sectionHTML = _react2.default.createElement(
+	                        'div',
+	                        { className: 'news-cover', key: index },
+	                        _react2.default.createElement(
+	                            'h3',
+	                            { className: 'news-head' },
+	                            item
+	                        ),
+	                        _react2.default.createElement(
+	                            'div',
+	                            { className: 'news-links' },
+	                            _this2.formNewsComp(item, classType)
+	                        )
+	                    );
+	                    sectionComp.push(sectionHTML);
+	                }
+	            });
+
+	            return sectionComp;
+	        }
+	    }, {
+	        key: 'formNewsComp',
+	        value: function formNewsComp(type, classType) {
+	            var newsHTML = [];
+
+	            this.newsObj[type].children.forEach(function (item, index) {
+	                newsHTML.push(_react2.default.createElement(_newsBox2.default, { article: item,
+	                    key: index,
+	                    classType: classType }));
+	            });
+
+	            return newsHTML;
+	        }
+	    }, {
 	        key: 'cleanData',
 	        value: function cleanData(data, type) {
+	            var _this3 = this;
+
 	            var regex = void 0,
 	                propToCheck = "",
 	                isMatch = false;
@@ -107732,56 +107813,30 @@
 	            }
 	            data.children = data.children.filter(function (elem, index) {
 	                if (elem.data[propToCheck]) {
-	                    if (elem.data[propToCheck].match(regex) && isMatch) {
-	                        return true;
-	                    } else if (!elem.data[propToCheck].match(regex) && !isMatch) {
+	                    if (elem.data[propToCheck].match(regex) && isMatch || !elem.data[propToCheck].match(regex) && !isMatch) {
+
+	                        if (_this3.newsIdArr.indexOf(elem.data.id) < 0) {
+	                            _this3.newsIdArr.push(elem.data.id);
+	                            _this3.newsIdChanged = true;
+	                        }
 	                        return true;
 	                    }
 	                }
 	                return false;
 	            });
+
 	            return data;
 	        }
 	    }, {
-	        key: 'componentWillReceiveProps',
-	        value: function componentWillReceiveProps(nextProps) {
-	            var news_update = nextProps.news[_reddit_news.NEWS_UPDATE];
-
-	            if (news_update && news_update.hasOwnProperty("data")) {
-	                this.newsObj[news_update.type] = this.cleanData(news_update.data.data, news_update.type);
-	            }
+	        key: 'getReactionAPI',
+	        value: function getReactionAPI(postArr) {
+	            this.props.getReaction(postArr, this.props.userId);
+	            this.newsIdChanged = false;
 	        }
 	    }, {
 	        key: 'render',
 	        value: function render() {
-	            var _this2 = this;
-
-	            var sectionComp = [];
-
-	            Object.keys(this.newsObj).forEach(function (item, index) {
-	                if (!_this2.newsObj[item].hasOwnProperty("children")) {
-	                    return;
-	                }
-	                var children = _this2.newsObj[item].children,
-	                    classType = _this2.newsObj[item].classType;
-	                if (Array.isArray(children)) {
-	                    var sectionHTML = _react2.default.createElement(
-	                        'div',
-	                        { className: 'news-cover', key: index },
-	                        _react2.default.createElement(
-	                            'h3',
-	                            { className: 'news-head' },
-	                            item
-	                        ),
-	                        _react2.default.createElement(
-	                            'div',
-	                            { className: 'news-links' },
-	                            _this2.formNewsComp(item, classType)
-	                        )
-	                    );
-	                    sectionComp.push(sectionHTML);
-	                }
-	            });
+	            var sectionComp = this.formSectionComponent();
 
 	            return _react2.default.createElement(
 	                'div',
@@ -107797,11 +107852,12 @@
 	function mapStateToProps(state) {
 	    return {
 	        tick: state.ticker,
-	        news: state.news
+	        news: state.news,
+	        sign: state.sign
 	    };
 	}
 
-	exports.default = (0, _reactRedux.connect)(mapStateToProps, { getNews: _reddit_news.getNews })(News);
+	exports.default = (0, _reactRedux.connect)(mapStateToProps, { getNews: _reddit_news.getNews, getReaction: _index.getReaction })(News);
 
 /***/ }),
 /* 1130 */
@@ -107946,6 +108002,8 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
+	var _reactRedux = __webpack_require__(160);
+
 	var _axios = __webpack_require__(508);
 
 	var _axios2 = _interopRequireDefault(_axios);
@@ -107974,24 +108032,65 @@
 	            "like": "2A6NBDFJTX6HCDT8",
 	            "dislike": "VO75CLDFDNPB85W4"
 	        };
+
+	        _this.state = {
+	            userReactions: {}
+	        };
 	        return _this;
 	    }
 
 	    _createClass(NewsReact, [{
-	        key: "render",
+	        key: 'onReact',
+	        value: function onReact(reactionType) {
+	            var userId = window.localStorage.getItem("user_id"),
+	                data = {
+	                postId: this.props.newsDetail.id,
+	                postType: "reddit-post",
+	                userId: userId
+	            },
+	                userReactions = this.state.userReactions;
+	            if (userReactions.hasOwnProperty('reactions')) {
+	                userReactions.reactions[userId].reactionType = reactionType;
+	            } else {
+	                userReactions = {
+	                    reactions: {}
+	                };
+	                userReactions.reactions[userId] = {
+	                    reactionType: reactionType
+	                };
+	            }
+	            this.setState({ userReactions: userReactions });
+
+	            _axios2.default.post(_index.ct_url + '/action/' + reactionType, data);
+	        }
+	    }, {
+	        key: 'componentWillReceiveProps',
+	        value: function componentWillReceiveProps(nextProps) {
+	            var userReactions = this.state.userReactions;
+	            if (nextProps.sign[_index.USER_REACTIONS]) {
+	                userReactions = nextProps.sign[_index.USER_REACTIONS].data.filter(function (item, index) {
+	                    return item._id === this.props.newsDetail.id;
+	                }, this)[0] || userReactions;
+	                this.setState({ userReactions: userReactions });
+	            }
+	        }
+	    }, {
+	        key: 'render',
 	        value: function render() {
 	            var _this2 = this;
 
 	            var newsDetail = this.props.newsDetail,
 	                userDetail = this.props.userDetail,
-	                commonReactionClass = "news-reaction";
+	                commonReactionClass = "news-reaction",
+	                userId = window.localStorage.getItem("user_id");
 
-	            debugger;
-	            if (newsDetail.id && userDetail.reactions && userDetail.reactions.hasOwnProperty(newsDetail.name)) {
+	            if (this.state.userReactions.hasOwnProperty('reactions') && this.state.userReactions.reactions.hasOwnProperty(userId)) {
 
-	                if (userDetail.reactions[newsDetail.id]) {
+	                var reactionType = this.state.userReactions.reactions[userId].reactionType;
+
+	                if (reactionType === this.reactionsObj.like) {
 	                    commonReactionClass += " reaction-like";
-	                } else {
+	                } else if (reactionType === this.reactionsObj.dislike) {
 	                    commonReactionClass += " reaction-dislike";
 	                }
 	            }
@@ -108000,18 +108099,22 @@
 	                'div',
 	                { className: commonReactionClass },
 	                _react2.default.createElement(
-	                    "span",
-	                    { className: "reaction reaction-like-span", onClick: function onClick() {
-	                            _this2.reaction(true);
+	                    'span',
+	                    { className: 'reaction reaction-like-span',
+	                        onClick: function onClick(event) {
+	                            event.stopPropagation();
+	                            _this2.onReact(_this2.reactionsObj.like);
 	                        } },
 	                    _react2.default.createElement('i', { className: 'fa fa-thumbs-o-up' }),
 	                    _react2.default.createElement('i', { className: 'fa fa-thumbs-up' }),
 	                    'Like'
 	                ),
 	                _react2.default.createElement(
-	                    "span",
-	                    { className: "reaction reaction-dislike-span", onClick: function onClick() {
-	                            _this2.reaction(false);
+	                    'span',
+	                    { className: 'reaction reaction-dislike-span',
+	                        onClick: function onClick(event) {
+	                            event.stopPropagation();
+	                            _this2.onReact(_this2.reactionsObj.dislike);
 	                        } },
 	                    _react2.default.createElement('i', { className: 'fa fa-thumbs-o-down' }),
 	                    _react2.default.createElement('i', { className: 'fa fa-thumbs-down' })
@@ -108023,7 +108126,13 @@
 	    return NewsReact;
 	}(_react2.default.Component);
 
-	exports.default = NewsReact;
+	function mapStateToProps(state) {
+	    return {
+	        sign: state.sign
+	    };
+	}
+
+	exports.default = (0, _reactRedux.connect)(mapStateToProps, {})(NewsReact);
 
 /***/ }),
 /* 1133 */
@@ -108205,30 +108314,3 @@
 
 /***/ })
 /******/ ]);
-	//export const ct_url = "https://cryptonthus.herokuapp.com/api";
-	var ct_url = exports.ct_url = "http://localhost:8000/api";
-	        key: 'onReact',
-	        value: function onReact(reactionType) {
-	            var data = {
-	                postId: this.props.newsDetail.id,
-	                postType: "reddit-post",
-	                userId: window.localStorage.getItem("user_id")
-	            };
-	            //if(this.reactionsObj.hasOwnProperty(reactionType.toLowerCase())){
-	            _axios2.default.post(_index.ct_url + '/action/' + reactionType, data);
-	            //}else{
-	            //console.warn("Unknown Reaction");
-	            //}
-	        }
-	    }, {
-	        key: 'render',
-	                    'span',
-	                    { className: 'reaction reaction-like-span',
-	                        onClick: function onClick(event) {
-	                            event.stopPropagation();
-	                            _this2.onReact(_this2.reactionsObj.like);
-	                    'span',
-	                    { className: 'reaction reaction-dislike-span',
-	                        onClick: function onClick(event) {
-	                            event.stopPropagation();
-	                            _this2.onReact(_this2.reactionsObj.dislike);

@@ -20,10 +20,11 @@ export default class NewsBox extends React.Component{
             data = article.data,
             className = "news-container news-"+(this.props.classType || "");
 
-        return (<div className={className}
-                     onClick={()=>{this.itemClick(data)}}>
-                    <NewsThumbnail data={data}/>
-                    <NewsDesc data={data}/>
-                </div>)
+        return (
+            <div className={className}
+                 onClick={()=>{this.itemClick(data)}}>
+                <NewsThumbnail data={data}/>
+                <NewsDesc data={data}/>
+            </div>)
     }
 }

@@ -1,6 +1,7 @@
 import { SIGN_UP, SIGN_IN, PORT_GET, PORT_UPDATE,
         PROF_UPDATE, USER_INFO,UPDATE_USERINFO,
-        GET_DATA,ERASE_DATA, CLEAR_SIGN_IN, CONFIRM_EMAIL } from '../actions/index';
+        GET_DATA,ERASE_DATA, CLEAR_SIGN_IN,
+        CONFIRM_EMAIL,USER_REACTIONS } from '../actions/index';
 
 export default function (state={},action) {
     let obj = {};
@@ -45,19 +46,22 @@ export default function (state={},action) {
                 obj[PROF_UPDATE] = action.payload.data;
                 return Object.assign({},state, obj);
             }
-        break;
+            break;
+
         case USER_INFO:
             if(action.payload.status === 200){
                 obj[USER_INFO] = action.payload.data;
                 return Object.assign({},state, obj);
             }
             break;
+
         case UPDATE_USERINFO:
             if(action.payload.status === 200){
                 obj[UPDATE_USERINFO] = action.payload.data;
                 return Object.assign({},state, obj);
             }
             break;
+
         case GET_DATA:
             if(action.payload.status === 200){
                 obj[GET_DATA] = action.payload.data;
@@ -73,12 +77,25 @@ export default function (state={},action) {
             obj[SIGN_IN] = {};
             return Object.assign({},state,obj);
             break;
+
         case CONFIRM_EMAIL:
-            if(action.payload.status) {
+            if(action.payload.status
+                && action.payload.status === 200) {
+
                 obj[CONFIRM_EMAIL] = action.payload.data;
             }
             return Object.assign({},state,obj);
             break;
+
+        case USER_REACTIONS:
+            if(action.payload.status
+                && action.payload.status === 200) {
+                obj[USER_REACTIONS] = action.payload.data;
+            }
+
+            return Object.assign({},state,obj);
+            break;
+
         default:
             return state;
             break;

@@ -3,12 +3,16 @@
  */
 
 import React from 'react';
+import { connect } from "react-redux";
 import axios from 'axios';
-import {ct_url} from '../../../../../actions/index';
+import {ct_url,USER_REACTIONS} from '../../../../../actions/index';
 
-export default class NewsReact extends React.Component {
+class NewsReact extends React.Component {
     constructor(props){
         super(props);
+        this.state = {
+            userReactions : {}
+        }
     }
 
     reactionsObj = {
@@ -17,31 +21,51 @@ export default class NewsReact extends React.Component {
     };
 
     onReact(reactionType){
-        let data = {
+        let userId = window.localStorage.getItem("user_id"),
+            data = {
             postId: this.props.newsDetail.id,
             postType: "reddit-post",
-            userId: window.localStorage.getItem("user_id")
-        };
-        //if(this.reactionsObj.hasOwnProperty(reactionType.toLowerCase())){
-        axios.post(`${ct_url}/action/${reactionType}`,data)
-        //}else{
-        //console.warn("Unknown Reaction");
-        //}
+            userId: userId
+        }, userReactions = this.state.userReactions;
+        if(userReactions.hasOwnProperty('reactions')){
+            userReactions.reactions[userId].reactionType = reactionType;
+        }else{
+            userReactions ={
+                reactions: {}
+            };
+            userReactions.reactions[userId] = {
+                reactionType: reactionType
+            }
+        }
+        this.setState({userReactions: userReactions});
+
+        axios.post(`${ct_url}/action/${reactionType}`,data);
+    }
+
+    componentWillReceiveProps(nextProps){
+        let userReactions = this.state.userReactions;
+        if(nextProps.sign[USER_REACTIONS]){
+            userReactions = nextProps.sign[USER_REACTIONS].data.filter(function(item, index){
+                return item._id === this.props.newsDetail.id;
+            },this)[0] || userReactions;
+            this.setState({userReactions: userReactions});
+        }
     }
 
     render(){
         let newsDetail = this.props.newsDetail,
             userDetail = this.props.userDetail,
-            commonReactionClass = "news-reaction";
+            commonReactionClass = "news-reaction",
+            userId = window.localStorage.getItem("user_id");
 
-        debugger;
-        if( newsDetail.id &&
-            userDetail.reactions &&
-            userDetail.reactions.hasOwnProperty(newsDetail.name)){
+        if(this.state.userReactions.hasOwnProperty('reactions')
+            && this.state.userReactions.reactions.hasOwnProperty(userId)){
 
-            if(userDetail.reactions[newsDetail.id]){
+            let reactionType = this.state.userReactions.reactions[userId].reactionType;
+
+            if(reactionType === this.reactionsObj.like){
                 commonReactionClass += " reaction-like";
-            }else{
+            }else if(reactionType === this.reactionsObj.dislike){
                 commonReactionClass += " reaction-dislike";
             }
         }
@@ -71,3 +95,12 @@ export default class NewsReact extends React.Component {
         );
     }
 }
+
+
+function mapStateToProps(state) {
+    return {
+        sign: state.sign
+    }
+}
+
+export default connect(mapStateToProps, {})(NewsReact);

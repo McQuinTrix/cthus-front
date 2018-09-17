@@ -150,7 +150,7 @@ class Canvas extends React.Component{
 
                         {/** Reddit News/Comments **/}
                         <div className={`news-block ${currentState === canvasState.news ? '' : 'hide'}`}>
-                            <News/>
+                            <News userId={userId}/>
                         </div>
 
                         {/** Profile **/}

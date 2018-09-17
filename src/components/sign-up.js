@@ -96,7 +96,6 @@ class SignUp extends React.Component{
     }
 
     componentWillReceiveProps(nextProps){
-        debugger;
         let signInState = nextProps.sign[SIGN_IN];
         if( signInState && signInState.isSignedIn){
 

@@ -238,8 +238,8 @@ html, body, #crypton-body, .canvas-container {
   position: relative;
   top: -3px; }
   .dash-worth span {
-    display: inline-block;
-    padding: 1px 1em; }
+    padding: 0px 1em 1px;
+    display: inline-block; }
   .dash-worth span:first-child {
     background-color: #00aebf; }
 

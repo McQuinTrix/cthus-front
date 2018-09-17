@@ -1,18 +1,19 @@
 import axios from "axios";
 
-export const FETCH_BTC = "fetch_btc";
-export const FETCH_ETH = "fetch_eth";
-export const SIGN_UP = "sign_up";
-export const SIGN_IN = "sign_in";
-export const PORT_GET = "port_get";
-export const PORT_UPDATE = "port_update";
-export const PROF_UPDATE = "prof_update";
-export const USER_INFO = "get_userInfo";
-export const UPDATE_USERINFO = "update_userInfo";
-export const GET_DATA = "get_data";
-export const ERASE_DATA = "erase_data";
-export const CLEAR_SIGN_IN = "clear_sign_in";
-export const CONFIRM_EMAIL = "confirm_email";
+export const FETCH_BTC = "fetch_btc",
+    FETCH_ETH = "fetch_eth",
+    SIGN_UP = "sign_up",
+    SIGN_IN = "sign_in",
+    PORT_GET = "port_get",
+    PORT_UPDATE = "port_update",
+    PROF_UPDATE = "prof_update",
+    USER_INFO = "get_userInfo",
+    UPDATE_USERINFO = "update_userInfo",
+    GET_DATA = "get_data",
+    ERASE_DATA = "erase_data",
+    CLEAR_SIGN_IN = "clear_sign_in",
+    CONFIRM_EMAIL = "confirm_email",
+    USER_REACTIONS = "user_reactions";
 
 const root_url = "https://api.gemini.com/v1/pubticker/";
 //export const ct_url = "https://cryptonthus.herokuapp.com/api";
@@ -101,7 +102,7 @@ export function getData(type){
 }
 
 export function confirmEmail(userId) {
-    const request = axios.post(`${ct_url}/confirm-email/${userId}`)
+    const request = axios.post(`${ct_url}/confirm-email/${userId}`);
 
     return {
         type: CONFIRM_EMAIL,
@@ -120,5 +121,14 @@ export function clearSignIn() {
     return {
         type: CLEAR_SIGN_IN,
         payload: ""
+    }
+}
+
+export function getReaction(postArr,userId){
+    const request = axios.post(`${ct_url}/user-reaction/${userId}`,{ids: postArr});
+
+    return {
+        type: USER_REACTIONS,
+        payload: request
     }
 }
