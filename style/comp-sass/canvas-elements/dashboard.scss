@@ -1,0 +1,91 @@
+.coin-intro{
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+}
+.coin-name{
+  padding: 4px 10px 0;
+  font-size: 2vh;
+  font-weight: bold;
+}
+
+.coin-image-cover{
+  .coin-image{
+    height: 25px;
+  }
+}
+
+.coin-amount{
+  font-weight: lighter;
+  font-size: 2vh;
+  display: flex;
+  align-items: center;
+  padding: 0 10px 10px 15px;
+  justify-content: space-between;
+}
+
+.coin-intro-cover{
+  display: flex;
+  padding: 1px 4px;
+}
+
+.coin-curr{
+  display: inline-block;
+  border: 2px solid #b32222;
+  border-radius: 3px;
+  font-size: 13px;
+  height: 18px;
+  margin-top: 3px;
+}
+
+.coin-short{
+  .coin-curr{
+    display: inline-block;
+    border-radius: 3px;
+
+    span{
+      display: inline-block;
+      padding: 0px 5px;
+    }
+  }
+}
+.coin-amount{
+  .coin-fiat{
+    padding-bottom: 5px;
+  }
+}
+
+$green:#268426;
+$lightGreen:#72ff72;
+$red:#b32222;
+$lightRed: #ff4b4b;
+
+.coin-short.up-tick{
+  .coin-curr{
+    border: 2px solid $green;
+  }
+  .coin-type{
+    background-color: $green;
+  }
+  .coin-amount .coin-fiat{
+    color: $lightGreen;
+  }
+}
+
+.coin-short.down-tick{
+  .coin-curr{
+    border: 2px solid $red;
+  }
+  .coin-type{
+    background-color: $red;
+  }
+  .coin-amount .coin-fiat{
+    color: $lightRed;
+  }
+}
+
+.coin-update-cover{
+  .coin-update{
+    padding: 8px 10px;
+  }
+}

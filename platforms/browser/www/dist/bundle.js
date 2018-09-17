@@ -87,20 +87,22 @@
 
 	var _loadLogo2 = _interopRequireDefault(_loadLogo);
 
-	var _signUp = __webpack_require__(1123);
+	var _signUp = __webpack_require__(1126);
 
 	var _signUp2 = _interopRequireDefault(_signUp);
 
-	var _canvas = __webpack_require__(1124);
+	var _canvas = __webpack_require__(1127);
 
 	var _canvas2 = _interopRequireDefault(_canvas);
 
+	var _confirmEmail = __webpack_require__(1135);
+
+	var _confirmEmail2 = _interopRequireDefault(_confirmEmail);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var createStoreWithMiddleware = (0, _redux.applyMiddleware)(_reduxPromise2.default)(_redux.createStore);
-
 	//Components
-
+	var createStoreWithMiddleware = (0, _redux.applyMiddleware)(_reduxPromise2.default)(_redux.createStore);
 
 	_reactDom2.default.render(_react2.default.createElement(
 	    _reactRedux.Provider,
@@ -111,6 +113,7 @@
 	        _react2.default.createElement(
 	            'div',
 	            null,
+	            _react2.default.createElement(_reactRouter.Route, { path: '/confirm-email/:userid', components: _confirmEmail2.default }),
 	            _react2.default.createElement(_reactRouter.Route, { path: '/canvas/:userid', components: _canvas2.default }),
 	            _react2.default.createElement(_reactRouter.Route, { path: '/signup/:id', component: _signUp2.default }),
 	            _react2.default.createElement(_reactRouter.Route, { path: '/dashboard', component: _dashboard2.default }),
@@ -39511,7 +39514,7 @@
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
-	exports.CLEAR_SIGN_IN = exports.ERASE_DATA = exports.GET_DATA = exports.UPDATE_USERINFO = exports.USER_INFO = exports.PROF_UPDATE = exports.PORT_UPDATE = exports.PORT_GET = exports.SIGN_IN = exports.SIGN_UP = exports.FETCH_ETH = exports.FETCH_BTC = undefined;
+	exports.ct_url = exports.USER_REACTIONS = exports.CONFIRM_EMAIL = exports.CLEAR_SIGN_IN = exports.ERASE_DATA = exports.GET_DATA = exports.UPDATE_USERINFO = exports.USER_INFO = exports.PROF_UPDATE = exports.PORT_UPDATE = exports.PORT_GET = exports.SIGN_IN = exports.SIGN_UP = exports.FETCH_ETH = exports.FETCH_BTC = undefined;
 	exports.fetchBTC = fetchBTC;
 	exports.fetchETH = fetchETH;
 	exports.signUp = signUp;
@@ -39521,8 +39524,10 @@
 	exports.updateUser = updateUser;
 	exports.signIn = signIn;
 	exports.getData = getData;
+	exports.confirmEmail = confirmEmail;
 	exports.eraseData = eraseData;
 	exports.clearSignIn = clearSignIn;
+	exports.getReaction = getReaction;
 
 	var _axios = __webpack_require__(508);
 
@@ -39530,22 +39535,24 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var FETCH_BTC = exports.FETCH_BTC = "fetch_btc";
-	var FETCH_ETH = exports.FETCH_ETH = "fetch_eth";
-	var SIGN_UP = exports.SIGN_UP = "sign_up";
-	var SIGN_IN = exports.SIGN_IN = "sign_in";
-	var PORT_GET = exports.PORT_GET = "port_get";
-	var PORT_UPDATE = exports.PORT_UPDATE = "port_update";
-	var PROF_UPDATE = exports.PROF_UPDATE = "prof_update";
-	var USER_INFO = exports.USER_INFO = "get_userInfo";
-	var UPDATE_USERINFO = exports.UPDATE_USERINFO = "update_userInfo";
-	var GET_DATA = exports.GET_DATA = "get_data";
-	var ERASE_DATA = exports.ERASE_DATA = "erase_data";
-	var CLEAR_SIGN_IN = exports.CLEAR_SIGN_IN = "clear_sign_in";
+	var FETCH_BTC = exports.FETCH_BTC = "fetch_btc",
+	    FETCH_ETH = exports.FETCH_ETH = "fetch_eth",
+	    SIGN_UP = exports.SIGN_UP = "sign_up",
+	    SIGN_IN = exports.SIGN_IN = "sign_in",
+	    PORT_GET = exports.PORT_GET = "port_get",
+	    PORT_UPDATE = exports.PORT_UPDATE = "port_update",
+	    PROF_UPDATE = exports.PROF_UPDATE = "prof_update",
+	    USER_INFO = exports.USER_INFO = "get_userInfo",
+	    UPDATE_USERINFO = exports.UPDATE_USERINFO = "update_userInfo",
+	    GET_DATA = exports.GET_DATA = "get_data",
+	    ERASE_DATA = exports.ERASE_DATA = "erase_data",
+	    CLEAR_SIGN_IN = exports.CLEAR_SIGN_IN = "clear_sign_in",
+	    CONFIRM_EMAIL = exports.CONFIRM_EMAIL = "confirm_email",
+	    USER_REACTIONS = exports.USER_REACTIONS = "user_reactions";
 
 	var root_url = "https://api.gemini.com/v1/pubticker/";
-	var ct_url = "https://cryptonthus.herokuapp.com/api";
-	//const ct_url = "http://localhost:8001/api";
+	//export const ct_url = "https://cryptonthus.herokuapp.com/api";
+	var ct_url = exports.ct_url = "http://localhost:8000/api";
 
 	function fetchBTC() {
 	    var req = _axios2.default.get(root_url + "/btcusd");
@@ -39628,6 +39635,15 @@
 	    };
 	}
 
+	function confirmEmail(userId) {
+	    var request = _axios2.default.post(ct_url + "/confirm-email/" + userId);
+
+	    return {
+	        type: CONFIRM_EMAIL,
+	        payload: request
+	    };
+	}
+
 	function eraseData() {
 	    return {
 	        type: ERASE_DATA,
@@ -39639,6 +39655,15 @@
 	    return {
 	        type: CLEAR_SIGN_IN,
 	        payload: ""
+	    };
+	}
+
+	function getReaction(postArr, userId) {
+	    var request = _axios2.default.post(ct_url + "/user-reaction/" + userId, { ids: postArr });
+
+	    return {
+	        type: USER_REACTIONS,
+	        payload: request
 	    };
 	}
 
@@ -41244,18 +41269,21 @@
 	                return Object.assign({}, state, obj);
 	            }
 	            break;
+
 	        case _index.USER_INFO:
 	            if (action.payload.status === 200) {
 	                obj[_index.USER_INFO] = action.payload.data;
 	                return Object.assign({}, state, obj);
 	            }
 	            break;
+
 	        case _index.UPDATE_USERINFO:
 	            if (action.payload.status === 200) {
 	                obj[_index.UPDATE_USERINFO] = action.payload.data;
 	                return Object.assign({}, state, obj);
 	            }
 	            break;
+
 	        case _index.GET_DATA:
 	            if (action.payload.status === 200) {
 	                obj[_index.GET_DATA] = action.payload.data;
@@ -41270,6 +41298,24 @@
 	        case _index.CLEAR_SIGN_IN:
 	            obj[_index.SIGN_IN] = {};
 	            return Object.assign({}, state, obj);
+	            break;
+
+	        case _index.CONFIRM_EMAIL:
+	            if (action.payload.status && action.payload.status === 200) {
+
+	                obj[_index.CONFIRM_EMAIL] = action.payload.data;
+	            }
+	            return Object.assign({}, state, obj);
+	            break;
+
+	        case _index.USER_REACTIONS:
+	            if (action.payload.status && action.payload.status === 200) {
+	                obj[_index.USER_REACTIONS] = action.payload.data;
+	            }
+
+	            return Object.assign({}, state, obj);
+	            break;
+
 	        default:
 	            return state;
 	            break;
@@ -41283,7 +41329,7 @@
 /* 535 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	'use strict';
+	"use strict";
 
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
@@ -41293,37 +41339,34 @@
 	    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 	    var action = arguments[1];
 
+	    var obj = {};
 	    switch (action.type) {
 	        case _reddit_news.CRYPTO:
-
 	            if (action.payload.status === 200) {
-	                var obj = {};
+	                action.payload.data.data["classType"] = "crypto";
 	                obj[_reddit_news.NEWS_UPDATE] = { type: action.type, data: action.payload.data };
 	                return Object.assign({}, state, obj);
 	            }
 	            break;
 	        case _reddit_news.BTC_NEWS:
-
 	            if (action.payload.status === 200) {
-	                var _obj = {};
-	                _obj[_reddit_news.NEWS_UPDATE] = { type: action.type, data: action.payload.data };
-	                return Object.assign({}, state, _obj);
+	                action.payload.data.data["classType"] = "bitcoin";
+	                obj[_reddit_news.NEWS_UPDATE] = { type: action.type, data: action.payload.data };
+	                return Object.assign({}, state, obj);
 	            }
 	            break;
 	        case _reddit_news.ETH_NEWS:
-
 	            if (action.payload.status === 200) {
-	                var _obj2 = {};
-	                _obj2[_reddit_news.NEWS_UPDATE] = { type: action.type, data: action.payload.data };
-	                return Object.assign({}, state, _obj2);
+	                action.payload.data.data["classType"] = "ethereum";
+	                obj[_reddit_news.NEWS_UPDATE] = { type: action.type, data: action.payload.data };
+	                return Object.assign({}, state, obj);
 	            }
 	            break;
 	        case _reddit_news.CRY_MAR:
-
 	            if (action.payload.status === 200) {
-	                var _obj3 = {};
-	                _obj3[_reddit_news.NEWS_UPDATE] = { type: action.type, data: action.payload.data };
-	                return Object.assign({}, state, _obj3);
+	                action.payload.data.data["classType"] = "cryptomarkets";
+	                obj[_reddit_news.NEWS_UPDATE] = { type: action.type, data: action.payload.data };
+	                return Object.assign({}, state, obj);
 	            }
 	            break;
 	        default:
@@ -50555,8 +50598,6 @@
 
 	var _reactRouter = __webpack_require__(199);
 
-	var _actions = __webpack_require__(507);
-
 	var _index = __webpack_require__(507);
 
 	var _loadLogo = __webpack_require__(545);
@@ -50577,9 +50618,11 @@
 
 	var _lineChart2 = _interopRequireDefault(_lineChart);
 
-	var _areaChart = __webpack_require__(1122);
+	var _coinIntro = __webpack_require__(1122);
 
-	var _areaChart2 = _interopRequireDefault(_areaChart);
+	var _coinAmount = __webpack_require__(1123);
+
+	var _coinChart = __webpack_require__(1124);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -50622,6 +50665,7 @@
 	                lastDayVal: 0
 	            }
 	        };
+	        _this.addInput = 0;
 	        _this.startX = 0;
 
 	        _this.state = {
@@ -50670,12 +50714,25 @@
 	            this.forceUpdate();
 	        }
 	    }, {
+	        key: 'addCoinVal',
+	        value: function addCoinVal(coin, event) {
+	            this.addInput = event.target.value;
+	            this.forceUpdate();
+	        }
+	    }, {
 	        key: 'updatePortfolio',
-	        value: function updatePortfolio(coin) {
+	        value: function updatePortfolio(coin, type) {
+	            var amount = +this.coinObj[coin].amount;
+	            if (type === 'add') {
+	                amount += +this.addInput;
+	                this.coinObj[coin].amount = amount;
+	            }
+	            this.addInput = 0;
+
 	            this.props.updateCoinAPI({
 	                userId: this.props.userId,
 	                type: coin,
-	                value: this.coinObj[coin].amount
+	                value: amount
 	            });
 	            this.refs.alertRef.showAlert({ message: "Portfolio Updated!", type: "success" });
 	        }
@@ -50685,6 +50742,7 @@
 	    }, {
 	        key: 'openUpdater',
 	        value: function openUpdater(type) {
+	            this.addInput = 0;
 	            if (type === this.state.updateCoin) {
 	                type = "";
 	            }
@@ -50755,7 +50813,7 @@
 	                ETH = this.props.eth;
 
 	            //Forming the HTML for each coin
-	            Object.keys(coinObj).forEach(function (elem, ind) {
+	            Object.keys(coinObj).forEach(function (elem, index) {
 
 	                var coin = coinObj[elem],
 	                    coverClass = "coin-cover",
@@ -50785,7 +50843,7 @@
 	                coinHTML.push(_react2.default.createElement(
 	                    'div',
 	                    { className: coverClass,
-	                        key: ind,
+	                        key: index,
 	                        onTouchEnd: function onTouchEnd(e) {
 	                            _this3.touchEnd(e, e.nativeEvent);
 	                        },
@@ -50798,86 +50856,55 @@
 	                            onClick: function onClick() {
 	                                _this3.openUpdater(elem);
 	                            } },
-	                        _react2.default.createElement(
-	                            'div',
-	                            { className: 'coin-intro' },
-	                            _react2.default.createElement(
-	                                'div',
-	                                { className: 'coin-image-cover' },
-	                                _react2.default.createElement('img', { src: coin.imgUrl, className: 'coin-image' })
-	                            ),
-	                            _react2.default.createElement(
-	                                'div',
-	                                { className: 'coin-name' },
-	                                coin.full_name
-	                            )
-	                        ),
-	                        _react2.default.createElement(
-	                            'div',
-	                            { className: 'coin-amount' },
-	                            _react2.default.createElement(
-	                                'div',
-	                                { className: 'ca-cover' },
-	                                _react2.default.createElement(
-	                                    'div',
-	                                    { className: 'coin-total' },
-	                                    coin.amount
-	                                ),
-	                                _react2.default.createElement(
-	                                    'div',
-	                                    { className: 'coin-curr' },
-	                                    _react2.default.createElement(
-	                                        'span',
-	                                        { className: 'coin-type' },
-	                                        'Price'
-	                                    ),
-	                                    _react2.default.createElement(
-	                                        'span',
-	                                        { className: 'coin-amt' },
-	                                        '$ ',
-	                                        (+coin.currVal).toLocaleString()
-	                                    )
-	                                )
-	                            )
-	                        )
+	                        _react2.default.createElement(_coinIntro.CoinIntro, { coin: coin }),
+	                        _react2.default.createElement(_coinAmount.CoinAmount, { coin: coin })
 	                    ),
 	                    _react2.default.createElement(
 	                        'div',
 	                        { className: 'coin-more' },
 	                        _react2.default.createElement(
 	                            'div',
-	                            { className: 'coin-update' },
-	                            _react2.default.createElement('input', { type: 'number',
-	                                className: 'coin-input',
-	                                value: coin.amount,
-	                                onChange: function onChange(e) {
-	                                    _this3.updateCoinVal(elem, e);
-	                                } }),
+	                            { className: 'coin-update-cover' },
 	                            _react2.default.createElement(
-	                                'button',
-	                                { className: 'update-button',
-	                                    onClick: function onClick() {
-	                                        _this3.updatePortfolio(elem);
-	                                    } },
-	                                _react2.default.createElement('i', { className: 'fa fa-refresh' }),
-	                                'Update'
+	                                'div',
+	                                { className: 'coin-update' },
+	                                _react2.default.createElement('input', { type: 'number',
+	                                    className: 'coin-input',
+	                                    value: coin.amount,
+	                                    onChange: function onChange(e) {
+	                                        _this3.updateCoinVal(elem, e);
+	                                    } }),
+	                                _react2.default.createElement(
+	                                    'button',
+	                                    { className: 'update-button',
+	                                        onClick: function onClick() {
+	                                            _this3.updatePortfolio(elem, 'update');
+	                                        } },
+	                                    _react2.default.createElement('i', { className: 'fa fa-refresh' }),
+	                                    'Update'
+	                                )
+	                            ),
+	                            _react2.default.createElement(
+	                                'div',
+	                                { className: 'coin-update' },
+	                                _react2.default.createElement('input', { type: 'number',
+	                                    className: 'coin-input',
+	                                    value: _this3.addInput,
+	                                    onChange: function onChange(e) {
+	                                        _this3.addCoinVal(elem, e);
+	                                    } }),
+	                                _react2.default.createElement(
+	                                    'button',
+	                                    { className: 'update-button',
+	                                        onClick: function onClick() {
+	                                            _this3.updatePortfolio(elem, 'add');
+	                                        } },
+	                                    _react2.default.createElement('i', { className: 'fa fa-plus', 'aria-hidden': 'true' }),
+	                                    'Add'
+	                                )
 	                            )
 	                        ),
-	                        _react2.default.createElement(
-	                            'div',
-	                            { className: 'coin-chart' },
-	                            coin.data.length > 0 ? _react2.default.createElement(_areaChart2.default, { width: 340,
-	                                height: 300,
-	                                chartData: coin.data,
-	                                chartName: coin.full_name,
-	                                dataKey: 'value',
-	                                marginStyle: { top: 5, right: 30, left: 0, bottom: 5 },
-	                                strokeColor: '#20e5f1' }) : _react2.default.createElement(
-	                                'div',
-	                                null,
-	                                'Loading ...'
-	                            )
-	                        )
+	                        _react2.default.createElement(_coinChart.CoinChart, { coin: coin })
 	                    )
 	                ));
 	            });
@@ -50897,7 +50924,7 @@
 	                        'div',
 	                        { className: 'dash-worth' },
 	                        '$ ',
-	                        amount.toFixed(2)
+	                        amount.toLocaleString(undefined, { minimumFractionDigits: 2 })
 	                    )
 	                ),
 	                _react2.default.createElement(
@@ -50922,14 +50949,13 @@
 	}(_react2.default.Component);
 
 	function mapStateToProps(state) {
-	    //return {sign: state.sign}
 	    return {
 	        tick: state.ticker,
 	        sign: state.sign
 	    };
 	}
 
-	exports.default = (0, _reactRedux.connect)(mapStateToProps, { getPortfolio: _actions.getPortfolio, updateCoinAPI: _actions.updateCoinAPI, getData: _actions.getData, eraseData: _actions.eraseData })(Dashboard);
+	exports.default = (0, _reactRedux.connect)(mapStateToProps, { getPortfolio: _index.getPortfolio, updateCoinAPI: _index.updateCoinAPI, getData: _index.getData, eraseData: _index.eraseData })(Dashboard);
 
 /***/ }),
 /* 548 */
@@ -106616,6 +106642,164 @@
 /* 1122 */
 /***/ (function(module, exports, __webpack_require__) {
 
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.CoinIntro = undefined;
+
+	var _react = __webpack_require__(2);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var CoinIntro = exports.CoinIntro = function CoinIntro(props) {
+	    var coinObj = props.coin,
+	        coinImage = coinObj.imgUrl,
+	        coinFullName = coinObj.full_name,
+	        coinCurrentValue = (+coinObj.currVal).toLocaleString();
+	    return _react2.default.createElement(
+	        "div",
+	        { className: "coin-intro" },
+	        _react2.default.createElement(
+	            "div",
+	            { className: "coin-intro-cover" },
+	            _react2.default.createElement(
+	                "div",
+	                { className: "coin-image-cover" },
+	                _react2.default.createElement("img", { src: coinImage, className: "coin-image" })
+	            ),
+	            _react2.default.createElement(
+	                "div",
+	                { className: "coin-name" },
+	                coinFullName
+	            )
+	        ),
+	        _react2.default.createElement(
+	            "div",
+	            { className: "coin-curr" },
+	            _react2.default.createElement(
+	                "span",
+	                { className: "coin-type" },
+	                "Price"
+	            ),
+	            _react2.default.createElement(
+	                "span",
+	                { className: "coin-amt" },
+	                "$ ",
+	                coinCurrentValue.toLocaleString()
+	            )
+	        )
+	    );
+	}; /**
+	    * Created by harshalcarpenter on 5/26/18.
+	    */
+
+/***/ }),
+/* 1123 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.CoinAmount = undefined;
+
+	var _react = __webpack_require__(2);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var CoinAmount = exports.CoinAmount = function CoinAmount(props) {
+	    var coin = props.coin,
+	        coinTotal = coin.amount,
+	        coinAmt = (+coin.currVal * coinTotal).toLocaleString(undefined, { minimumFractionDigits: 2 });
+
+	    return _react2.default.createElement(
+	        "div",
+	        { className: "coin-amount" },
+	        _react2.default.createElement(
+	            "div",
+	            { className: "coin-total" },
+	            coinTotal
+	        ),
+	        _react2.default.createElement(
+	            "div",
+	            { className: "coin-fiat" },
+	            _react2.default.createElement(
+	                "span",
+	                { className: "coin-amt" },
+	                "$ ",
+	                coinAmt
+	            )
+	        )
+	    );
+	}; /**
+	    * Created by harshalcarpenter on 5/26/18.
+	    */
+
+/***/ }),
+/* 1124 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.CoinChart = undefined;
+
+	var _react = __webpack_require__(2);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _areaChart = __webpack_require__(1125);
+
+	var _areaChart2 = _interopRequireDefault(_areaChart);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	/**
+	 * Created by harshalcarpenter on 5/26/18.
+	 */
+
+	var CoinChart = exports.CoinChart = function CoinChart(props) {
+	    var coin = props.coin,
+	        width = 340;
+
+	    if (document.querySelector('.coin-intro')) {
+	        width = parseInt(window.getComputedStyle(document.querySelector('.coin-intro')).width) - 20;
+	    }
+
+	    if (coin.data.length === 0) {
+	        return _react2.default.createElement(
+	            'div',
+	            null,
+	            'Loading ...'
+	        );
+	    }
+
+	    return _react2.default.createElement(
+	        'div',
+	        { className: 'coin-chart' },
+	        _react2.default.createElement(_areaChart2.default, { width: width,
+	            height: 300,
+	            chartData: coin.data,
+	            chartName: coin.full_name,
+	            dataKey: 'value',
+	            marginStyle: { top: 5, right: 30, left: 0, bottom: 5 },
+	            strokeColor: '#20e5f1' })
+	    );
+	};
+
+/***/ }),
+/* 1125 */
+/***/ (function(module, exports, __webpack_require__) {
+
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
@@ -106705,7 +106889,7 @@
 	exports.default = ReAreaChart;
 
 /***/ }),
-/* 1123 */
+/* 1126 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -106850,7 +107034,6 @@
 	    }, {
 	        key: 'componentWillReceiveProps',
 	        value: function componentWillReceiveProps(nextProps) {
-
 	            var signInState = nextProps.sign[_actions.SIGN_IN];
 	            if (signInState && signInState.isSignedIn) {
 
@@ -106976,7 +107159,7 @@
 	exports.default = (0, _reactRedux.connect)(mapStateToProps, { signUp: _actions.signUp, signIn: _actions.signIn, clearSignIn: _actions.clearSignIn })(SignUp);
 
 /***/ }),
-/* 1124 */
+/* 1127 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -107003,13 +107186,17 @@
 
 	var _dashboard2 = _interopRequireDefault(_dashboard);
 
-	var _userProfile = __webpack_require__(1125);
+	var _userProfile = __webpack_require__(1128);
 
 	var _userProfile2 = _interopRequireDefault(_userProfile);
 
-	var _news = __webpack_require__(1126);
+	var _news = __webpack_require__(1129);
 
 	var _news2 = _interopRequireDefault(_news);
+
+	var _aboutUs = __webpack_require__(1134);
+
+	var _aboutUs2 = _interopRequireDefault(_aboutUs);
 
 	var _homePage = __webpack_require__(544);
 
@@ -107214,7 +107401,7 @@
 	                        _react2.default.createElement(
 	                            'div',
 	                            { className: 'news-block ' + (currentState === canvasState.news ? '' : 'hide') },
-	                            _react2.default.createElement(_news2.default, null)
+	                            _react2.default.createElement(_news2.default, { userId: userId })
 	                        ),
 	                        _react2.default.createElement(
 	                            'div',
@@ -107229,7 +107416,7 @@
 	                        _react2.default.createElement(
 	                            'div',
 	                            { className: 'about-us ' + (currentState === canvasState.info ? '' : 'hide') },
-	                            _react2.default.createElement(AboutUs, null)
+	                            _react2.default.createElement(_aboutUs2.default, null)
 	                        )
 	                    )
 	                ),
@@ -107280,46 +107467,6 @@
 	    return Chat;
 	}(_react2.default.Component);
 
-	//About Us
-
-
-	var AboutUs = function (_React$Component3) {
-	    _inherits(AboutUs, _React$Component3);
-
-	    function AboutUs(props) {
-	        _classCallCheck(this, AboutUs);
-
-	        return _possibleConstructorReturn(this, (AboutUs.__proto__ || Object.getPrototypeOf(AboutUs)).call(this, props));
-	    }
-
-	    _createClass(AboutUs, [{
-	        key: 'render',
-	        value: function render() {
-	            return _react2.default.createElement(
-	                'div',
-	                null,
-	                _react2.default.createElement(
-	                    'h1',
-	                    null,
-	                    'About Us'
-	                ),
-	                _react2.default.createElement(
-	                    'div',
-	                    { className: 'au-container' },
-	                    _react2.default.createElement(
-	                        'u',
-	                        null,
-	                        'Cryptonthus'
-	                    ),
-	                    ' is a crypto-assets portfolio application with news updates(from reddit communities).'
-	                )
-	            );
-	        }
-	    }]);
-
-	    return AboutUs;
-	}(_react2.default.Component);
-
 	//Redux
 
 	function mapStateToProps(state) {
@@ -107338,7 +107485,7 @@
 	})(Canvas);
 
 /***/ }),
-/* 1125 */
+/* 1128 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -107354,8 +107501,6 @@
 	var _react2 = _interopRequireDefault(_react);
 
 	var _reactRedux = __webpack_require__(160);
-
-	var _actions = __webpack_require__(507);
 
 	var _index = __webpack_require__(507);
 
@@ -107491,10 +107636,10 @@
 	    };
 	}
 
-	exports.default = (0, _reactRedux.connect)(mapStateToProps, { updateUser: _actions.updateUser, getUser: _actions.getUser })(UserProfile);
+	exports.default = (0, _reactRedux.connect)(mapStateToProps, { updateUser: _index.updateUser, getUser: _index.getUser })(UserProfile);
 
 /***/ }),
-/* 1126 */
+/* 1129 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -107511,6 +107656,8 @@
 
 	var _reddit_news = __webpack_require__(536);
 
+	var _index = __webpack_require__(507);
+
 	var _moment = __webpack_require__(548);
 
 	var _moment2 = _interopRequireDefault(_moment);
@@ -107520,6 +107667,10 @@
 	var _loadLogo = __webpack_require__(545);
 
 	var _loadLogo2 = _interopRequireDefault(_loadLogo);
+
+	var _newsBox = __webpack_require__(1130);
+
+	var _newsBox2 = _interopRequireDefault(_newsBox);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -107541,11 +107692,13 @@
 	        var _this = _possibleConstructorReturn(this, (News.__proto__ || Object.getPrototypeOf(News)).call(this, props));
 
 	        _this.newsObj = {};
+	        _this.newsIdArr = [];
+	        _this.newsIdChanged = false;
 
-	        _this.newsObj[_reddit_news.BTC_NEWS] = "";
-	        _this.newsObj[_reddit_news.ETH_NEWS] = "";
-	        _this.newsObj[_reddit_news.CRYPTO] = "";
-	        _this.newsObj[_reddit_news.CRY_MAR] = "";
+	        _this.newsObj[_reddit_news.BTC_NEWS] = {};
+	        _this.newsObj[_reddit_news.ETH_NEWS] = {};
+	        _this.newsObj[_reddit_news.CRYPTO] = {};
+	        _this.newsObj[_reddit_news.CRY_MAR] = {};
 	        return _this;
 	    }
 
@@ -107553,57 +107706,6 @@
 
 
 	    _createClass(News, [{
-	        key: 'formNewsComp',
-	        value: function formNewsComp(type, index) {
-	            var newsHTML = [];
-
-	            this.newsObj[type].forEach(function (elem, index2) {
-
-	                newsHTML.push(_react2.default.createElement(
-	                    'div',
-	                    { className: 'news-container',
-	                        onClick: function onClick() {
-	                            cordova.InAppBrowser.open(elem.data.url, '_system');
-	                        },
-	                        key: index2 },
-	                    _react2.default.createElement(
-	                        'div',
-	                        { className: 'news-image' },
-	                        elem.data.thumbnail.length > 8 ? _react2.default.createElement('img', { src: elem.data.thumbnail }) : _react2.default.createElement(
-	                            'div',
-	                            { className: 'margin-top-5' },
-	                            _react2.default.createElement(_loadLogo2.default, { height: 120 })
-	                        )
-	                    ),
-	                    _react2.default.createElement(
-	                        'div',
-	                        { className: 'news-desc' },
-	                        _react2.default.createElement(
-	                            'div',
-	                            null,
-	                            _react2.default.createElement(
-	                                'span',
-	                                { className: 'news-time' },
-	                                (0, _moment2.default)().utc(elem.data.created_utc).format("MMM DD,YYYY")
-	                            ),
-	                            _react2.default.createElement(
-	                                'span',
-	                                { className: 'news-source' },
-	                                elem.data.domain
-	                            )
-	                        ),
-	                        _react2.default.createElement(
-	                            'h3',
-	                            null,
-	                            elem.data.title
-	                        )
-	                    )
-	                ));
-	            });
-
-	            return newsHTML;
-	        }
-	    }, {
 	        key: 'componentWillMount',
 	        value: function componentWillMount() {
 	            this.props.getNews(_reddit_news.CRYPTO, 15);
@@ -107612,8 +107714,72 @@
 	            this.props.getNews(_reddit_news.CRY_MAR, 15);
 	        }
 	    }, {
+	        key: 'componentWillReceiveProps',
+	        value: function componentWillReceiveProps(nextProps) {
+	            var news_update = nextProps.news[_reddit_news.NEWS_UPDATE];
+
+	            if (news_update && news_update.hasOwnProperty("data")) {
+	                this.newsObj[news_update.type] = this.cleanData(news_update.data.data, news_update.type);
+	                if (this.newsIdChanged) {
+	                    this.getReactionAPI(this.newsIdArr);
+	                }
+	            }
+	        }
+	    }, {
+	        key: 'formSectionComponent',
+	        value: function formSectionComponent() {
+	            var _this2 = this;
+
+	            var sectionComp = [];
+
+	            Object.keys(this.newsObj).forEach(function (item, index) {
+
+	                if (!_this2.newsObj[item].hasOwnProperty("children")) {
+	                    return;
+	                }
+
+	                var children = _this2.newsObj[item].children,
+	                    classType = _this2.newsObj[item].classType;
+
+	                if (Array.isArray(children)) {
+	                    var sectionHTML = _react2.default.createElement(
+	                        'div',
+	                        { className: 'news-cover', key: index },
+	                        _react2.default.createElement(
+	                            'h3',
+	                            { className: 'news-head' },
+	                            item
+	                        ),
+	                        _react2.default.createElement(
+	                            'div',
+	                            { className: 'news-links' },
+	                            _this2.formNewsComp(item, classType)
+	                        )
+	                    );
+	                    sectionComp.push(sectionHTML);
+	                }
+	            });
+
+	            return sectionComp;
+	        }
+	    }, {
+	        key: 'formNewsComp',
+	        value: function formNewsComp(type, classType) {
+	            var newsHTML = [];
+
+	            this.newsObj[type].children.forEach(function (item, index) {
+	                newsHTML.push(_react2.default.createElement(_newsBox2.default, { article: item,
+	                    key: index,
+	                    classType: classType }));
+	            });
+
+	            return newsHTML;
+	        }
+	    }, {
 	        key: 'cleanData',
 	        value: function cleanData(data, type) {
+	            var _this3 = this;
+
 	            var regex = void 0,
 	                propToCheck = "",
 	                isMatch = false;
@@ -107647,60 +107813,35 @@
 	            }
 	            data.children = data.children.filter(function (elem, index) {
 	                if (elem.data[propToCheck]) {
-	                    if (elem.data[propToCheck].match(regex) && isMatch) {
-	                        return true;
-	                    } else if (!elem.data[propToCheck].match(regex) && !isMatch) {
+	                    if (elem.data[propToCheck].match(regex) && isMatch || !elem.data[propToCheck].match(regex) && !isMatch) {
+
+	                        if (_this3.newsIdArr.indexOf(elem.data.id) < 0) {
+	                            _this3.newsIdArr.push(elem.data.id);
+	                            _this3.newsIdChanged = true;
+	                        }
 	                        return true;
 	                    }
 	                }
 	                return false;
 	            });
-	            return data.children;
+
+	            return data;
 	        }
 	    }, {
-	        key: 'componentWillReceiveProps',
-	        value: function componentWillReceiveProps(nextProps) {
-	            var self = this,
-	                news_update = nextProps.news[_reddit_news.NEWS_UPDATE];
-	            if (news_update && news_update.hasOwnProperty("data")) {
-	                this.newsObj[news_update.type] = this.cleanData(news_update.data.data, news_update.type);
-	            }
+	        key: 'getReactionAPI',
+	        value: function getReactionAPI(postArr) {
+	            this.props.getReaction(postArr, this.props.userId);
+	            this.newsIdChanged = false;
 	        }
 	    }, {
 	        key: 'render',
 	        value: function render() {
-	            var _this2 = this;
-
-	            var sectionComp = [];
-
-	            Object.keys(this.newsObj).forEach(function (elem, index) {
-	                if (Array.isArray(_this2.newsObj[elem])) {
-	                    var sectionHTML = _react2.default.createElement(
-	                        'div',
-	                        { className: 'news-cover', key: index },
-	                        _react2.default.createElement(
-	                            'h3',
-	                            { className: 'news-head' },
-	                            elem
-	                        ),
-	                        _react2.default.createElement(
-	                            'div',
-	                            { className: 'news-links' },
-	                            _this2.formNewsComp(elem, index)
-	                        )
-	                    );
-	                    sectionComp.push(sectionHTML);
-	                }
-	            });
+	            var sectionComp = this.formSectionComponent();
 
 	            return _react2.default.createElement(
 	                'div',
-	                null,
-	                _react2.default.createElement(
-	                    'div',
-	                    { className: 'latest-news' },
-	                    sectionComp
-	                )
+	                { className: 'latest-news' },
+	                sectionComp
 	            );
 	        }
 	    }]);
@@ -107711,11 +107852,465 @@
 	function mapStateToProps(state) {
 	    return {
 	        tick: state.ticker,
-	        news: state.news
+	        news: state.news,
+	        sign: state.sign
 	    };
 	}
 
-	exports.default = (0, _reactRedux.connect)(mapStateToProps, { getNews: _reddit_news.getNews })(News);
+	exports.default = (0, _reactRedux.connect)(mapStateToProps, { getNews: _reddit_news.getNews, getReaction: _index.getReaction })(News);
+
+/***/ }),
+/* 1130 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(2);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _newsDesc = __webpack_require__(1131);
+
+	var _newsThumbnail = __webpack_require__(1133);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /**
+	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * Created by harshalcarpenter on 5/19/18.
+	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                */
+
+	var NewsBox = function (_React$Component) {
+	    _inherits(NewsBox, _React$Component);
+
+	    function NewsBox(props) {
+	        _classCallCheck(this, NewsBox);
+
+	        return _possibleConstructorReturn(this, (NewsBox.__proto__ || Object.getPrototypeOf(NewsBox)).call(this, props));
+	    }
+
+	    _createClass(NewsBox, [{
+	        key: 'itemClick',
+	        value: function itemClick(data) {
+	            cordova.InAppBrowser.open(data.url, '_system');
+	        }
+	    }, {
+	        key: 'render',
+	        value: function render() {
+	            var _this2 = this;
+
+	            var article = this.props.article,
+	                data = article.data,
+	                className = "news-container news-" + (this.props.classType || "");
+
+	            return _react2.default.createElement(
+	                'div',
+	                { className: className,
+	                    onClick: function onClick() {
+	                        _this2.itemClick(data);
+	                    } },
+	                _react2.default.createElement(_newsThumbnail.NewsThumbnail, { data: data }),
+	                _react2.default.createElement(_newsDesc.NewsDesc, { data: data })
+	            );
+	        }
+	    }]);
+
+	    return NewsBox;
+	}(_react2.default.Component);
+
+	exports.default = NewsBox;
+
+/***/ }),
+/* 1131 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.NewsDesc = undefined;
+
+	var _react = __webpack_require__(2);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _moment = __webpack_require__(548);
+
+	var _moment2 = _interopRequireDefault(_moment);
+
+	var _newsReaction = __webpack_require__(1132);
+
+	var _newsReaction2 = _interopRequireDefault(_newsReaction);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var NewsDesc = exports.NewsDesc = function NewsDesc(props) {
+	    var data = props.data,
+	        postedDate = (0, _moment2.default)().utc(data.created_utc).format("MMM DD,YYYY");
+
+	    return _react2.default.createElement(
+	        'div',
+	        { className: 'news-desc' },
+	        _react2.default.createElement(
+	            'div',
+	            null,
+	            _react2.default.createElement(
+	                'span',
+	                { className: 'news-time' },
+	                postedDate
+	            ),
+	            _react2.default.createElement(
+	                'span',
+	                { className: 'news-source' },
+	                data.domain
+	            )
+	        ),
+	        _react2.default.createElement(
+	            'h3',
+	            null,
+	            data.title
+	        ),
+	        _react2.default.createElement(_newsReaction2.default, { userDetail: {}, newsDetail: data })
+	    );
+	}; /**
+	    * Created by harshalcarpenter on 5/19/18.
+	    */
+
+/***/ }),
+/* 1132 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(2);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactRedux = __webpack_require__(160);
+
+	var _axios = __webpack_require__(508);
+
+	var _axios2 = _interopRequireDefault(_axios);
+
+	var _index = __webpack_require__(507);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /**
+	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * Created by harshalcarpenter on 5/20/18.
+	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                */
+
+	var NewsReact = function (_React$Component) {
+	    _inherits(NewsReact, _React$Component);
+
+	    function NewsReact(props) {
+	        _classCallCheck(this, NewsReact);
+
+	        var _this = _possibleConstructorReturn(this, (NewsReact.__proto__ || Object.getPrototypeOf(NewsReact)).call(this, props));
+
+	        _this.reactionsObj = {
+	            "like": "2A6NBDFJTX6HCDT8",
+	            "dislike": "VO75CLDFDNPB85W4"
+	        };
+
+	        _this.state = {
+	            userReactions: {}
+	        };
+	        return _this;
+	    }
+
+	    _createClass(NewsReact, [{
+	        key: 'onReact',
+	        value: function onReact(reactionType) {
+	            var userId = window.localStorage.getItem("user_id"),
+	                data = {
+	                postId: this.props.newsDetail.id,
+	                postType: "reddit-post",
+	                userId: userId
+	            },
+	                userReactions = this.state.userReactions;
+	            if (userReactions.hasOwnProperty('reactions')) {
+	                userReactions.reactions[userId].reactionType = reactionType;
+	            } else {
+	                userReactions = {
+	                    reactions: {}
+	                };
+	                userReactions.reactions[userId] = {
+	                    reactionType: reactionType
+	                };
+	            }
+	            this.setState({ userReactions: userReactions });
+
+	            _axios2.default.post(_index.ct_url + '/action/' + reactionType, data);
+	        }
+	    }, {
+	        key: 'componentWillReceiveProps',
+	        value: function componentWillReceiveProps(nextProps) {
+	            var userReactions = this.state.userReactions;
+	            if (nextProps.sign[_index.USER_REACTIONS]) {
+	                userReactions = nextProps.sign[_index.USER_REACTIONS].data.filter(function (item, index) {
+	                    return item._id === this.props.newsDetail.id;
+	                }, this)[0] || userReactions;
+	                this.setState({ userReactions: userReactions });
+	            }
+	        }
+	    }, {
+	        key: 'render',
+	        value: function render() {
+	            var _this2 = this;
+
+	            var newsDetail = this.props.newsDetail,
+	                userDetail = this.props.userDetail,
+	                commonReactionClass = "news-reaction",
+	                userId = window.localStorage.getItem("user_id");
+
+	            if (this.state.userReactions.hasOwnProperty('reactions') && this.state.userReactions.reactions.hasOwnProperty(userId)) {
+
+	                var reactionType = this.state.userReactions.reactions[userId].reactionType;
+
+	                if (reactionType === this.reactionsObj.like) {
+	                    commonReactionClass += " reaction-like";
+	                } else if (reactionType === this.reactionsObj.dislike) {
+	                    commonReactionClass += " reaction-dislike";
+	                }
+	            }
+
+	            return _react2.default.createElement(
+	                'div',
+	                { className: commonReactionClass },
+	                _react2.default.createElement(
+	                    'span',
+	                    { className: 'reaction reaction-like-span',
+	                        onClick: function onClick(event) {
+	                            event.stopPropagation();
+	                            _this2.onReact(_this2.reactionsObj.like);
+	                        } },
+	                    _react2.default.createElement('i', { className: 'fa fa-thumbs-o-up' }),
+	                    _react2.default.createElement('i', { className: 'fa fa-thumbs-up' }),
+	                    'Like'
+	                ),
+	                _react2.default.createElement(
+	                    'span',
+	                    { className: 'reaction reaction-dislike-span',
+	                        onClick: function onClick(event) {
+	                            event.stopPropagation();
+	                            _this2.onReact(_this2.reactionsObj.dislike);
+	                        } },
+	                    _react2.default.createElement('i', { className: 'fa fa-thumbs-o-down' }),
+	                    _react2.default.createElement('i', { className: 'fa fa-thumbs-down' })
+	                )
+	            );
+	        }
+	    }]);
+
+	    return NewsReact;
+	}(_react2.default.Component);
+
+	function mapStateToProps(state) {
+	    return {
+	        sign: state.sign
+	    };
+	}
+
+	exports.default = (0, _reactRedux.connect)(mapStateToProps, {})(NewsReact);
+
+/***/ }),
+/* 1133 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.NewsThumbnail = undefined;
+
+	var _react = __webpack_require__(2);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _loadLogo = __webpack_require__(545);
+
+	var _loadLogo2 = _interopRequireDefault(_loadLogo);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	/**
+	 * Created by harshalcarpenter on 5/19/18.
+	 */
+	var NewsThumbnail = exports.NewsThumbnail = function NewsThumbnail(props) {
+	    var data = props.data;
+
+	    if (data.thumbnail.length > 8) {
+	        return _react2.default.createElement(
+	            'div',
+	            { className: 'news-image' },
+	            _react2.default.createElement('img', { src: data.thumbnail })
+	        );
+	    }
+
+	    return _react2.default.createElement(
+	        'div',
+	        { className: 'news-image' },
+	        _react2.default.createElement(
+	            'div',
+	            { className: 'margin-top-5' },
+	            _react2.default.createElement(_loadLogo2.default, { height: 120 })
+	        )
+	    );
+	};
+
+/***/ }),
+/* 1134 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(2);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /**
+	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * Created by harshalcarpenter on 5/17/18.
+	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                */
+
+
+	//About Us
+	var AboutUs = function (_React$Component) {
+	    _inherits(AboutUs, _React$Component);
+
+	    function AboutUs(props) {
+	        _classCallCheck(this, AboutUs);
+
+	        return _possibleConstructorReturn(this, (AboutUs.__proto__ || Object.getPrototypeOf(AboutUs)).call(this, props));
+	    }
+
+	    _createClass(AboutUs, [{
+	        key: "render",
+	        value: function render() {
+	            return _react2.default.createElement(
+	                "div",
+	                null,
+	                _react2.default.createElement(
+	                    "h1",
+	                    null,
+	                    "About Us"
+	                ),
+	                _react2.default.createElement(
+	                    "div",
+	                    { className: "au-container" },
+	                    _react2.default.createElement(
+	                        "u",
+	                        null,
+	                        "Cryptonthus"
+	                    ),
+	                    " is a crypto-assets portfolio application with news updates(from reddit communities)."
+	                )
+	            );
+	        }
+	    }]);
+
+	    return AboutUs;
+	}(_react2.default.Component);
+
+	exports.default = AboutUs;
+
+/***/ }),
+/* 1135 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(2);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactRedux = __webpack_require__(160);
+
+	var _index = __webpack_require__(507);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /**
+	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * Created by harshalcarpenter on 5/23/18.
+	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                */
+
+
+	var ConfirmEmailComponent = function (_React$Component) {
+	    _inherits(ConfirmEmailComponent, _React$Component);
+
+	    function ConfirmEmailComponent(props) {
+	        _classCallCheck(this, ConfirmEmailComponent);
+
+	        return _possibleConstructorReturn(this, (ConfirmEmailComponent.__proto__ || Object.getPrototypeOf(ConfirmEmailComponent)).call(this, props));
+	    }
+
+	    _createClass(ConfirmEmailComponent, [{
+	        key: 'componentWillMount',
+	        value: function componentWillMount() {
+	            this.props.confirmEmail(this.props.params.userid);
+	        }
+	    }, {
+	        key: 'render',
+	        value: function render() {
+	            return _react2.default.createElement(
+	                'div',
+	                null,
+	                'Your email is confirmed! Thank you!'
+	            );
+	        }
+	    }]);
+
+	    return ConfirmEmailComponent;
+	}(_react2.default.Component);
+
+	function mapStateToProps(state) {
+	    return { sign: state.sign };
+	}
+
+	exports.default = (0, _reactRedux.connect)(mapStateToProps, { confirmEmail: _index.confirmEmail })(ConfirmEmailComponent);
 
 /***/ })
 /******/ ]);

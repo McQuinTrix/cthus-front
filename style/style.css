@@ -177,9 +177,7 @@ body{
     top: -19px;
 }
 
-.canvas-cover{
-    padding: 60px 15px 0px;
-}
+
 
 .menu-wheel{
     position: absolute;
@@ -269,46 +267,11 @@ body{
     display: block;
 }
 
-.coin-intro{
-    display: flex;
-    align-items: center;
-    padding: 1.25em 0 1.25em 0.938em;;
-}
-
-.coin-short{
-    display: flex;
-    justify-content: space-between;
-}
-
 .coin-image-cover{
-    display: flex;
-}
 
-.coin-name{
-    padding: 0 10px;
-    font-size: 18px;
-    font-weight: bold;
-}
-
-.coin-image{
-    height: 50px;
-}
-
-.coin-amount{
-    font-weight: lighter;
-    font-size: 15px;
-    display: flex;
-    align-items: center;
-    padding: 10px 15px;
-}
-
-.ca-cover{
-    height: 56px;
-    overflow: hidden;
-    text-align: right;
 }
 .coin-total{
-    font-size: 22px;
+    font-size: 2.8vh;
 }
 
 .update-button{
@@ -319,7 +282,7 @@ body{
     border-width: 0px;
 }
 
-.update-button .fa-refresh{
+.update-button .fa{
     display: inline-block;
     padding: 0 10px;
 }
@@ -331,6 +294,7 @@ body{
     color: white;
     font-size: 1rem;
     padding: 2px 5px;
+    width: 35vw;
 }
 
 .input-cover{

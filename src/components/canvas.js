@@ -7,9 +7,10 @@ import React from 'react';
 //Components
 import Logo, {smallAnim} from './load-logo';
 import Alert from './alert-message';
-import Dashboard from "./dashboard";
-import UserProfile from "./user-profile";
-import News from "./news.js";
+import Dashboard from "./canvas-components/dashboard";
+import UserProfile from "./canvas-components/user-profile";
+import News from "./canvas-components/news.js";
+import AboutUs from "./canvas-components/about-us";
 import {userId} from './home-page.js';
 import {browserHistory} from 'react-router';
 
@@ -149,7 +150,7 @@ class Canvas extends React.Component{
 
                         {/** Reddit News/Comments **/}
                         <div className={`news-block ${currentState === canvasState.news ? '' : 'hide'}`}>
-                            <News/>
+                            <News userId={userId}/>
                         </div>
 
                         {/** Profile **/}
@@ -198,24 +199,6 @@ class Chat extends React.Component{
                 <h2>Chat</h2>
                 <div className="chat-room">
 
-                </div>
-            </div>
-        );
-    }
-}
-
-//About Us
-class AboutUs extends React.Component{
-    constructor(props){
-        super(props);
-    }
-
-    render(){
-        return (
-            <div>
-                <h1>About Us</h1>
-                <div className="au-container">
-                    <u>Cryptonthus</u> is a crypto-assets portfolio application with news updates(from reddit communities).
                 </div>
             </div>
         );

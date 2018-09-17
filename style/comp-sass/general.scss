@@ -1,4 +1,5 @@
 @import "alert-mess";
+@import "canvas-elements/_home";
 
 html,body,#crypton-body,.canvas-container{
   height: 100%;
@@ -30,105 +31,8 @@ html,body,#crypton-body,.canvas-container{
   font-size: 0.75rem;
 }
 
-.news-container{
-  display: flex;
-  padding: 5px 2px;
-  margin: 10px 0px;
-  background-color: #4a4949;
-  width: 100%;
-  border-radius: 7px;
-  .news-image{
-    margin: 0 3px;
-    img{
-      height: 120px;
-      width: 110px;
-      border-radius: 8px;
-    }
-  }
-  .news-desc{
-    width: calc(100% - 110px);
-    padding: 0 5px;
-    .news-head{
-
-    }
-    h3{
-      margin: 2px;
-      font-size: 0.9rem;
-      width: 100%;
-      display: inline-block;
-    }
-    .news-time,.news-source{
-      background-color: #00aebf;
-
-      font-weight: 100;
-      font-size: 0.75rem;
-      display: inline-block;
-
-      padding: 2px 5px;
-      color: white;
-    }
-    .news-time{
-      border-radius: 4px 0 0 4px;
-    }
-    .news-source{
-      background-color: tomato;
-      border-radius: 0 4px 4px 0;
-    }
-  }
-}
-
-.news-cover{
-  border-width: 0px;
-  border-top: 7px;
-  border-style: dotted;
-  margin-top: 50px;
-  .news-head{
-    margin: 3px 0;
-    font-size: 1.5rem;
-    position: relative;
-    top: -25px;
-    background-color: #333333;
-    display: inline-block;
-    padding: 0 18px 0 0;
-  }
-  .news-link{
-    margin-top: -25px;
-  }
-}
-
 .margin-top-5{
   margin-top: -5px;
-}
-
-.coin-short.up-tick{
-  .coin-curr{
-    display: inline-block;
-    border: 2px solid #268426;
-    border-radius: 3px;
-    .coin-type{
-      background-color: #268426;
-    }
-
-    span{
-      display: inline-block;
-      padding: 0px 5px;
-    }
-  }
-}
-.coin-short.down-tick{
-  .coin-curr{
-    display: inline-block;
-    border: 2px solid #b32222;
-    border-radius: 3px;
-    .coin-type{
-      background-color: #b32222;
-    }
-
-    span{
-      display: inline-block;
-      padding: 0px 5px;
-    }
-  }
 }
 
 .au-container{
@@ -142,8 +46,8 @@ html,body,#crypton-body,.canvas-container{
   position: relative;
   top: -3px;
   span{
+    padding: 0px 1em 1px;
     display: inline-block;
-    padding: 1px 1em;
   }
   span:first-child{
     background-color: #00aebf;
@@ -151,4 +55,15 @@ html,body,#crypton-body,.canvas-container{
   span:nth-child(1){
 
   }
+}
+
+.canvas-cover{
+  padding: 0px 15px 0px;
+  overflow: auto;
+  margin-top: 60px;
+  height: calc(100% - 60px);
+}
+
+@media(max-width: 370px) {
+
 }

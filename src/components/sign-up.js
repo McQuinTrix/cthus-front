@@ -96,7 +96,6 @@ class SignUp extends React.Component{
     }
 
     componentWillReceiveProps(nextProps){
-
         let signInState = nextProps.sign[SIGN_IN];
         if( signInState && signInState.isSignedIn){
 
@@ -105,12 +104,10 @@ class SignUp extends React.Component{
 
         }else if(signInState && signInState.isSignedIn === false){
 
-            this.refs.alertBox.showAlert(
-                {
-                    message: signInState.data.message || "Sign In Failed.",
-                    type: "error"
-                }
-            );
+            this.refs.alertBox.showAlert({
+                message: signInState.data.message || "Sign In Failed.",
+                type: "error"
+            });
 
             this.props.clearSignIn();
         }
